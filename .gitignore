@@ -1,8 +1,3 @@
-```
-# Build artifacts
-css/output.css
-js/core.js
+(css/advanced-tools.css, js/enhanced-workers.js, js/tool-controller.js) are all source code files (.css and .js) that should not be ignored. There are no build artifacts, dependency directories, or temporary files in the changes that would require adding ignore rules.
 
-# Workers
-workers/*.worker.js
-```
+The current .gitignore is empty and there are no files that need to be added to .gitignore based on the provided changes.
