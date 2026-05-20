@@ -1,0 +1,464 @@
+/**
+ * Pixaroid — Advanced Tools UI Styles v2.0
+ * Professional-grade styling similar to Sejda/iLovePDF
+ * Features: comparison sliders, batch queues, preview grids, progress tracking
+ */
+
+/* ═══════════════════════════════════════════════════════════
+   COMPARISON SLIDER (Before/After)
+═══════════════════════════════════════════════════════════ */
+.comparison-container {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 1.5rem auto;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+
+.comparison-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 66.67%; /* 3:2 aspect ratio */
+  background: var(--s2);
+}
+
+.comparison-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.comparison-image.after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+}
+
+.comparison-slider {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 4px;
+  height: 100%;
+  background: var(--ac);
+  cursor: ew-resize;
+  z-index: 10;
+  transform: translateX(-50%);
+}
+
+.comparison-slider::before {
+  content: '◀ ▶';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--ac);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  box-shadow: 0 2px 12px rgba(124,111,255,0.4);
+  white-space: pre;
+  letter-spacing: -2px;
+}
+
+.comparison-label {
+  position: absolute;
+  bottom: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  z-index: 5;
+}
+
+.comparison-label.before {
+  left: 12px;
+}
+
+.comparison-label.after {
+  right: 12px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BATCH QUEUE DISPLAY
+═══════════════════════════════════════════════════════════ */
+.batch-queue {
+  background: var(--s1);
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.batch-queue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--bd);
+}
+
+.batch-queue-title {
+  font-family: var(--fd);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--tx);
+}
+
+.batch-queue-count {
+  font-size: 0.75rem;
+  color: var(--mu);
+  background: var(--s2);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.queue-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem;
+  border-radius: 8px;
+  background: var(--s2);
+  margin-bottom: 0.5rem;
+  transition: background 0.2s;
+}
+
+.queue-item:hover {
+  background: var(--s3);
+}
+
+.queue-item-preview {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: var(--bd);
+}
+
+.queue-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.queue-item-name {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--tx);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.25rem;
+}
+
+.queue-item-meta {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.7rem;
+  color: var(--mu);
+}
+
+.queue-item-status {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.queue-item-status.pending {
+  background: rgba(124,111,255,0.1);
+  color: var(--ac2);
+}
+
+.queue-item-status.processing {
+  background: rgba(255,171,46,0.1);
+  color: var(--am);
+}
+
+.queue-item-status.completed {
+  background: rgba(35,214,122,0.1);
+  color: var(--gn);
+}
+
+.queue-item-status.failed {
+  background: rgba(255,79,79,0.1);
+  color: var(--rd);
+}
+
+.queue-item-remove {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: var(--mu);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.queue-item-remove:hover {
+  background: rgba(255,79,79,0.1);
+  color: var(--rd);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PREVIEW GRID
+═══════════════════════════════════════════════════════════ */
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.preview-card {
+  background: var(--s1);
+  border: 1px solid var(--bd);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.preview-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.preview-card-image {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  background: var(--s2);
+}
+
+.preview-card-info {
+  padding: 0.75rem;
+}
+
+.preview-card-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--tx);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.375rem;
+}
+
+.preview-card-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  color: var(--mu);
+}
+
+.preview-card-savings {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--gn);
+  background: rgba(35,214,122,0.1);
+  padding: 0.125rem 0.375rem;
+  border-radius: 3px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PROGRESS RING
+═══════════════════════════════════════════════════════════ */
+.progress-ring-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 2rem;
+}
+
+.progress-ring {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.progress-ring-circle {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+}
+
+.progress-ring-bg {
+  stroke: var(--bd);
+}
+
+.progress-ring-fill {
+  stroke: var(--ac);
+  transition: stroke-dashoffset 0.3s ease;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.progress-ring-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--fd);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--tx);
+}
+
+.progress-ring-label {
+  font-size: 0.8125rem;
+  color: var(--mu);
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SETTINGS PRESETS
+═══════════════════════════════════════════════════════════ */
+.presets-bar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 1rem;
+  background: var(--s2);
+  border-bottom: 1px solid var(--bd);
+}
+
+.preset-btn {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid var(--bd2);
+  border-radius: 6px;
+  background: var(--s1);
+  color: var(--mu);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.preset-btn:hover {
+  border-color: var(--ac);
+  color: var(--tx);
+  background: rgba(124,111,255,0.1);
+}
+
+.preset-btn.active {
+  background: var(--ac);
+  border-color: var(--ac);
+  color: #fff;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FILE SIZE COMPARISON
+═══════════════════════════════════════════════════════════ */
+.size-comparison {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 1rem;
+  background: var(--s2);
+  border-radius: 10px;
+  margin: 1rem 0;
+}
+
+.size-item {
+  text-align: center;
+}
+
+.size-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--mu);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.375rem;
+}
+
+.size-value {
+  font-family: var(--fd);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--tx);
+}
+
+.size-value.original {
+  color: var(--mu);
+}
+
+.size-value.result {
+  color: var(--gn);
+}
+
+.size-arrow {
+  font-size: 1.5rem;
+  color: var(--ac);
+}
+
+.size-savings {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gn);
+  margin-top: 0.25rem;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE ADJUSTMENTS
+═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .comparison-container {
+    margin: 1rem 0;
+  }
+  
+  .comparison-slider::before {
+    width: 32px;
+    height: 32px;
+    font-size: 8px;
+  }
+  
+  .preview-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.75rem;
+  }
+  
+  .preview-card-image {
+    height: 90px;
+  }
+  
+  .size-comparison {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .size-arrow {
+    transform: rotate(90deg);
+  }
+}
