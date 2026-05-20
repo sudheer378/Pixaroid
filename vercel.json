@@ -1,5 +1,4 @@
 {
-  {
      2	  "framework": null,
      3	  "buildCommand": null,
      4	  "outputDirectory": ".",
@@ -155,4 +154,3 @@
    154	    }
    155	  ]
    156	}
-}
