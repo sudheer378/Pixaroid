@@ -1,4 +1,4 @@
-/* Pixaroid — bulk.worker.js v5 */
+/* Pixaroid — bulk.worker.js v6 — fixed FileReaderSync issue */
 'use strict';
 var MIME={jpeg:'image/jpeg',jpg:'image/jpeg',png:'image/png',webp:'image/webp',gif:'image/gif',avif:'image/avif'};
 
@@ -9,8 +9,8 @@ self.onmessage=async function(e){
     var t=tasks[i];
     try{
       var blob=await run(t,type,opts);
-      var ab=blobBuf(blob);
-      results.push({filename:t.filename,buffer:ab||null,blob:ab?null:blob,mime:blob.type});
+      // Store blob directly - no ArrayBuffer conversion needed
+      results.push({filename:t.filename,blob:blob,mime:blob.type});
       self.postMessage({jobId:jid,type:'progress',current:i+1,total:total,filename:t.filename});
     }catch(err){
       errors.push({filename:t.filename,error:String(err.message||err)});
@@ -20,7 +20,6 @@ self.onmessage=async function(e){
   self.postMessage({jobId:jid,type:'done',total:total,results:results,errors:errors});
 };
 
-function blobBuf(b){try{return new FileReaderSync().readAsArrayBuffer(b);}catch(e){return null;}}
 async function getBm(buf,mime){
   try{return await createImageBitmap(new Blob([buf],{type:mime||'image/jpeg'}));}catch(e){}
   try{return await createImageBitmap(new Blob([buf]));}catch(e2){throw new Error('Decode failed');}

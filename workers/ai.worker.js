@@ -1,4 +1,4 @@
-/* Pixaroid — ai.worker.js v5 */
+/* Pixaroid — ai.worker.js v6 — fixed FileReaderSync issue */
 'use strict';
 
 self.onmessage=async function(e){
@@ -12,14 +12,15 @@ self.onmessage=async function(e){
     else if(d.op==='ai-colorize') r=await colorize(d);
     else if(d.op==='ai-ocr')      r=await ocr(d);
     else throw new Error('Unknown op: '+d.op);
-    if(r.isText){self.postMessage({jobId:jid,text:r.text,confidence:r.conf,format:'txt',buffer:null,mime:'text/plain',width:r.w,height:r.h});return;}
-    var ab=blobBuf(r.blob);
-    if(ab&&ab.byteLength>0)self.postMessage({jobId:jid,buffer:ab,mime:r.blob.type,width:r.w,height:r.h,format:r.fmt});
-    else self.postMessage({jobId:jid,blob:r.blob,width:r.w,height:r.h,format:r.fmt});
+    if(r.isText){
+      self.postMessage({jobId:jid,text:r.text,confidence:r.conf,format:'txt',mime:'text/plain',width:r.w,height:r.h});
+      return;
+    }
+    // Send result as blob for maximum compatibility
+    self.postMessage({jobId:jid,blob:r.blob,width:r.w,height:r.h,format:r.fmt});
   }catch(err){self.postMessage({jobId:d.jobId,error:String(err.message||err)});}
 };
 
-function blobBuf(b){try{return new FileReaderSync().readAsArrayBuffer(b);}catch(e){return null;}}
 function prog(p){self.postMessage({type:'progress',percent:Math.round(p)});}
 async function getBm(buf,mime){
   if(mime==='image/heic'||mime==='image/heif')throw new Error('HEIC not supported here — use HEIC→JPG tool first.');
