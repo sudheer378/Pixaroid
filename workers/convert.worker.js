@@ -1,18 +1,17 @@
-/* Pixaroid — convert.worker.js v5 */
+/* Pixaroid — convert.worker.js v6 — fixed FileReaderSync issue */
 'use strict';
 var MIME={jpeg:'image/jpeg',jpg:'image/jpeg',png:'image/png',webp:'image/webp',gif:'image/gif',bmp:'image/bmp',tiff:'image/tiff',tif:'image/tiff',avif:'image/avif'};
 
 self.onmessage=async function(e){
   var d=e.data,jid=d.jobId;
-  try{var r=await doConvert(d);dispatch(jid,r.blob,r.w,r.h,r.fmt);}
+  try{
+    var r=await doConvert(d);
+    // Send result as blob for maximum compatibility
+    self.postMessage({jobId:jid,blob:r.blob,width:r.w,height:r.h,format:r.fmt});
+  }
   catch(err){self.postMessage({jobId:jid,error:String(err.message||err)});}
 };
-function blobBuf(b){try{return new FileReaderSync().readAsArrayBuffer(b);}catch(e){return null;}}
-function dispatch(jid,blob,w,h,fmt){
-  var ab=blobBuf(blob);
-  if(ab&&ab.byteLength>0)self.postMessage({jobId:jid,buffer:ab,mime:blob.type,width:w,height:h,format:fmt});
-  else self.postMessage({jobId:jid,blob:blob,width:w,height:h,format:fmt});
-}
+
 async function getBm(buf,mime){
   for(var t of[mime,'image/jpeg','image/png','']){
     try{return await createImageBitmap(t?new Blob([buf],{type:t}):new Blob([buf]));}catch(e){}

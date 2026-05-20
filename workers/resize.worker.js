@@ -1,19 +1,18 @@
-/* Pixaroid — resize.worker.js v5 */
+/* Pixaroid — resize.worker.js v6 — fixed FileReaderSync issue */
 'use strict';
 var MIME={jpeg:'image/jpeg',jpg:'image/jpeg',png:'image/png',webp:'image/webp',gif:'image/gif',avif:'image/avif'};
 var PS={'1080x1080':{w:1080,h:1080},'1080x1350':{w:1080,h:1350},'1080x566':{w:1080,h:566},'1080x1920':{w:1080,h:1920},'1200x630':{w:1200,h:630},'820x312':{w:820,h:312},'1920x1005':{w:1920,h:1005},'170x170':{w:170,h:170},'1200x675':{w:1200,h:675},'1500x500':{w:1500,h:500},'400x400':{w:400,h:400},'1200x627':{w:1200,h:627},'1584x396':{w:1584,h:396},'1280x720':{w:1280,h:720},'2560x1440':{w:2560,h:1440},'800x800':{w:800,h:800},'500x500':{w:500,h:500},'1000x1500':{w:1000,h:1500},'1000x3000':{w:1000,h:3000},'165x165':{w:165,h:165},'600x600':{w:600,h:600},'413x531':{w:413,h:531},'512x512':{w:512,h:512},'320x320':{w:320,h:320},'1080x1080':{w:1080,h:1080}};
 
 self.onmessage=async function(e){
   var d=e.data,jid=d.jobId;
-  try{var r=await doResize(d);dispatch(jid,r.blob,r.w,r.h,r.fmt);}
+  try{
+    var r=await doResize(d);
+    // Send result as blob for maximum compatibility
+    self.postMessage({jobId:jid,blob:r.blob,width:r.w,height:r.h,format:r.fmt});
+  }
   catch(err){self.postMessage({jobId:jid,error:String(err.message||err)});}
 };
-function blobBuf(b){try{return new FileReaderSync().readAsArrayBuffer(b);}catch(e){return null;}}
-function dispatch(jid,blob,w,h,fmt){
-  var ab=blobBuf(blob);
-  if(ab&&ab.byteLength>0)self.postMessage({jobId:jid,buffer:ab,mime:blob.type,width:w,height:h,format:fmt});
-  else self.postMessage({jobId:jid,blob:blob,width:w,height:h,format:fmt});
-}
+
 async function getBm(buf,mime){
   try{return await createImageBitmap(new Blob([buf],{type:mime||'image/jpeg'}));}catch(e){}
   try{return await createImageBitmap(new Blob([buf]));}catch(e2){throw new Error('Cannot decode image');}

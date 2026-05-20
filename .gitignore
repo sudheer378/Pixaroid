@@ -1,6 +1,8 @@
-node_modules/
-dist/
+```
+# Build artifacts
 css/output.css
-.DS_Store
-*.log
-.env
+js/core.js
+
+# Workers
+workers/*.worker.js
+```

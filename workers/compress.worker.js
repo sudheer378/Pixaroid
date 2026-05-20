@@ -1,20 +1,40 @@
-/* Pixaroid — compress.worker.js v5 — classic script, no ES modules */
+/* Pixaroid — compress.worker.js v6 — fixed FileReaderSync issue */
 'use strict';
+
+// Helper to convert blob to ArrayBuffer asynchronously compatible way
+function blobToArrayBuffer(blob) {
+  return new Promise(function(resolve, reject) {
+    try {
+      var reader = new FileReader();
+      reader.onload = function() { resolve(reader.result); };
+      reader.onerror = function() { reject(new Error('Failed to read blob')); };
+      reader.readAsArrayBuffer(blob);
+    } catch(e) {
+      // Fallback for sync contexts (shouldn't happen in modern workers)
+      try {
+        var fr = new FileReaderSync();
+        resolve(fr.readAsArrayBuffer(blob));
+      } catch(syncErr) {
+        reject(syncErr);
+      }
+    }
+  });
+}
+
 var MIME={jpeg:'image/jpeg',jpg:'image/jpeg',png:'image/png',webp:'image/webp',gif:'image/gif',avif:'image/avif'};
 var DIM=[1,.9,.8,.7,.6,.5,.4,.3,.25,.2];
 
 self.onmessage=async function(e){
   var d=e.data,jid=d.jobId;
-  try{var r=(d.op==='compress-target')?await doTarget(d):await doFixed(d);
-    dispatch(jid,r.blob,r.w,r.h,r.fmt);
+  try{
+    var r=(d.op==='compress-target')?await doTarget(d):await doFixed(d);
+    // Send result - prefer blob for compatibility
+    self.postMessage({jobId:jid,blob:r.blob,width:r.w,height:r.h,format:r.fmt});
   }catch(err){self.postMessage({jobId:jid,error:String(err.message||err)});}
 };
 
-function blobBuf(blob){try{var fr=new FileReaderSync();return fr.readAsArrayBuffer(blob);}catch(e){return null;}}
 function dispatch(jid,blob,w,h,fmt){
-  var ab=blobBuf(blob);
-  if(ab&&ab.byteLength>0) self.postMessage({jobId:jid,buffer:ab,mime:blob.type,width:w,height:h,format:fmt});
-  else self.postMessage({jobId:jid,blob:blob,width:w,height:h,format:fmt});
+  self.postMessage({jobId:jid,blob:blob,width:w,height:h,format:fmt});
 }
 async function bm(buf,mime){
   for(var t of[mime,'image/jpeg','image/png','']){
