@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compress Image Online — Free | Pixaroid</title>
+  <meta name="description" content="Free online image compressor. Reduce JPG, PNG, WebP file sizes by up to 90% without visible quality loss. 100% browser-based, no upload required.">
+  <link rel="stylesheet" href="/css/output.css">
+  <link rel="stylesheet" href="/css/premium.css">
+</head>
+<body>
+  <header><div class="container nav-wrapper"><a href="/" class="logo">Pixaroid</a></div></header>
+  <section class="hero"><h1>Compress Image Online</h1><p>Reduce image file size by up to 90% without visible quality loss.</p></section>
+  <div class="container">
+    <div id="premium-dropzone" class="dropzone-premium">
+      <div class="dropzone-icon">📁</div>
+      <div class="dropzone-title">Drop images here</div>
+      <div class="dropzone-sub">or click to browse</div>
+      <div class="dropzone-hint"><span>JPG, PNG, WebP</span><span>•</span><span>Max 20MB</span><span>•</span><kbd>Ctrl+V</kbd> paste</div>
+    </div>
+    <div class="tool-controls" id="tool-controls">
+      <div class="control-card">
+        <label class="control-label">Quality Presets</label>
+        <div class="preset-grid">
+          <button class="preset-btn" data-quality="0.95">Maximum</button>
+          <button class="preset-btn active" data-quality="0.8">Recommended</button>
+          <button class="preset-btn" data-quality="0.6">Balanced</button>
+          <button class="preset-btn" data-quality="0.4">Extreme</button>
+        </div>
+      </div>
+    </div>
+    <div class="processing-area" id="processing-area">
+      <div class="progress-container">
+        <div class="progress-text"><span>Processing...</span><span id="progress-percent">0%</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar"></div></div>
+      </div>
+    </div>
+    <div class="stats-grid" id="stats-grid" style="display:none;">
+      <div class="stat-card stat-original"><span class="stat-value">-</span><span class="stat-label">Original</span></div>
+      <div class="stat-card stat-compressed"><span class="stat-value">-</span><span class="stat-label">Compressed</span></div>
+      <div class="stat-card stat-savings"><span class="stat-value">-</span><span class="stat-label">Savings</span></div>
+    </div>
+    <div class="comparison-wrapper" id="comparison-wrapper">
+      <div class="comparison-container">
+        <img class="comp-img comp-img-before" src="" alt="Before">
+        <img class="comp-img comp-img-after" src="" alt="After">
+        <div class="comp-slider"><div class="comp-handle">↔</div></div>
+        <span class="comp-label label-before">Before</span>
+        <span class="comp-label label-after">After</span>
+      </div>
+    </div>
+    <div class="action-buttons" id="action-buttons">
+      <button class="btn btn-primary" onclick="downloadProcessed()">Download</button>
+      <button class="btn btn-secondary" onclick="location.reload()">New</button>
+    </div>
+  </div>
+  <div id="toast-container" class="toast-container"></div>
+  <script src="/js/premium-ui.js"></script>
+</body>
+</html>
