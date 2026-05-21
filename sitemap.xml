@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Core Pages -->
   <sitemap>
     <loc>https://pixaroid.vercel.app/sitemap-core.xml</loc>
-    <lastmod>2025-01-10T00:00:00+00:00</lastmod>
+    <lastmod>2024-05-20</lastmod>
   </sitemap>
+  
+  <!-- Tool Categories (Split for performance) -->
   <sitemap>
     <loc>https://pixaroid.vercel.app/sitemap-tools-1.xml</loc>
-    <lastmod>2025-01-10T00:00:00+00:00</lastmod>
+    <lastmod>2024-05-20</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://pixaroid.vercel.app/sitemap-tools-2.xml</loc>
-    <lastmod>2025-01-10T00:00:00+00:00</lastmod>
+    <lastmod>2024-05-20</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://pixaroid.vercel.app/sitemap-tools-3.xml</loc>
-    <lastmod>2025-01-10T00:00:00+00:00</lastmod>
+    <lastmod>2024-05-20</lastmod>
   </sitemap>
+
+  <!-- Guides & SEO Content -->
   <sitemap>
     <loc>https://pixaroid.vercel.app/sitemap-guides.xml</loc>
-    <lastmod>2025-01-10T00:00:00+00:00</lastmod>
+    <lastmod>2024-05-20</lastmod>
   </sitemap>
+
+  <!-- Images/Media (If applicable) -->
   <sitemap>
     <loc>https://pixaroid.vercel.app/sitemap-images.xml</loc>
-    <lastmod>2025-01-10T00:00:00+00:00</lastmod>
+    <lastmod>2024-05-20</lastmod>
   </sitemap>
 </sitemapindex>
