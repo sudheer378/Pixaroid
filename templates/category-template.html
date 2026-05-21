@@ -1,66 +1,125 @@
 <!DOCTYPE html>
-<html lang="en" class="">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{{CATEGORY_TITLE}} | Pixaroid</title>
-  <meta name="description" content="{{CATEGORY_DESCRIPTION}}" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://pixaroid.vercel.app/tools/{{CATEGORY_SLUG}}/" />
-  <meta property="og:type"        content="website" />
-  <meta property="og:site_name"   content="Pixaroid" />
-  <meta property="og:title"       content="{{CATEGORY_OG_TITLE}}" />
-  <meta property="og:description" content="{{CATEGORY_OG_DESCRIPTION}}" />
-  <meta property="og:url"         content="https://pixaroid.vercel.app/tools/{{CATEGORY_SLUG}}/" />
-  <meta property="og:image"       content="https://pixaroid.vercel.app/assets/images/og-default.png" />
-  <meta name="twitter:card"        content="summary_large_image" />
-  <meta name="twitter:site"        content="@pixaroidapp" />
-  <meta name="twitter:title"       content="{{CATEGORY_OG_TITLE}}" />
-  <meta name="twitter:description" content="{{CATEGORY_OG_DESCRIPTION}}" />
-  <meta name="twitter:image"       content="https://pixaroid.vercel.app/assets/images/og-default.png" />
-  <link rel="icon"     href="/assets/svg/favicon.svg" type="image/svg+xml" />
-  <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#4F46E5" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/output.css" />
-  <link rel="stylesheet" href="/css/animations.css" />
-  <script type="application/ld+json">{{CATEGORY_SCHEMA_BREADCRUMB}}</script>
-  <script type="application/ld+json">{{CATEGORY_SCHEMA_ITEMLIST}}</script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="{{DESC}}"/>
+<meta name="keywords" content="{{KEYWORDS}}"/>
+<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large"/>
+<meta name="author" content="Pixaroid"/>
+<link rel="canonical" href="{{CANONICAL}}"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Pixaroid"/>
+<meta property="og:title" content="{{OG_TITLE}}"/>
+<meta property="og:description" content="{{OG_DESC}}"/>
+<meta property="og:url" content="{{CANONICAL}}"/>
+<meta property="og:image" content="https://pixaroid.vercel.app/assets/images/og-default.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="{{OG_TITLE}}"/>
+<meta name="twitter:description" content="{{OG_DESC}}"/>
+<title>{{TITLE}}</title>
+<link rel="icon" href="/assets/svg/favicon.svg" type="image/svg+xml"/>
+<link rel="manifest" href="/manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--ink:#05040D;--ink2:#08071A;--glass:#0D0B1E;--glass2:#131128;--glass3:#1A1833;--rim:rgba(255,255,255,.065);--rim2:rgba(255,255,255,.1);--rim3:rgba(255,255,255,.18);--txt:#F0EFF8;--mute:#9494BB;--dim:#383860;--v:#7B6FFF;--v2:#A99FFF;--gr:#1EE87A;--tl:#10D4BE;--rs:#FF3C9D;--or:#FF7040;--go:#FFB830;--pdf:#F87070;--cmp:#FF7040;--cnv:#7B6FFF;--rsz:#10D4BE;--edt:#FFB830;--ai:#FF3C9D;--soc:#1EE87A;--utl:#60A5FA;--blk:#A78BFA;--f:'Plus Jakarta Sans',sans-serif;--fm:'JetBrains Mono',monospace;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{font-family:var(--f);background:var(--ink);color:var(--txt);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.6;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 100% 60% at 50% -15%,rgba(123,111,255,.2),transparent 55%),radial-gradient(ellipse 50% 35% at 10% 70%,rgba(255,60,157,.06),transparent 55%),radial-gradient(ellipse 40% 30% at 90% 75%,rgba(16,212,190,.05),transparent 50%);}
+a{color:inherit;text-decoration:none;}
+h1,h2,h3{font-weight:800;line-height:1.1;letter-spacing:-.035em;}
+.W{max-width:1200px;margin:0 auto;padding:0 1.25rem;position:relative;z-index:1;}
+.nav{position:sticky;top:0;z-index:300;background:rgba(5,4,13,.88);backdrop-filter:blur(28px) saturate(160%);border-bottom:1px solid var(--rim);}
+.ni{display:flex;align-items:center;gap:.875rem;height:58px;max-width:1200px;margin:0 auto;padding:0 1.25rem;}
+.logo{display:flex;align-items:center;gap:.5rem;font-weight:800;font-size:1.125rem;letter-spacing:-.04em;}
+.lm{width:32px;height:32px;border-radius:9px;background:#0A0818;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 20px rgba(123,111,255,.45);}
+.logo-t{background:linear-gradient(90deg,#fff 0%,#C4BFFF 45%,#A99FFF 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ns{flex:1;}
+.nl{display:flex;align-items:center;gap:.125rem;}
+.na{padding:.375rem .75rem;border-radius:8px;font-size:.875rem;font-weight:500;color:var(--mute);transition:color .2s,background .2s;}
+.na:hover{color:var(--txt);background:rgba(255,255,255,.06);}
+.hero{padding:3rem 0 2rem;text-align:center;}
+.hero h1{font-size:clamp(2rem,5vw,3.5rem);margin-bottom:1rem;}
+.hero p{font-size:1.0625rem;color:var(--mute);max-width:600px;margin:0 auto;}
+.breadcrumb{display:flex;align-items:center;gap:.5rem;font-size:.8125rem;color:var(--dim);margin-bottom:1.5rem;}
+.breadcrumb a{color:var(--mute);transition:color .2s;}
+.breadcrumb a:hover{color:var(--v2);}
+.breadcrumb span{opacity:.5;}
+.sec{margin-bottom:2.5rem;}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;padding-bottom:.875rem;border-bottom:1px solid var(--rim);}
+.sht{font-size:1.25rem;font-weight:800;letter-spacing:-.025em;display:flex;align-items:center;gap:.625rem;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem;}
+@media(max-width:560px){.grid{grid-template-columns:repeat(2,1fr);}}
+.tc{display:flex;flex-direction:column;gap:.5rem;padding:1.125rem;background:var(--glass);border:1px solid var(--rim2);border-radius:14px;cursor:pointer;position:relative;overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s;}
+.tc:hover,.tc:focus-within{transform:translateY(-3px);box-shadow:0 10px 32px rgba(0,0,0,.4);border-color:var(--cb,var(--rim3));}
+.tc.hidden{display:none;}
+.tico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;overflow:hidden;}
+.tico svg{width:20px;height:20px;position:relative;z-index:1;}
+.tname{font-size:.95rem;font-weight:700;letter-spacing:-.02em;line-height:1.25;}
+.tdesc{font-size:.8125rem;color:var(--mute);line-height:1.45;flex:1;}
+.tft{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:.25rem;}
+.tarr{color:var(--dim);opacity:0;transition:opacity .15s,transform .15s;}
+.tc:hover .tarr{opacity:1;transform:translateX(3px);}
+.back-link{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;border-radius:9px;border:1px solid var(--rim2);background:var(--glass);font-size:.875rem;font-weight:600;color:var(--mute);margin-bottom:1.5rem;transition:all .2s;}
+.back-link:hover{border-color:var(--rim3);color:var(--txt);background:rgba(255,255,255,.05);}
+footer{border-top:1px solid var(--rim);padding:2.5rem 0;margin-top:3rem;}
+.fi2{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.25rem;}
+.flinks{display:flex;flex-wrap:wrap;gap:.125rem;}
+.fl{padding:.375rem .75rem;border-radius:7px;font-size:.8125rem;color:var(--mute);transition:color .2s,background .2s;}
+.fl:hover{color:var(--txt);background:rgba(255,255,255,.05);}
+.fcopy{font-size:.8125rem;color:var(--dim);}
+</style>
 </head>
-<body class="bg-[var(--bg)] text-[var(--text)]">
+<body>
+<nav class="nav"><div class="ni">
+<a href="/" class="logo"><div class="lm"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="url(#g)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 12l10 5 10-5"/><path d="M2 17l10 5 10-5"/><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7B6FFF"/><stop offset="100%" stop-color="#FF3C9D"/></linearGradient></defs></svg></div><span class="logo-t">Pixaroid</span></a>
+<div class="ns"></div>
+<div class="nl">
+<a href="/tools/pdf-tools/" class="na">PDF</a>
+<a href="/tools/compression/" class="na">Compress</a>
+<a href="/tools/conversion/" class="na">Convert</a>
+<a href="/tools/ai-tools/" class="na">AI Tools</a>
+<a href="/guides/" class="na">Guides</a>
+<a href="/about.html" class="na">About</a>
+</div>
+</div></nav>
 
-  <!-- Navbar (same as homepage — injected by build) -->
-  <header id="navbar" data-component="navbar"></header>
+<main class="W">
+<div class="hero">
+<a href="/" class="back-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Back to Home</a>
+<h1>{{H1}}</h1>
+<p>{{HERO_DESC}}</p>
+</div>
 
-  <!-- Category Hero -->
-  <section id="category-hero"
-           data-category="{{CATEGORY_SLUG}}"
-           data-color="{{CATEGORY_COLOR}}"
-           style="background:{{CATEGORY_COLOR_BG}};border-bottom:1px solid var(--border);padding:3.5rem 1.5rem 2.5rem;">
-    <div style="max-width:1200px;margin:0 auto;">
-      <nav style="font-size:.8125rem;color:var(--muted);margin-bottom:1.5rem;display:flex;gap:.5rem;">
-        <a href="/">Home</a><span>›</span><span>{{CATEGORY_LABEL}}</span>
-      </nav>
-      <div style="display:inline-flex;align-items:center;gap:.375rem;padding:.25rem .75rem;border-radius:999px;font-size:.75rem;font-weight:600;margin-bottom:1rem;background:{{CATEGORY_COLOR_BG}};color:{{CATEGORY_COLOR}};border:1px solid {{CATEGORY_COLOR}}30;">
-        {{CATEGORY_TOOL_COUNT}} Tools
-      </div>
-      <h1 style="font-family:'Poppins',sans-serif;font-size:clamp(1.75rem,3.5vw,2.5rem);font-weight:800;margin-bottom:.75rem;">{{CATEGORY_HEADLINE}}</h1>
-      <p style="font-size:1.0625rem;color:var(--muted);max-width:560px;line-height:1.7;">{{CATEGORY_SUBHEADLINE}}</p>
-    </div>
-  </section>
+<div class="sec">
+<div class="sh"><span class="sht">{{ICON}} {{CATEGORY_NAME}} Tools ({{COUNT}})</span></div>
+<div class="grid" id="tools-grid"></div>
+</div>
+</main>
 
-  <!-- Tool Grid -->
-  <main id="tool-grid" style="max-width:1200px;margin:0 auto;padding:2.5rem 1.5rem 5rem;">
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;">
-      {{TOOL_CARDS}}
-    </div>
-  </main>
+<footer><div class="W fi2">
+<div class="flinks">
+<a href="/about.html" class="fl">About</a><a href="/contact.html" class="fl">Contact</a>
+<a href="/privacy-policy.html" class="fl">Privacy</a><a href="/terms-of-service.html" class="fl">Terms</a>
+<a href="/faq.html" class="fl">FAQ</a><a href="/sitemap.xml" class="fl">Sitemap</a>
+</div>
+<div class="fcopy">© 2025 Pixaroid. All rights reserved.</div>
+</div></footer>
 
-  <!-- Footer (same as homepage — injected by build) -->
-  <footer id="footer" data-component="footer"></footer>
-
-  <script type="module" src="/js/app.js"></script>
+<script>
+const TOOLS = {{TOOLS_JSON}};
+const grid = document.getElementById('tools-grid');
+grid.innerHTML = TOOLS.map(t => 
+'<a href="/tools/'+t.c+'/'+t.s+'/" class="tc" style="--cg:'+t.cg+';--cb:'+t.cb+'" data-cat="'+t.c+'">'+
+'<div class="tico" style="background:'+t.bg+'">'+t.i+'</div>'+
+'<div class="tname">'+t.n+'</div>'+
+'<div class="tdesc">'+t.d+'</div>'+
+'<div class="tft"><span></span><svg class="tarr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>'+
+'</a>'
+).join('');
+</script>
 </body>
 </html>
