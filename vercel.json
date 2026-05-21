@@ -7,50 +7,24 @@
   "trailingSlash": false,
   "headers": [
     {
-      "source": "/(.*)\\.html",
+      "source": "/(.*)",
       "headers": [
         {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
         },
         {
-          "key": "Content-Type",
-          "value": "text/html; charset=utf-8"
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
         }
       ]
     },
     {
-      "source": "/(css|js|assets|fonts)/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/workers/(.*)\\.js",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/javascript; charset=utf-8"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        },
-        {
-          "key": "Cross-Origin-Opener-Policy",
-          "value": "same-origin"
-        },
-        {
-          "key": "Cross-Origin-Embedder-Policy",
-          "value": "require-corp"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)\\.xml",
+      "source": "/(.*\\.xml)$",
       "headers": [
         {
           "key": "Content-Type",
@@ -76,120 +50,72 @@
       ]
     },
     {
-      "source": "/llms.txt",
+      "source": "/workers/(.*)\\.js$",
       "headers": [
         {
           "key": "Content-Type",
-          "value": "text/plain; charset=utf-8"
+          "value": "application/javascript; charset=utf-8"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, immutable"
         }
       ]
     },
     {
-      "source": "/(.*)",
+      "source": "/sw.js",
       "headers": [
         {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
+          "key": "Content-Type",
+          "value": "application/javascript; charset=utf-8"
         },
         {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
         },
         {
-          "key": "Permissions-Policy",
-          "value": "camera=(), microphone=(), geolocation=()"
-        },
+          "key": "Service-Worker-Allowed",
+          "value": "/"
+        }
+      ]
+    },
+    {
+      "source": "/(css|js|assets|images|fonts)/(.*)",
+      "headers": [
         {
-          "key": "X-Frame-Options",
-          "value": "SAMEORIGIN"
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*\\.html?)$",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
         }
       ]
     }
   ],
   "rewrites": [
-    {
-      "source": "/compress-image",
-      "destination": "/tools/compression/index.html"
-    },
-    {
-      "source": "/compress-jpg",
-      "destination": "/tools/compression/jpg.html"
-    },
-    {
-      "source": "/compress-png",
-      "destination": "/tools/compression/png.html"
-    },
-    {
-      "source": "/convert-jpg-to-png",
-      "destination": "/tools/conversion/jpg-to-png.html"
-    },
-    {
-      "source": "/convert-png-to-jpg",
-      "destination": "/tools/conversion/png-to-jpg.html"
-    },
-    {
-      "source": "/convert-to-webp",
-      "destination": "/tools/conversion/to-webp.html"
-    },
-    {
-      "source": "/resize-image",
-      "destination": "/tools/resize/index.html"
-    },
-    {
-      "source": "/resize-for-instagram",
-      "destination": "/tools/resize/instagram.html"
-    },
-    {
-      "source": "/resize-for-facebook",
-      "destination": "/tools/resize/facebook.html"
-    },
-    {
-      "source": "/crop-image",
-      "destination": "/tools/editor/crop.html"
-    },
-    {
-      "source": "/rotate-image",
-      "destination": "/tools/editor/rotate.html"
-    },
-    {
-      "source": "/add-watermark",
-      "destination": "/tools/editor/watermark.html"
-    },
-    {
-      "source": "/bulk-compress",
-      "destination": "/tools/bulk-tools/compress.html"
-    },
-    {
-      "source": "/bulk-convert",
-      "destination": "/tools/bulk-tools/convert.html"
-    },
-    {
-      "source": "/merge-pdf",
-      "destination": "/tools/pdf-tools/merge.html"
-    },
-    {
-      "source": "/split-pdf",
-      "destination": "/tools/pdf-tools/split.html"
-    },
-    {
-      "source": "/compress-pdf",
-      "destination": "/tools/pdf-tools/compress.html"
-    },
-    {
-      "source": "/pdf-to-jpg",
-      "destination": "/tools/pdf-tools/pdf-to-jpg.html"
-    },
-    {
-      "source": "/jpg-to-pdf",
-      "destination": "/tools/pdf-tools/jpg-to-pdf.html"
-    },
-    {
-      "source": "/ai-background-remover",
-      "destination": "/tools/ai-tools/background-remover.html"
-    },
-    {
-      "source": "/ai-upscaler",
-      "destination": "/tools/ai-tools/upscaler.html"
-    }
+    { "source": "/compress", "destination": "/tools/compression/index.html" },
+    { "source": "/convert", "destination": "/tools/conversion/index.html" },
+    { "source": "/resize", "destination": "/tools/resize/index.html" },
+    { "source": "/editor", "destination": "/tools/editor/index.html" },
+    { "source": "/ai", "destination": "/tools/ai-tools/index.html" },
+    { "source": "/social", "destination": "/tools/social-tools/index.html" },
+    { "source": "/bulk", "destination": "/tools/bulk-tools/index.html" },
+    { "source": "/pdf", "destination": "/tools/pdf-tools/index.html" },
+    { "source": "/utilities", "destination": "/tools/utilities/index.html" },
+    { "source": "/guides", "destination": "/guides/index.html" }
   ]
 }
