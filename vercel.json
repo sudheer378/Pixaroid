@@ -5,6 +5,7 @@
   "installCommand": null,
   "cleanUrls": true,
   "trailingSlash": false,
+  "ignoreProjectSettings": true,
   "headers": [
     {
       "source": "/(.*)\\.html",
@@ -191,5 +192,18 @@
       "source": "/ai-upscaler",
       "destination": "/tools/ai-tools/upscaler.html"
     }
-  ]
+  ],
+  "functions": {
+    "api/*.js": {
+      "runtime": "@vercel/node@3.0.0"
+    }
+  },
+  "regions": ["iad1"],
+  "public": true,
+  "projectSettings": {
+    "buildCommand": null,
+    "devCommand": null,
+    "installCommand": null,
+    "outputDirectory": "."
+  }
 }
