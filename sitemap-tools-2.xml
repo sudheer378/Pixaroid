@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://pixaroid.vercel.app/merge-pdf</loc><priority>0.9</priority></url>
+  <url><loc>https://pixaroid.vercel.app/split-pdf</loc><priority>0.9</priority></url>
+  <url><loc>https://pixaroid.vercel.app/compress-pdf</loc><priority>0.9</priority></url>
+  <url><loc>https://pixaroid.vercel.app/pdf-to-jpg</loc><priority>0.8</priority></url>
+  <url><loc>https://pixaroid.vercel.app/jpg-to-pdf</loc><priority>0.8</priority></url>
+  <url><loc>https://pixaroid.vercel.app/edit-pdf</loc><priority>0.8</priority></url>
+  <url><loc>https://pixaroid.vercel.app/remove-bg</loc><priority>0.7</priority></url>
+  <url><loc>https://pixaroid.vercel.app/image-filter</loc><priority>0.7</priority></url>
+  <url><loc>https://pixaroid.vercel.app/bulk-resize</loc><priority>0.7</priority></url>
+  <url><loc>https://pixaroid.vercel.app/bulk-compress</loc><priority>0.7</priority></url>
+</urlset>
