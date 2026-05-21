@@ -1,8 +1,7 @@
-# Pixaroid Robots.txt - Production Configuration
-# Optimized for Google Search Console, AI Crawlers, and SEO
-
 User-agent: *
 Allow: /
+
+# Explicitly allow critical assets for rendering
 Allow: /tools/
 Allow: /guides/
 Allow: /assets/
@@ -10,7 +9,7 @@ Allow: /css/
 Allow: /js/
 Allow: /workers/
 
-# Specific AI Crawlers
+# AI Crawlers
 User-agent: GPTBot
 Allow: /
 
@@ -20,24 +19,5 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-User-agent: Applebot
-Allow: /
-
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 0
-
-# Block aggressive scrapers
-User-agent: AhrefsBot
-Disallow: /api/
-Crawl-delay: 5
-
-User-agent: SemrushBot
-Disallow: /api/
-Crawl-delay: 5
-
 # Sitemap Location
 Sitemap: https://pixaroid.vercel.app/sitemap.xml
-
-# Host
-Host: https://pixaroid.vercel.app
