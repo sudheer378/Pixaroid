@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://pixaroid.vercel.app/guides/compress-image</loc><priority>0.6</priority></url>
-  <url><loc>https://pixaroid.vercel.app/guides/convert-heic</loc><priority>0.6</priority></url>
-  <url><loc>https://pixaroid.vercel.app/guides/pdf-tools</loc><priority>0.6</priority></url>
-  <url><loc>https://pixaroid.vercel.app/guides/webp-benefits</loc><priority>0.5</priority></url>
-  <url><loc>https://pixaroid.vercel.app/guides/image-formats</loc><priority>0.5</priority></url>
+  <url><loc>https://pixaroid.vercel.app/tools/compress-jpg</loc><priority>0.8</priority></url>
+  <url><loc>https://pixaroid.vercel.app/tools/compress-png</loc><priority>0.8</priority></url>
 </urlset>

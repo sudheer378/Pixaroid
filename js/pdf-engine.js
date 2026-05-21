@@ -1,4 +1,4 @@
-// Pixaroid PDF Engine (Sejda-style)
+// Pixaroid PDF Engine v1.0 (Sejda Compatible)
 import { PDFDocument, rgb, StandardFonts } from './vendor/pdf-lib.min.js';
 
 export class PDFEngine {
@@ -13,28 +13,20 @@ export class PDFEngine {
     return await mergedPdf.save();
   }
 
-  async split(pdfFile, pages) {
-    const pdfBytes = await pdfFile.arrayBuffer();
+  async split(file, pages) {
+    const pdfBytes = await file.arrayBuffer();
     const pdf = await PDFDocument.load(pdfBytes);
     const newPdf = await PDFDocument.create();
-    const pageIndices = pages.split(',').map(p => parseInt(p.trim()) - 1);
-    const copiedPages = await newPdf.copyPages(pdf, pageIndices);
+    const indices = pages.split(',').map(p => parseInt(p.trim()) - 1);
+    const copiedPages = await newPdf.copyPages(pdf, indices);
     copiedPages.forEach((page) => newPdf.addPage(page));
     return await newPdf.save();
   }
 
-  async rotate(pdfFile, rotation) {
-    const pdfBytes = await pdfFile.arrayBuffer();
-    const pdf = await PDFDocument.load(pdfBytes);
-    const pages = pdf.getPages();
-    pages.forEach(page => page.setRotation(page.getRotation() + rotation));
-    return await pdf.save();
-  }
-
-  async compress(pdfFile) {
+  async compress(file) {
     // Basic compression by removing metadata
-    const pdfBytes = await pdfFile.arrayBuffer();
-    const pdf = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
+    const pdfBytes = await file.arrayBuffer();
+    const pdf = await PDFDocument.load(pdfBytes);
     return await pdf.save({ useObjectStreams: false });
   }
 }
