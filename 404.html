@@ -1,37 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<meta name="robots" content="noindex"/>
-<link rel="canonical" href="https://pixaroid.vercel.app/404.html"/>
-<link rel="icon" href="/assets/svg/favicon.svg" type="image/svg+xml"/>
-<title>404 — Page Not Found | Pixaroid</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
-<style>
-:root{--bg:#05040D;--s1:#0D0B1E;--s2:#131128;--bd:rgba(255,255,255,.065);--bd2:rgba(255,255,255,.1);--tx:#F0EFF8;--mu:#9494BB;--ac:#7B6FFF;--ac2:#A99FFF;--f:'Plus Jakarta Sans',sans-serif;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--f);background:var(--bg);color:var(--tx);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;-webkit-font-smoothing:antialiased;}
-body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 50% 30%,rgba(123,111,255,.14),transparent 60%);}
-.err-num{font-size:clamp(6rem,20vw,12rem);font-weight:800;letter-spacing:-.05em;line-height:1;background:linear-gradient(135deg,#fff,#A99FFF 40%,#FF3C9D 80%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:1rem;position:relative;z-index:1;}
-h1{font-size:clamp(1.25rem,3vw,1.75rem);font-weight:800;margin-bottom:.75rem;position:relative;z-index:1;}
-p{color:var(--mu);max-width:400px;font-size:.9375rem;line-height:1.7;margin-bottom:2rem;position:relative;z-index:1;}
-.links{display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;}
-.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.6875rem 1.375rem;border-radius:10px;font-weight:700;font-size:.9375rem;text-decoration:none;transition:transform .15s;}
-.btn-p{background:linear-gradient(135deg,var(--ac),#9C40FF);color:#fff;box-shadow:0 4px 16px rgba(123,111,255,.3);}
-.btn-p:hover{transform:translateY(-2px);}
-.btn-s{border:1px solid var(--bd2);background:var(--s2);color:var(--mu);}
-.btn-s:hover{color:var(--tx);border-color:var(--bd2);}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found - Pixaroid</title>
+  <meta name="description" content="The page you're looking for doesn't exist. Browse our image and PDF tools instead.">
+  <link rel="stylesheet" href="/css/output.css">
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-align: center;
+      padding: 2rem;
+    }
+    .error-code {
+      font-size: 8rem;
+      font-weight: bold;
+      margin: 0;
+      opacity: 0.3;
+    }
+    .error-title {
+      font-size: 2rem;
+      margin: 1rem 0;
+    }
+    .error-message {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      max-width: 500px;
+      margin-bottom: 2rem;
+    }
+    .search-box {
+      width: 100%;
+      max-width: 400px;
+      padding: 1rem 1.5rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      max-width: 800px;
+      width: 100%;
+      margin-top: 2rem;
+    }
+    .tool-card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-decoration: none;
+      color: white;
+      transition: transform 0.2s, background 0.2s;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .tool-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255,255,255,0.2);
+    }
+    .tool-card h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.1rem;
+    }
+    .tool-card p {
+      margin: 0;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    .home-link {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      background: white;
+      color: #667eea;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      transition: transform 0.2s;
+    }
+    .home-link:hover {
+      transform: scale(1.05);
+    }
+  </style>
 </head>
 <body>
-<div class="err-num">404</div>
-<h1>Page not found</h1>
-<p>The page you're looking for doesn't exist or may have moved. Try one of these instead:</p>
-<div class="links">
-  <a href="/" class="btn btn-p"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Go Home</a>
-  <a href="/tools/compression/compress-image/" class="btn btn-s">Compress Image</a>
-  <a href="/tools/pdf-tools/pdf-editor/" class="btn btn-s">PDF Editor</a>
-  <a href="/tools/conversion/heic-to-jpg/" class="btn btn-s">HEIC to JPG</a>
-</div>
+  <h1 class="error-code">404</h1>
+  <h2 class="error-title">Page Not Found</h2>
+  <p class="error-message">Oops! The page you're looking for doesn't exist or has been moved.</p>
+  
+  <input type="text" class="search-box" placeholder="Search for tools..." id="searchInput">
+  
+  <div class="tools-grid">
+    <a href="/compress-image" class="tool-card">
+      <h3>🗜️ Compress Image</h3>
+      <p>Reduce file size</p>
+    </a>
+    <a href="/convert-jpg-to-png" class="tool-card">
+      <h3>🔄 Convert JPG to PNG</h3>
+      <p>Format conversion</p>
+    </a>
+    <a href="/resize-image" class="tool-card">
+      <h3>📏 Resize Image</h3>
+      <p>Change dimensions</p>
+    </a>
+    <a href="/merge-pdf" class="tool-card">
+      <h3>📄 Merge PDF</h3>
+      <p>Combine PDF files</p>
+    </a>
+    <a href="/ai-background-remover" class="tool-card">
+      <h3>✨ AI Background Remover</h3>
+      <p>Remove backgrounds</p>
+    </a>
+    <a href="/pdf-to-jpg" class="tool-card">
+      <h3>📸 PDF to JPG</h3>
+      <p>Extract images</p>
+    </a>
+  </div>
+  
+  <a href="/" class="home-link">← Back to Home</a>
+  
+  <script>
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const query = this.value.toLowerCase();
+        const tools = {
+          'compress': '/compress-image',
+          'convert': '/convert-jpg-to-png',
+          'resize': '/resize-image',
+          'crop': '/crop-image',
+          'rotate': '/rotate-image',
+          'watermark': '/add-watermark',
+          'merge': '/merge-pdf',
+          'split': '/split-pdf',
+          'pdf': '/pdf-to-jpg',
+          'background': '/ai-background-remover',
+          'upscal': '/ai-upscaler'
+        };
+        for (const [key, url] of Object.entries(tools)) {
+          if (query.includes(key)) {
+            window.location.href = url;
+            return;
+          }
+        }
+        alert('Try searching for: compress, convert, resize, pdf, merge, split, background');
+      }
+    });
+  </script>
 </body>
 </html>
