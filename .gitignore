@@ -2,25 +2,22 @@
 # Dependencies
 node_modules/
 
-# Editor/IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-*.tmp
-
-# Logs
-*.log
-
-# Environment files
-.env
-.env.local
-*.env.*
-
-# Build artifacts
+# Build outputs
 dist/
 build/
 target/
+
+# Environment
+.env
+.env.local
+.env.*
+
+# Editors
+.vscode/
+.idea/
+
+# Logs
+*.log
 
 # Python
 __pycache__/
@@ -28,27 +25,25 @@ __pycache__/
 *.pyo
 *.pyd
 .Python
-env/
 venv/
 .venv/
-pip-log.txt
-pip-delete-this-directory.txt
-.tox/
+.env
+.env.local
+.pytest_cache/
+.mypy_cache/
 .coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.out
-*.pid
-*.seed
-*.session
-.hypothesis/
+htmlcov/
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# OS generated files
 .DS_Store
 Thumbs.db
 
-# Compression files
+# Compressed files
 *.zip
 *.gz
 *.tar
@@ -71,7 +66,4 @@ Thumbs.db
 *.tar.bz2
 *.tar.xz
 *.tar.zst
-
-# Image files (not to be ignored)
-# .png, .jpg, .jpeg, .bmp, .gif, .webm are not added to ignore list per rules
 ```
