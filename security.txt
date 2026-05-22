@@ -1,0 +1,55 @@
+# ============================================================
+#  Pixaroid — security.txt
+#  Security Policy & Contact Information
+#  Domain: https://pixaroid.vercel.app
+#  Last updated: 2026-03-16
+# ============================================================
+
+# Security vulnerability reporting contact
+Contact: mailto:security@pixaroid.vercel.app
+Contact: https://github.com/sudheer378/Pixaroid/issues
+
+# Encryption key (PGP)
+Encryption: https://pixaroid.vercel.app/pgp-key.txt
+
+# Preferred language for security reports
+Preferred-Languages: en
+
+# Security policy location
+Policy: https://pixaroid.vercel.app/security-policy.html
+
+# Acknowledgments page
+Acknowledgments: https://pixaroid.vercel.app/security-acknowledgments.html
+
+# Hiring security team members (optional)
+Hiring: https://pixaroid.vercel.app/careers
+
+# Expiration date for this file (1 year from now)
+Expires: 2027-03-16T23:59:59.000Z
+
+# Canonical URL for this security.txt file
+Canonical: https://pixaroid.vercel.app/.well-known/security.txt
+Canonical: https://pixaroid.vercel.app/security.txt
+
+# ============================================================
+#  SECURITY NOTES
+# ============================================================
+# 
+# Pixaroid is a client-side only application. All image and PDF
+# processing happens in the user's browser using Web Workers
+# and the Canvas API. No files are ever uploaded to our servers.
+#
+# This means:
+# - No server-side file storage vulnerabilities
+# - No file upload attack vectors
+# - No database containing user files
+# - No backend API for file processing
+#
+# Potential security concerns should focus on:
+# - XSS vulnerabilities in client-side code
+# - Dependency vulnerabilities (npm packages)
+# - Service Worker security
+# - PWA offline storage
+# - Third-party CDN integrity
+#
+# We take security seriously and appreciate responsible disclosure.

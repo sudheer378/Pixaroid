@@ -1,0 +1,7 @@
+Contact: mailto:security@pixaroid.com
+Contact: https://github.com/sudheer378/Pixaroid/security/advisories/new
+Expires: 2025-12-31T23:59:59.000Z
+Acknowledgments: https://github.com/sudheer378/Pixaroid/blob/main/SECURITY.md
+Preferred-Languages: en
+Canonical: https://pixaroid.com/.well-known/security.txt
+Policy: https://github.com/sudheer378/Pixaroid/blob/main/SECURITY.md
