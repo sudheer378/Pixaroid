@@ -1,0 +1,15 @@
+/* TEAM */
+Developer: Sudheer
+Site: https://github.com/sudheer378/Pixaroid
+Location: India
+
+/* THANKS */
+Inspired by: Sejda, iLovePDF, TinyPNG
+Technologies: Vercel, Web Workers, Canvas API
+
+/* SITE */
+Last update: 2024/05/22
+Language: English
+Doctype: HTML5
+Components: Vanilla JS, CSS3
+IDE: VS Code

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compress JPEG - Pixaroid v2.0</title>
+    <meta name="description" content="Compress JPEG images online with advanced algorithms. Reduce file size by up to 90% while maintaining quality.">
+    
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .tool-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #f7fafc;
+            margin-bottom: 1rem;
+        }
+        
+        .tool-description {
+            color: #a0aec0;
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .tool-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            .tool-content {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+        
+        .main-section {
+            background: #1a202c;
+            border-radius: 12px;
+            padding: 2rem;
+        }
+        
+        .settings-panel {
+            background: #2d3748;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .setting-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .setting-label {
+            display: block;
+            color: #f7fafc;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .setting-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: #1a202c;
+            border: 1px solid #4a5568;
+            border-radius: 6px;
+            color: #f7fafc;
+            font-size: 1rem;
+        }
+        
+        .setting-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .setting-hint {
+            font-size: 0.875rem;
+            color: #718096;
+            margin-top: 0.25rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #4a5568;
+            color: white;
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            background: #5a6b78;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .results-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #4a5568;
+        }
+        
+        .comparison-container {
+            margin-top: 1.5rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .stat-card {
+            background: #1a202c;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #a0aec0;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">
+                <span class="logo-icon">🎨</span>
+                <span class="logo-text">Pixaroid v2.0</span>
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/tools/">All Tools</a>
+                <a href="/compression/">Compression</a>
+                <a href="/conversion/">Conversion</a>
+                <a href="/resize/">Resize</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="tool-container">
+        <header class="tool-header">
+            <h1 class="tool-title">Compress JPEG Images</h1>
+            <p class="tool-description">
+                Reduce JPEG file size by up to 90% while maintaining excellent quality. 
+                Process images directly in your browser - no uploads required.
+            </p>
+        </header>
+
+        <div class="tool-content">
+            <div class="main-section">
+                <!-- Dropzone -->
+                <div id="dropzone"></div>
+
+                <!-- File List -->
+                <div id="file-list" style="margin-top: 2rem;"></div>
+
+                <!-- Progress Bar -->
+                <div id="progress-bar" style="margin-top: 2rem;"></div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button id="process-btn" class="btn btn-primary" disabled>
+                        Compress Images
+                    </button>
+                    <button id="reset-btn" class="btn btn-secondary">
+                        Reset
+                    </button>
+                </div>
+
+                <!-- Results Section -->
+                <div id="results-section" class="results-section" style="display: none;">
+                    <h2 style="color: #f7fafc; margin-bottom: 1rem;">Results</h2>
+                    
+                    <!-- Comparison Slider -->
+                    <div id="comparison-slider" class="comparison-container"></div>
+                    
+                    <!-- Stats -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="original-size">-</div>
+                            <div class="stat-label">Original Size</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="compressed-size">-</div>
+                            <div class="stat-label">Compressed Size</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="reduction-percent">-</div>
+                            <div class="stat-label">Reduction</div>
+                        </div>
+                    </div>
+
+                    <!-- Download Button -->
+                    <div class="action-buttons" style="margin-top: 1.5rem;">
+                        <button id="download-btn" class="btn btn-primary">
+                            Download Image
+                        </button>
+                        <button id="download-all-btn" class="btn btn-secondary">
+                            Download All
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Panel -->
+            <div class="settings-panel">
+                <h3 style="color: #f7fafc; margin-bottom: 1.5rem;">Compression Settings</h3>
+                
+                <div class="setting-group">
+                    <label class="setting-label" for="quality-setting">Quality Level</label>
+                    <select id="quality-setting" class="setting-input" data-setting="quality">
+                        <option value="0.3">Low (Smallest size)</option>
+                        <option value="0.5">Medium-Low</option>
+                        <option value="0.6" selected>Medium (Balanced)</option>
+                        <option value="0.75">Medium-High</option>
+                        <option value="0.85">High (Best quality)</option>
+                        <option value="0.95">Very High</option>
+                        <option value="1.0">Lossless</option>
+                    </select>
+                    <p class="setting-hint">Lower quality = smaller file size</p>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label" for="max-width-setting">Max Width (optional)</label>
+                    <input type="number" id="max-width-setting" class="setting-input" 
+                           placeholder="e.g., 1920" data-setting="width">
+                    <p class="setting-hint">Leave empty to keep original width</p>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label" for="max-height-setting">Max Height (optional)</label>
+                    <input type="number" id="max-height-setting" class="setting-input" 
+                           placeholder="e.g., 1080" data-setting="height">
+                    <p class="setting-hint">Leave empty to keep original height</p>
+                </div>
+
+                <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #4a5568;">
+                    <h4 style="color: #f7fafc; margin-bottom: 0.75rem;">Features</h4>
+                    <ul style="color: #a0aec0; font-size: 0.875rem; line-height: 1.8;">
+                        <li>✓ 100% browser-based (no uploads)</li>
+                        <li>✓ Batch processing (up to 50 files)</li>
+                        <li>✓ Before/after comparison</li>
+                        <li>✓ Real-time progress tracking</li>
+                        <li>✓ Up to 100MB file size support</li>
+                        <li>✓ Maintains EXIF data</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p style="color: #718096; text-align: center;">
+                © 2024 Pixaroid v2.0 - Professional Image Processing Tools
+            </p>
+        </div>
+    </footer>
+
+    <!-- Core Libraries (Load Order Matters) -->
+    <script src="/js/core/pixaroid-core.js"></script>
+    <script src="/js/services/image-processing-service.js"></script>
+    <script src="/js/ui/premium-ui.js"></script>
+    <script src="/js/tool-controller.js"></script>
+
+    <!-- Tool Configuration -->
+    <script>
+        window.ToolConfig = {
+            toolId: 'compress-jpeg',
+            toolName: 'JPEG Compressor',
+            toolType: 'compress',
+            accept: 'image/jpeg,image/jpg',
+            multiple: true,
+            maxFiles: 50,
+            maxSize: 100 * 1024 * 1024, // 100MB
+            showComparison: true,
+            autoProcess: false
+        };
+    </script>
+
+    <!-- Results Update Logic -->
+    <script>
+        // Listen for completion events
+        PixaroidCore.eventBus.on('tool:complete', (data) => {
+            if (data.results && data.results.length > 0) {
+                const firstResult = data.results[0];
+                
+                if (firstResult.result) {
+                    // Update stats
+                    document.getElementById('original-size').textContent = 
+                        PixaroidCore.utils.formatBytes(firstResult.result.originalSize);
+                    document.getElementById('compressed-size').textContent = 
+                        PixaroidCore.utils.formatBytes(firstResult.result.compressedSize);
+                    document.getElementById('reduction-percent').textContent = 
+                        firstResult.result.reduction + '%';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
