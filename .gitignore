@@ -1,30 +1,25 @@
 ```
-# Web workers
-tools/pdf-tools/workers/*.worker.js
-workers/*.worker.js
+# Workers and build artifacts
+*.worker.js
+dist/
+build/
+*.min.js
+*.bundle.js
 
-# PDF tools related build artifacts
-tools/pdf-tools/js/pdf/*.js
+# Dependencies
+node_modules/
 
-# Temporary HTML files that might be generated during builds
-*.html.tmp
-*.html.bak
-
-# Local environment files that might be created
-.env.local
-.env
-
-# Editor and IDE files
+# Editors
 .vscode/
 .idea/
-*.swp
-*.swo
 
-# Log files
+# Logs and temp files
 *.log
-
-# Backup and temporary files
 *.tmp
-*.bak
-*.backup
+*.swp
+
+# Environment
+.env
+.env.local
+*.env.*
 ```
