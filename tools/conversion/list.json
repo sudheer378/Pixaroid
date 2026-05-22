@@ -1,0 +1,11 @@
+[
+{"s":"jpg-to-png","n":"JPG to PNG","d":"Convert JPEG to transparent PNG"},
+{"s":"png-to-jpg","n":"PNG to JPG","d":"Convert PNG with transparency to JPEG"},
+{"s":"webp-to-jpg","n":"WebP to JPG","d":"Convert WebP images to JPEG"},
+{"s":"jpg-to-webp","n":"JPG to WebP","d":"Convert JPEG to modern WebP format"},
+{"s":"png-to-webp","n":"PNG to WebP","d":"Convert PNG to efficient WebP"},
+{"s":"gif-to-png","n":"GIF to PNG","d":"Extract GIF frames as PNG"},
+{"s":"tiff-to-jpg","n":"TIFF to JPG","d":"Convert professional TIFF to JPEG"},
+{"s":"png-to-gif","n":"PNG to GIF","d":"Create animated GIF from PNG"},
+{"s":"ico-converter","n":"Image to ICO","d":"Create favicons from any image"}
+]

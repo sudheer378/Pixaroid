@@ -1,0 +1,11 @@
+[
+{"s":"resize-image","n":"Resize Image","d":"Resize by pixels or percentage"},
+{"s":"resize-image-by-pixels","n":"Resize by Pixels","d":"Set exact width and height"},
+{"s":"resize-image-by-percentage","n":"Resize by Percent","d":"Scale by percentage value"},
+{"s":"resize-image-for-instagram","n":"Instagram Sizes","d":"All Instagram post & story sizes"},
+{"s":"resize-image-for-youtube","n":"YouTube Sizes","d":"Thumbnails & channel art"},
+{"s":"resize-image-for-facebook","n":"Facebook Sizes","d":"Cover, post & profile photos"},
+{"s":"resize-image-for-twitter","n":"Twitter/X Sizes","d":"Header & tweet image sizes"},
+{"s":"resize-passport-photo","n":"Passport Photo","d":"US, UK, EU passport dimensions"},
+{"s":"resize-image-to-300dpi","n":"Set to 300 DPI","d":"Print-ready resolution"}
+]
