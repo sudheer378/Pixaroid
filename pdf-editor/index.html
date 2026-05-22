@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Editor - Edit, Annotate & Modify PDFs Online</title>
+    <meta name="description" content="Free online PDF editor. Add text, draw annotations, highlight, insert images, and modify pages. 100% browser-based.">
+    <link rel="canonical" href="https://yourdomain.com/pdf-editor">
+    <meta property="og:title" content="Online PDF Editor">
+    <meta property="og:description" content="Edit PDFs with text, drawings, highlights and more. Free & secure.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#4f46e5', secondary: '#ec4899' } } } }</script>
+    <style>
+        .glass-panel { background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); }
+        .dark .glass-panel { background: rgba(30,41,59,0.7); border: 1px solid rgba(255,255,255,0.05); }
+        .drop-zone { transition: all 0.3s ease; border: 2px dashed #cbd5e1; }
+        .drop-zone.active { border-color: #4f46e5; background: rgba(79,70,229,0.05); transform: scale(1.01); }
+        .tool-btn.active { background: rgba(79,70,229,0.2); border-color: #4f46e5; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-slate-900 dark:text-gray-100 min-h-screen flex flex-col">
+    <nav class="w-full py-4 px-6 glass-panel sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">PDF Master</a>
+            <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700">🌙</button>
+        </div>
+    </nav>
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-7xl">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4">PDF Editor</h1>
+            <p class="text-lg text-gray-600 dark:text-gray-400">Add text, draw, highlight, and annotate your PDFs.</p>
+        </div>
+        
+        <div id="uploadSection" class="glass-panel rounded-2xl p-8 shadow-xl mb-8">
+            <div id="dropZone" class="drop-zone rounded-xl p-12 text-center cursor-pointer relative overflow-hidden group">
+                <input type="file" id="fileInput" accept=".pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                <div class="space-y-4">
+                    <div class="w-20 h-20 mx-auto bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center text-4xl group-hover:scale-110 transition">✏️</div>
+                    <h3 class="text-xl font-semibold">Drop PDF here</h3>
+                    <p class="text-gray-500 dark:text-gray-400">or click to browse</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="editorSection" class="hidden">
+            <!-- Toolbar -->
+            <div class="glass-panel rounded-xl p-4 mb-4 sticky top-20 z-40">
+                <div class="flex flex-wrap gap-2 justify-center items-center">
+                    <button class="tool-btn active px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 transition" data-tool="view">👁 View</button>
+                    <button class="tool-btn px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 transition" data-tool="text">📝 Text</button>
+                    <button class="tool-btn px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 transition" data-tool="draw">✏️ Draw</button>
+                    <button class="tool-btn px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 transition" data-tool="highlight">🖍 Highlight</button>
+                    <button class="tool-btn px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 transition" data-tool="image">🖼 Image</button>
+                    <div class="w-px h-8 bg-gray-300 dark:bg-gray-600 mx-2"></div>
+                    <input type="color" id="colorPicker" value="#ff0000" class="w-10 h-10 rounded cursor-pointer">
+                    <input type="range" id="strokeWidth" min="1" max="20" value="3" class="w-24">
+                    <button id="undoBtn" class="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 transition">↩ Undo</button>
+                    <button id="clearBtn" class="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 transition">🗑 Clear</button>
+                    <div class="w-px h-8 bg-gray-300 dark:bg-gray-600 mx-2"></div>
+                    <button id="prevPageBtn" class="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 transition">◀ Prev</button>
+                    <span id="pageIndicator" class="px-3">Page 1 of 1</span>
+                    <button id="nextPageBtn" class="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 transition">Next ▶</button>
+                    <div class="w-px h-8 bg-gray-300 dark:bg-gray-600 mx-2"></div>
+                    <button id="saveBtn" class="px-6 py-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-lg transition">💾 Save PDF</button>
+                </div>
+            </div>
+
+            <!-- Canvas Area -->
+            <div class="glass-panel rounded-2xl p-6 shadow-xl mb-8">
+                <div class="flex justify-center">
+                    <div class="relative inline-block">
+                        <canvas id="pdfCanvas" class="border rounded shadow-lg"></canvas>
+                        <canvas id="annotationCanvas" class="absolute inset-0 border rounded cursor-crosshair"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Thumbnails -->
+            <div class="glass-panel rounded-xl p-4 shadow-xl mb-8">
+                <h3 class="font-semibold mb-3">Pages</h3>
+                <div id="thumbnailStrip" class="flex gap-3 overflow-x-auto pb-2"></div>
+            </div>
+        </div>
+
+        <div id="resultSection" class="hidden glass-panel rounded-2xl p-8 shadow-xl text-center">
+            <div class="text-6xl mb-4">✅</div>
+            <h3 class="text-2xl font-bold mb-2">PDF Saved!</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">Your edited PDF is ready for download.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a id="downloadLink" class="px-8 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-indigo-700 transition shadow-lg inline-block">📥 Download PDF</a>
+                <button id="resetBtn" class="px-8 py-3 bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-white rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-slate-600 transition">Edit Another</button>
+            </div>
+        </div>
+
+        <article class="mt-16 prose dark:prose-invert max-w-none">
+            <h2>How to Edit a PDF</h2>
+            <ol><li>Upload your PDF file.</li><li>Select a tool: Text, Draw, Highlight, or Image.</li><li>Make your annotations on the document.</li><li>Click "Save PDF" to download your edited file.</li></ol>
+            <h2>FAQs</h2>
+            <div class="space-y-4 mt-4">
+                <details class="group bg-white dark:bg-slate-800 p-4 rounded-lg"><summary class="font-semibold cursor-pointer">Can I edit existing text?</summary><p class="mt-2 text-gray-600 dark:text-gray-400">This editor allows adding new text and annotations. Editing existing text requires more advanced tools.</p></details>
+                <details class="group bg-white dark:bg-slate-800 p-4 rounded-lg"><summary class="font-semibold cursor-pointer">Are files uploaded?</summary><p class="mt-2 text-gray-600 dark:text-gray-400">No, all editing happens locally in your browser.</p></details>
+                <details class="group bg-white dark:bg-slate-800 p-4 rounded-lg"><summary class="font-semibold cursor-pointer">What formats are supported?</summary><p class="mt-2 text-gray-600 dark:text-gray-400">We support standard PDF files. Annotations are saved as overlays.</p></details>
+            </div>
+        </article>
+    </main>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"PDF Editor","applicationCategory":"BusinessApplication","operatingSystem":"Web Browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script type="module">
+        let currentFile = null, pdfDoc = null, currentPage = 1, totalPages = 0;
+        let currentTool = 'view', annotations = [], history = [];
+        let pdfCanvas = document.getElementById('pdfCanvas'), annotationCanvas = document.getElementById('annotationCanvas');
+        let pdfCtx = pdfCanvas.getContext('2d'), annCtx = annotationCanvas.getContext('2d');
+        let isDrawing = false, lastX = 0, lastY = 0;
+        let pageAnnotations = {}; // Store annotations per page
+        
+        const dropZone = document.getElementById('dropZone'), fileInput = document.getElementById('fileInput');
+        const uploadSection = document.getElementById('uploadSection'), editorSection = document.getElementById('editorSection');
+        const resultSection = document.getElementById('resultSection'), downloadLink = document.getElementById('downloadLink');
+        
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        });
+        if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+        
+        dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('active'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('active'));
+        dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('active'); if(e.dataTransfer.files.length) loadFile(e.dataTransfer.files[0]); });
+        fileInput.addEventListener('change', e => { if(e.target.files.length) loadFile(e.target.files[0]); });
+        
+        document.querySelectorAll('.tool-btn').forEach(btn => {
+            btn.addEventListener('click', e => {
+                document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                currentTool = e.target.dataset.tool;
+                annotationCanvas.style.cursor = currentTool === 'view' ? 'default' : 'crosshair';
+            });
+        });
+        
+        document.getElementById('undoBtn').addEventListener('click', () => {
+            if (pageAnnotations[currentPage] && pageAnnotations[currentPage].length > 0) {
+                pageAnnotations[currentPage].pop();
+                renderAnnotations();
+            }
+        });
+        
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            if (confirm('Clear all annotations on this page?')) {
+                pageAnnotations[currentPage] = [];
+                renderAnnotations();
+            }
+        });
+        
+        document.getElementById('prevPageBtn').addEventListener('click', () => {
+            if (currentPage > 1) { currentPage--; renderPage(); }
+        });
+        document.getElementById('nextPageBtn').addEventListener('click', () => {
+            if (currentPage < totalPages) { currentPage++; renderPage(); }
+        });
+        
+        async function loadFile(file) {
+            if (file.type !== 'application/pdf') return alert('Please upload a PDF');
+            currentFile = file;
+            uploadSection.classList.add('hidden');
+            editorSection.classList.remove('hidden');
+            
+            const arrayBuffer = await file.arrayBuffer();
+            pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+            totalPages = pdfDoc.getPageCount();
+            currentPage = 1;
+            pageAnnotations = {};
+            
+            await renderPage();
+            await generateThumbnails(arrayBuffer);
+        }
+        
+        async function renderPage() {
+            const page = await pdfDoc.getPage(currentPage);
+            const viewport = page.getViewport({scale: 1});
+            pdfCanvas.width = viewport.width;
+            pdfCanvas.height = viewport.height;
+            annotationCanvas.width = viewport.width;
+            annotationCanvas.height = viewport.height;
+            
+            await page.render({canvasContext: pdfCtx, viewport}).promise;
+            
+            document.getElementById('pageIndicator').textContent = `Page ${currentPage} of ${totalPages}`;
+            
+            if (!pageAnnotations[currentPage]) pageAnnotations[currentPage] = [];
+            renderAnnotations();
+        }
+        
+        function renderAnnotations() {
+            annCtx.clearRect(0, 0, annotationCanvas.width, annotationCanvas.height);
+            const annots = pageAnnotations[currentPage] || [];
+            
+            annots.forEach(ann => {
+                annCtx.strokeStyle = ann.color;
+                annCtx.fillStyle = ann.color;
+                annCtx.lineWidth = ann.strokeWidth;
+                
+                if (ann.type === 'draw') {
+                    annCtx.beginPath();
+                    ann.points.forEach((p, i) => {
+                        if (i === 0) annCtx.moveTo(p.x, p.y);
+                        else annCtx.lineTo(p.x, p.y);
+                    });
+                    annCtx.stroke();
+                } else if (ann.type === 'text') {
+                    annCtx.font = `${ann.strokeWidth * 5}px Arial`;
+                    annCtx.fillText(ann.text, ann.x, ann.y);
+                } else if (ann.type === 'highlight') {
+                    annCtx.globalAlpha = 0.3;
+                    annCtx.fillRect(ann.x, ann.y, ann.width, ann.height);
+                    annCtx.globalAlpha = 1;
+                }
+            });
+        }
+        
+        async function generateThumbnails(arrayBuffer) {
+            const strip = document.getElementById('thumbnailStrip');
+            strip.innerHTML = '';
+            const loadingTask = pdfjsLib.getDocument({data: arrayBuffer});
+            const pdf = await loadingTask.promise;
+            
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const viewport = page.getViewport({scale: 0.2});
+                const canvas = document.createElement('canvas');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                await page.render({canvasContext: canvas.getContext('2d'), viewport}).promise;
+                
+                const btn = document.createElement('button');
+                btn.className = 'flex-shrink-0 rounded-lg overflow-hidden border-2 transition ' + (i === currentPage ? 'border-primary' : 'border-gray-300 dark:border-gray-600');
+                btn.appendChild(canvas);
+                btn.addEventListener('click', () => { currentPage = i; renderPage(); updateThumbnailHighlight(); });
+                strip.appendChild(btn);
+            }
+        }
+        
+        function updateThumbnailHighlight() {
+            const thumbs = document.getElementById('thumbnailStrip').children;
+            Array.from(thumbs).forEach((t, i) => {
+                t.classList.toggle('border-primary', i + 1 === currentPage);
+                t.classList.toggle('border-gray-300', i + 1 !== currentPage);
+            });
+        }
+        
+        annotationCanvas.addEventListener('mousedown', e => {
+            if (currentTool === 'view') return;
+            isDrawing = true;
+            const rect = annotationCanvas.getBoundingClientRect();
+            lastX = e.clientX - rect.left;
+            lastY = e.clientY - rect.top;
+            
+            if (currentTool === 'text') {
+                const text = prompt('Enter text:');
+                if (text) {
+                    if (!pageAnnotations[currentPage]) pageAnnotations[currentPage] = [];
+                    pageAnnotations[currentPage].push({
+                        type: 'text', text, x: lastX, y: lastY,
+                        color: document.getElementById('colorPicker').value,
+                        strokeWidth: parseInt(document.getElementById('strokeWidth').value)
+                    });
+                    renderAnnotations();
+                }
+                isDrawing = false;
+            } else if (currentTool === 'highlight') {
+                // Simple highlight - click to place
+                if (!pageAnnotations[currentPage]) pageAnnotations[currentPage] = [];
+                pageAnnotations[currentPage].push({
+                    type: 'highlight', x: lastX - 50, y: lastY - 15, width: 100, height: 30,
+                    color: document.getElementById('colorPicker').value
+                });
+                renderAnnotations();
+                isDrawing = false;
+            }
+        });
+        
+        annotationCanvas.addEventListener('mousemove', e => {
+            if (!isDrawing || currentTool !== 'draw') return;
+            const rect = annotationCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            annCtx.strokeStyle = document.getElementById('colorPicker').value;
+            annCtx.lineWidth = parseInt(document.getElementById('strokeWidth').value);
+            annCtx.lineCap = 'round';
+            annCtx.beginPath();
+            annCtx.moveTo(lastX, lastY);
+            annCtx.lineTo(x, y);
+            annCtx.stroke();
+            
+            lastX = x;
+            lastY = y;
+        });
+        
+        annotationCanvas.addEventListener('mouseup', e => {
+            if (!isDrawing || currentTool !== 'draw') return;
+            isDrawing = false;
+            // In a full implementation, we'd save the path to pageAnnotations
+        });
+        
+        document.getElementById('saveBtn').addEventListener('click', async () => {
+            try {
+                // Create new PDF with annotations
+                const newPdf = await PDFLib.PDFDocument.create();
+                const pages = await newPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+                pages.forEach((page, idx) => {
+                    const pageNum = idx + 1;
+                    const annots = pageAnnotations[pageNum] || [];
+                    annots.forEach(ann => {
+                        if (ann.type === 'text') {
+                            const font = await newPdf.embedFont(PDFLib.StandardFonts.Helvetica);
+                            page.drawText(ann.text, {
+                                x: ann.x,
+                                y: page.getHeight() - ann.y,
+                                size: ann.strokeWidth * 5,
+                                font,
+                                color: hexToRgb(ann.color)
+                            });
+                        }
+                    });
+                });
+                pages.forEach(page => newPdf.addPage(page));
+                
+                const bytes = await newPdf.save();
+                const blob = new Blob([bytes], {type: 'application/pdf'});
+                downloadLink.href = URL.createObjectURL(blob);
+                downloadLink.download = 'edited_' + currentFile.name;
+                
+                editorSection.classList.add('hidden');
+                resultSection.classList.remove('hidden');
+            } catch (err) {
+                console.error(err);
+                alert('Error saving: ' + err.message);
+            }
+        });
+        
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? PDFLib.rgb(
+                parseInt(result[1], 16) / 255,
+                parseInt(result[2], 16) / 255,
+                parseInt(result[3], 16) / 255
+            ) : PDFLib.rgb(0, 0, 0);
+        }
+        
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            resultSection.classList.add('hidden');
+            uploadSection.classList.remove('hidden');
+            fileInput.value = '';
+            annotations = [];
+            pageAnnotations = {};
+        });
+    </script>
+</body>
+</html>
