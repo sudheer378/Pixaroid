@@ -1,0 +1,126 @@
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is Pixaroid free to use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, Pixaroid is completely free to use. All our image processing tools are available at no cost with no registration required. You can compress, convert, resize, and edit images directly in your browser without any fees."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to install any software to use Pixaroid?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No installation required! Pixaroid runs entirely in your web browser. All image processing happens locally on your device using modern web technologies, so there's no need to download or install any software."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are my images uploaded to a server?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, your images are never uploaded to any server. All processing happens locally in your browser using client-side technologies. Your files stay on your device throughout the entire process, ensuring complete privacy and security."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What image formats does Pixaroid support?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pixaroid supports all major image formats including JPEG, PNG, GIF, WebP, AVIF, BMP, TIFF, SVG, ICO, and HEIC. You can convert between these formats, compress them, or edit them using our various tools."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a file size limit for images?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pixaroid can handle images up to 100MB in size. However, the actual limit may vary depending on your device's memory and browser capabilities. For best performance, we recommend processing images under 50MB."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I process multiple images at once?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Many Pixaroid tools support batch processing, allowing you to upload and process multiple images simultaneously. You can compress, convert, or resize dozens of images in one go, saving you time and effort."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which browsers are compatible with Pixaroid?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pixaroid works on all modern browsers including Chrome, Firefox, Safari, Edge, and Opera. For the best experience, we recommend using the latest version of your preferred browser."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does Pixaroid work on mobile devices?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely! Pixaroid is fully responsive and works perfectly on smartphones and tablets. You can process images on iOS, Android, or any other mobile device with a modern web browser."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I compress an image without losing quality?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use Pixaroid's smart compression tools which use advanced algorithms to reduce file size while maintaining visual quality. You can adjust the compression level to find the perfect balance between file size and image quality for your needs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I edit PDF files with Pixaroid?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, Pixaroid offers PDF tools including split, merge, compress, and convert functions. All PDF processing happens in your browser, keeping your documents secure and private."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between lossy and lossless compression?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Lossy compression reduces file size by removing some image data, which may slightly affect quality but results in much smaller files. Lossless compression preserves all original data, maintaining perfect quality but with less size reduction. Pixaroid offers both options depending on your needs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How can I convert HEIC images to JPG?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Simply use Pixaroid's HEIC to JPG converter tool. Upload your HEIC files (commonly used by iPhones), and they'll be converted to JPG format instantly in your browser, ready to share or use anywhere."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is Pixaroid safe to use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, Pixaroid is completely safe. Since all processing happens locally in your browser, your files never leave your device. We don't store, transmit, or access any of your images or data."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use Pixaroid offline?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pixaroid requires an initial internet connection to load, but once loaded, many tools can work offline thanks to our Progressive Web App (PWA) technology. However, for the best experience, we recommend having an internet connection."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I resize an image for social media?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use Pixaroid's social media image resizer tools, which offer preset dimensions for popular platforms like Instagram, Facebook, Twitter, LinkedIn, and more. Simply select your platform and upload your image for instant resizing."
+      }
+    }
+  ]
+}
