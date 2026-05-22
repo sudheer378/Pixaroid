@@ -434,9 +434,137 @@ select:focus,input[type=number]:focus,input[type=text]:focus{
 
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".aeo-answer", ".ht", ".hd", ".fai", ".hst p", ".ht2"]}, "@id": "https://pixaroid.vercel.app/tools/conversion/convert-png-to-gif/", "url": "https://pixaroid.vercel.app/tools/conversion/convert-png-to-gif/"}</script>
+
+<style>
+    .drop-zone {
+        border: 2px dashed #4b5563;
+        border-radius: 12px;
+        padding: 48px 24px;
+        text-align: center;
+        background: #1f2937;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        margin-bottom: 24px;
+    }
+    .drop-zone.drag-over {
+        border-color: #3b82f6;
+        background: #1e3a8a;
+        transform: scale(1.02);
+    }
+    .drop-zone:hover {
+        border-color: #6b7280;
+    }
+    .upload-icon {
+        color: #6b7280;
+        margin-bottom: 16px;
+    }
+    .drop-content h3 {
+        margin: 0 0 8px 0;
+        color: #f3f4f6;
+        font-size: 20px;
+    }
+    .drop-content p {
+        margin: 4px 0;
+        color: #9ca3af;
+        font-size: 14px;
+    }
+    .file-types {
+        font-size: 12px;
+        color: #6b7280;
+        margin-top: 12px;
+    }
+    .file-list {
+        margin-bottom: 24px;
+    }
+    .file-item {
+        display: flex;
+        align-items: center;
+        background: #1f2937;
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        gap: 12px;
+    }
+    .file-icon {
+        font-size: 24px;
+    }
+    .file-info {
+        flex: 1;
+        min-width: 0;
+    }
+    .file-name {
+        color: #f3f4f6;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .file-size {
+        color: #9ca3af;
+        font-size: 12px;
+        margin-top: 2px;
+    }
+    .remove-file {
+        background: none;
+        border: none;
+        color: #ef4444;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: background 0.2s;
+    }
+    .remove-file:hover {
+        background: rgba(239, 68, 68, 0.1);
+    }
+    .process-btn {
+        width: 100%;
+        padding: 16px;
+        background: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .process-btn:hover:not(:disabled) {
+        background: #2563eb;
+        transform: translateY(-1px);
+    }
+    .process-btn:disabled {
+        background: #4b5563;
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+    .allowed-types {
+        color: #3b82f6;
+        font-weight: 500;
+    }
+</style>
+
 </head>
 <body>
-<div class="zo" id="zo"><button class="zc" id="zc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button><img id="zi" src="" alt="Zoomed"/></div>
+<div class="zo" id="zo"><button class="zc" id="zc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button><img id="zi" src="" alt="Zoomed"/>
+
+        <div id="drop-zone" class="drop-zone">
+            <div class="drop-content">
+                <svg class="upload-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <h3>Drag & Drop Files Here</h3>
+                <p>or click to browse</p>
+                <p class="file-types">Supports: <span class="allowed-types">Auto-detected</span></p>
+                <input type="file" id="file-input" multiple style="display:none">
+            </div>
+        </div>
+        <div id="file-list" class="file-list"></div>
+        <button id="process-btn" class="process-btn" disabled>Upload Files to Start</button>
+
+</div>
 <nav class="tn"><div class="ni">
   <a href="/" class="logo"><div class="lm"><svg width="28" height="28" viewBox="0 0 20 20" fill="none">
   <defs>
@@ -815,5 +943,28 @@ console.log('[Pixaroid] Universal Engine initialized:',TOOL_TYPE);
 
 })();
 </script>
+<script src="/js/smart-upload.js" defer></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-detect category from URL path
+            const pathParts = window.location.pathname.split('/').filter(p => p);
+            const category = pathParts[1] || 'general'; // e.g., 'compression', 'pdf-tools'
+            
+            // Initialize Smart Upload with category enforcement
+            window.initSmartUpload({
+                dropZone: document.getElementById('drop-zone'),
+                fileInput: document.getElementById('file-input'),
+                fileListContainer: document.getElementById('file-list'),
+                processBtn: document.getElementById('process-btn'),
+                category: category,
+                maxFiles: 50,
+                maxSize: 100 * 1024 * 1024 // 100MB
+            });
+            
+            console.log('Smart Upload initialized for category:', category);
+        });
+    </script>
+
 </body>
 </html>
