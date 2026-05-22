@@ -21,3 +21,6 @@ Allow: /
 
 # Sitemap Location
 Sitemap: https://pixaroid.vercel.app/sitemap.xml
+
+# Sitemap
+Sitemap: https://pixaroid.com/sitemap-index.xml

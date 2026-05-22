@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequently Asked Questions - Pixaroid</title>
+    <meta name="description" content="Find answers to common questions about Pixaroid's free online image tools. Learn about features, privacy, supported formats, and more.">
+    <link rel="canonical" href="https://pixaroid.com/guides/faq.html">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Is Pixaroid free to use?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, Pixaroid is completely free to use. All our image processing tools are available at no cost with no registration required."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Are my images uploaded to a server?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No, your images are never uploaded to any server. All processing happens locally in your browser using client-side technologies."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What image formats does Pixaroid support?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Pixaroid supports JPEG, PNG, GIF, WebP, AVIF, BMP, TIFF, SVG, ICO, and HEIC formats."
+                }
+            }
+        ]
+    }
+    </script>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--bg-secondary);
+        }
+        h1 { font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-primary); }
+        .subtitle { color: var(--text-secondary); font-size: 1.1rem; }
+        .faq-item {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        .faq-item:hover { transform: translateY(-2px); }
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--accent);
+            transition: transform 0.3s;
+        }
+        .faq-item.active .faq-question::after { transform: rotate(45deg); }
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+        .faq-item.active .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            max-height: 500px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover { color: var(--accent-hover); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Frequently Asked Questions</h1>
+            <p class="subtitle">Everything you need to know about Pixaroid</p>
+        </header>
+        
+        <main>
+            <div class="faq-item">
+                <div class="faq-question">Is Pixaroid free to use?</div>
+                <div class="faq-answer">
+                    <p>Yes, Pixaroid is completely free to use. All our image processing tools are available at no cost with no registration required. You can compress, convert, resize, and edit images directly in your browser without any fees or watermarks.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Do I need to install any software?</div>
+                <div class="faq-answer">
+                    <p>No installation required! Pixaroid runs entirely in your web browser. All image processing happens locally on your device using modern web technologies, so there's no need to download or install any software.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Are my images uploaded to a server?</div>
+                <div class="faq-answer">
+                    <p>No, your images are never uploaded to any server. All processing happens locally in your browser using client-side technologies. Your files stay on your device throughout the entire process, ensuring complete privacy and security.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">What image formats does Pixaroid support?</div>
+                <div class="faq-answer">
+                    <p>Pixaroid supports all major image formats including JPEG, PNG, GIF, WebP, AVIF, BMP, TIFF, SVG, ICO, and HEIC. You can convert between these formats, compress them, or edit them using our various tools.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Is there a file size limit?</div>
+                <div class="faq-answer">
+                    <p>Pixaroid can handle images up to 100MB in size. However, the actual limit may vary depending on your device's memory and browser capabilities. For best performance, we recommend processing images under 50MB.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I process multiple images at once?</div>
+                <div class="faq-answer">
+                    <p>Yes! Many Pixaroid tools support batch processing, allowing you to upload and process multiple images simultaneously. You can compress, convert, or resize dozens of images in one go, saving you time and effort.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Which browsers are compatible?</div>
+                <div class="faq-answer">
+                    <p>Pixaroid works on all modern browsers including Chrome, Firefox, Safari, Edge, and Opera. For the best experience, we recommend using the latest version of your preferred browser.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Does Pixaroid work on mobile devices?</div>
+                <div class="faq-answer">
+                    <p>Absolutely! Pixaroid is fully responsive and works perfectly on smartphones and tablets. You can process images on iOS, Android, or any other mobile device with a modern web browser.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">How do I compress an image without losing quality?</div>
+                <div class="faq-answer">
+                    <p>Use Pixaroid's smart compression tools which use advanced algorithms to reduce file size while maintaining visual quality. You can adjust the compression level to find the perfect balance between file size and image quality for your needs.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I edit PDF files with Pixaroid?</div>
+                <div class="faq-answer">
+                    <p>Yes, Pixaroid offers PDF tools including split, merge, compress, and convert functions. All PDF processing happens in your browser, keeping your documents secure and private.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Is Pixaroid safe to use?</div>
+                <div class="faq-answer">
+                    <p>Yes, Pixaroid is completely safe. Since all processing happens locally in your browser, your files never leave your device. We don't store, transmit, or access any of your images or data.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I use Pixaroid offline?</div>
+                <div class="faq-answer">
+                    <p>Pixaroid requires an initial internet connection to load, but once loaded, many tools can work offline thanks to our Progressive Web App (PWA) technology. However, for the best experience, we recommend having an internet connection.</p>
+                </div>
+            </div>
+        </main>
+        
+        <a href="/guides/" class="back-link">← Back to Guides</a>
+    </div>
+    
+    <script>
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                item.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>
