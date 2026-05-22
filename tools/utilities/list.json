@@ -1,0 +1,10 @@
+[
+{"s":"image-size-checker","n":"Image Size Checker","d":"File size and format info"},
+{"s":"image-format-checker","n":"Image Format Checker","d":"Detect format & metadata"},
+{"s":"image-dimension-checker","n":"Dimension Checker","d":"Get pixel dimensions"},
+{"s":"image-metadata-viewer","n":"Metadata Viewer","d":"EXIF, GPS, camera data"},
+{"s":"color-palette-generator","n":"Color Palette","d":"Extract palette from image"},
+{"s":"dominant-color-extractor","n":"Dominant Color","d":"Most prominent color"},
+{"s":"image-to-base64","n":"Image to Base64","d":"Encode as Base64 string"},
+{"s":"base64-to-image","n":"Base64 to Image","d":"Decode Base64 to image"}
+]

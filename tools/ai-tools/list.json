@@ -1,0 +1,8 @@
+[
+{"s":"background-remover","n":"Background Remover","d":"AI instant background removal"},
+{"s":"image-upscaler","n":"AI Upscaler","d":"2x and 4x super resolution"},
+{"s":"photo-enhancer","n":"Photo Enhancer","d":"Auto-enhance portraits"},
+{"s":"ai-image-sharpener","n":"AI Sharpener","d":"Multi-pass unsharp mask"},
+{"s":"ai-colorize-photo","n":"Colorize Photo","d":"Add color to B&W photos"},
+{"s":"image-to-text-ocr","n":"Image to Text OCR","d":"Extract text from images"}
+]

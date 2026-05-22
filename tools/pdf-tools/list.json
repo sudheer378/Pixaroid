@@ -1,0 +1,13 @@
+[
+{"s":"pdf-compress","n":"PDF Compress","d":"Reduce PDF file size"},
+{"s":"pdf-merge","n":"PDF Merge","d":"Combine multiple PDFs"},
+{"s":"pdf-split","n":"PDF Split","d":"Split PDF into pages"},
+{"s":"pdf-rotate","n":"PDF Rotate","d":"Rotate PDF pages"},
+{"s":"pdf-editor","n":"PDF Editor","d":"Edit PDF content"},
+{"s":"pdf-to-jpg","n":"PDF to JPG","d":"Convert PDF pages to images"},
+{"s":"pdf-to-png","n":"PDF to PNG","d":"Convert PDF to PNG"},
+{"s":"jpg-to-pdf","n":"JPG to PDF","d":"Convert images to PDF"},
+{"s":"png-to-pdf","n":"PNG to PDF","d":"Convert PNG to PDF"},
+{"s":"pdf-to-word","n":"PDF to Word","d":"Convert PDF to DOCX"},
+{"s":"pdf-watermark","n":"PDF Watermark","d":"Add watermark to PDF"}
+]

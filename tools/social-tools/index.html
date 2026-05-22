@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Social Media Tools | Pixaroid</title>
+<link rel="icon" href="/assets/svg/favicon.svg" type="image/svg+xml"/>
+<style>
+:root{--ink:#05040D;--glass:#0D0B1E;--glass2:#131128;--rim:rgba(255,255,255,.065);--rim2:rgba(255,255,255,.1);--txt:#F0EFF8;--mute:#9494BB;--clr:#1EE87A;--f:'Plus Jakarta Sans',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}body{font-family:var(--f);background:var(--ink);color:var(--txt);min-height:100vh;}
+.nav{position:sticky;top:0;z-index:100;background:rgba(5,4,13,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--rim);padding:.75rem 0;}
+.ni{max-width:1200px;margin:0 auto;padding:0 1.25rem;display:flex;align-items:center;gap:1rem;}
+.logo{display:flex;align-items:center;gap:.5rem;font-weight:800;font-size:1.125rem;color:#fff;}
+.back{padding:.5rem 1rem;border-radius:8px;background:var(--glass2);border:1px solid var(--rim2);color:var(--mute);text-decoration:none;font-size:.875rem;transition:all .2s;}
+.back:hover{color:var(--txt);border-color:var(--rim);}
+.hero{padding:3rem 1.25rem;text-align:center;max-width:800px;margin:0 auto;}
+.hero h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;margin-bottom:1rem;background:linear-gradient(135deg,#fff,var(--clr));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero p{color:var(--mute);font-size:1.125rem;line-height:1.7;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;max-width:1200px;margin:0 auto;padding:0 1.25rem 3rem;}
+.card{display:block;padding:1.5rem;background:var(--glass);border:1px solid var(--rim2);border-radius:14px;text-decoration:none;transition:transform .2s,border-color .2s;}
+.card:hover{transform:translateY(-3px);border-color:var(--clr);}
+.card h3{font-size:1rem;margin-bottom:.5rem;color:#fff;}
+.card p{color:var(--mute);font-size:.875rem;}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="ni"><a href="/" class="logo"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#1EE87A"/><path d="M10 16l6 6 10-10" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Pixaroid</a><a href="/" class="back">← Back to Home</a></div></nav>
+<main>
+<div class="hero"><h1>Social Media Tools</h1><p>Create perfectly sized images for YouTube, Instagram, Facebook, Twitter and more. All processing happens in your browser — no uploads required.</p></div>
+<div class="grid" id="tools"></div>
+</main>
+<script>
+const tools=[];
+fetch('/tools/social-tools/list.json').then(r=>r.ok?r.json():[]).then(list=>{
+if(Array.isArray(list))tools.push(...list);
+render();
+}).catch(()=>render());
+function render(){
+if(!tools.length){document.getElementById('tools').innerHTML='<p style="text-align:center;color:var(--mute);grid-column:1/-1;">Loading tools...</p>';return;}
+document.getElementById('tools').innerHTML=tools.map(t=>`<a href="/tools/social-tools/${t.s}/" class="card"><h3>${t.n}</h3><p>${t.d}</p></a>`).join('');
+}
+</script>
+</body>
+</html>

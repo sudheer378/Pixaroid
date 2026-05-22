@@ -1,0 +1,8 @@
+[
+{"s":"bulk-image-compress","n":"Bulk Compress","d":"Compress up to 100 images"},
+{"s":"bulk-image-resize","n":"Bulk Resize","d":"Resize 100 images at once"},
+{"s":"bulk-image-convert","n":"Bulk Convert","d":"Convert 100 images"},
+{"s":"bulk-image-watermark","n":"Bulk Watermark","d":"Watermark 100 images"},
+{"s":"bulk-image-rotate","n":"Bulk Rotate","d":"Rotate 100 images"},
+{"s":"bulk-image-flip","n":"Bulk Flip","d":"Flip 100 images"}
+]

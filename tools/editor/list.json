@@ -1,0 +1,17 @@
+[
+{"s":"crop-image","n":"Crop Image","d":"Freeform or ratio crop"},
+{"s":"rotate-image","n":"Rotate Image","d":"Any angle rotation"},
+{"s":"rotate-image-90","n":"Rotate 90°","d":"Quick clockwise rotation"},
+{"s":"flip-image","n":"Flip Image","d":"Horizontal or vertical mirror"},
+{"s":"flip-image-horizontal","n":"Flip Horizontal","d":"Mirror left to right"},
+{"s":"flip-image-vertical","n":"Flip Vertical","d":"Mirror top to bottom"},
+{"s":"meme-generator","n":"Meme Generator","d":"Impact-font meme maker"},
+{"s":"add-watermark","n":"Add Watermark","d":"Text watermark with tiling"},
+{"s":"add-text-to-image","n":"Add Text","d":"Styled text overlays"},
+{"s":"blur-image","n":"Blur Image","d":"Gaussian blur control"},
+{"s":"sharpen-image","n":"Sharpen Image","d":"Unsharp mask sharpening"},
+{"s":"adjust-brightness","n":"Adjust Brightness","d":"Highlights & shadows"},
+{"s":"adjust-contrast","n":"Adjust Contrast","d":"Boost or reduce contrast"},
+{"s":"image-to-grayscale","n":"Grayscale","d":"Black & white conversion"},
+{"s":"invert-image-colors","n":"Invert Colors","d":"Photo negative effect"}
+]
