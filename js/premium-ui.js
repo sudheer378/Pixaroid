@@ -1,319 +1,231 @@
 /**
- * Pixaroid Premium UI Controller v2.0
- * Adds Sejda/iLovePDF-level UX to all tool pages
+ * Premium UI Components for Pixaroid Pro
+ * Sejda/iLovePDF style interface elements
  */
 
-(function() {
-  'use strict';
+class PremiumUI {
+    constructor(containerId) {
+        this.container = document.getElementById(containerId);
+        this.dropzone = null;
+        this.fileList = null;
+        this.progressBar = null;
+        this.actionButtons = null;
+    }
 
-  const $ = (sel) => document.querySelector(sel);
-  const $$ = (sel) => document.querySelectorAll(sel);
+    init() {
+        this.renderDropzone();
+        this.renderFileList();
+        this.renderProgressBar();
+        this.renderActions();
+        this.attachEvents();
+    }
 
-  // State
-  let originalFile = null;
-  let processedBlob = null;
-  let worker = null;
+    renderDropzone() {
+        const html = `
+            <div id="dropzone" class="premium-dropzone">
+                <div class="dz-icon">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                    </svg>
+                </div>
+                <h3>Drop files here</h3>
+                <p>or click to select files</p>
+                <div class="dz-limit">Max 50 files, 100MB each</div>
+                <input type="file" id="fileInput" multiple hidden>
+            </div>
+        `;
+        this.container.insertAdjacentHTML('afterbegin', html);
+        this.dropzone = this.container.querySelector('#dropzone');
+    }
 
-  // Initialize when DOM ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+    renderFileList() {
+        const html = `
+            <div id="fileList" class="premium-filelist" style="display:none;">
+                <div class="fl-header">
+                    <span>Files</span>
+                    <button id="clearAll" class="btn-text">Clear All</button>
+                </div>
+                <div class="fl-items"></div>
+            </div>
+        `;
+        this.container.insertAdjacentHTML('beforeend', html);
+        this.fileList = this.container.querySelector('#fileList');
+    }
 
-  function init() {
-    const dropzone = $('#premium-dropzone');
-    if (!dropzone) return;
+    renderProgressBar() {
+        const html = `
+            <div id="progressContainer" class="premium-progress" style="display:none;">
+                <div class="progress-info">
+                    <span class="progress-text">Processing...</span>
+                    <span class="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+                <div class="progress-details"></div>
+            </div>
+        `;
+        this.container.insertAdjacentHTML('beforeend', html);
+        this.progressBar = this.container.querySelector('#progressContainer');
+    }
 
-    setupDropzone(dropzone);
-    setupPaste();
-    setupPresets();
-    setupComparisonSlider();
-    console.log('[PremiumUI] Initialized');
-  }
+    renderActions() {
+        const html = `
+            <div id="actionButtons" class="premium-actions" style="display:none;">
+                <button id="downloadAll" class="btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    Download All (ZIP)
+                </button>
+                <button id="startOver" class="btn-secondary">Start Over</button>
+            </div>
+        `;
+        this.container.insertAdjacentHTML('beforeend', html);
+        this.actionButtons = this.container.querySelector('#actionButtons');
+    }
 
-  function setupDropzone(dropzone) {
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evt => {
-      dropzone.addEventListener(evt, (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      });
-    });
+    attachEvents() {
+        const dropzone = this.dropzone;
+        const fileInput = this.container.querySelector('#fileInput');
 
-    ['dragenter', 'dragover'].forEach(evt => {
-      dropzone.addEventListener(evt, () => dropzone.classList.add('drag-over'));
-    });
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, preventDefaults, false);
+        });
 
-    ['dragleave', 'drop'].forEach(evt => {
-      dropzone.addEventListener(evt, () => dropzone.classList.remove('drag-over'));
-    });
-
-    dropzone.addEventListener('drop', (e) => {
-      const files = e.dataTransfer.files;
-      if (files.length) handleFiles(files);
-    });
-
-    dropzone.addEventListener('click', () => {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*,.pdf';
-      input.multiple = true;
-      input.onchange = (e) => handleFiles(e.target.files);
-      input.click();
-    });
-  }
-
-  function setupPaste() {
-    document.addEventListener('paste', (e) => {
-      const items = e.clipboardData.items;
-      for (let item of items) {
-        if (item.type.indexOf('image') !== -1) {
-          const file = item.getAsFile();
-          handleFiles([file]);
-          break;
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
         }
-      }
-    });
-  }
 
-  function setupPresets() {
-    $$('.preset-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        $$('.preset-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const quality = parseFloat(btn.dataset.quality);
-        if (quality && originalFile) {
-          processFile(originalFile, quality);
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, () => dropzone.classList.add('highlight'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, () => dropzone.classList.remove('highlight'), false);
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            this.handleFiles(files);
+        }, false);
+
+        dropzone.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => this.handleFiles(e.target.files));
+
+        this.container.querySelector('#clearAll').addEventListener('click', () => this.clearFiles());
+        this.container.querySelector('#startOver').addEventListener('click', () => this.reset());
+    }
+
+    handleFiles(files) {
+        const validFiles = Array.from(files).filter(file => {
+            if (file.size > 100 * 1024 * 1024) {
+                alert(`${file.name} exceeds 100MB limit`);
+                return false;
+            }
+            return true;
+        });
+
+        if (validFiles.length === 0) return;
+
+        this.dropzone.style.display = 'none';
+        this.fileList.style.display = 'block';
+        
+        const listContainer = this.fileList.querySelector('.fl-items');
+        
+        validFiles.forEach((file, index) => {
+            const item = document.createElement('div');
+            item.className = 'fl-item';
+            item.innerHTML = `
+                <div class="fl-icon">📄</div>
+                <div class="fl-info">
+                    <div class="fl-name">${file.name}</div>
+                    <div class="fl-size">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+                </div>
+                <div class="fl-status" id="status-${index}">Waiting</div>
+                <button class="fl-remove" onclick="this.parentElement.remove()">×</button>
+            `;
+            listContainer.appendChild(item);
+        });
+
+        window.dispatchEvent(new CustomEvent('files-selected', { detail: validFiles }));
+    }
+
+    updateProgress(percent) {
+        this.progressBar.style.display = 'block';
+        const fill = this.progressBar.querySelector('.progress-fill');
+        const text = this.progressBar.querySelector('.progress-percent');
+        
+        fill.style.width = `${percent}%`;
+        text.textContent = `${percent}%`;
+    }
+
+    updateFileStatus(index, status, message) {
+        const el = document.getElementById(`status-${index}`);
+        if (el) {
+            el.textContent = message || status;
+            el.className = `fl-status status-${status.toLowerCase()}`;
         }
-      });
-    });
-  }
-
-  function setupComparisonSlider() {
-    const slider = $('.comp-slider');
-    const container = $('.comparison-container');
-    if (!slider || !container) return;
-
-    let isDragging = false;
-
-    slider.addEventListener('mousedown', () => isDragging = true);
-    document.addEventListener('mouseup', () => isDragging = false);
-    document.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      const rect = container.getBoundingClientRect();
-      const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
-      const percent = (x / rect.width) * 100;
-      slider.style.left = percent + '%';
-      $('.comp-img-after').style.clipPath = `polygon(${percent}% 0, 100% 0, 100% 100%, ${percent}% 100%)`;
-    });
-
-    // Touch support
-    slider.addEventListener('touchstart', () => isDragging = true);
-    document.addEventListener('touchend', () => isDragging = false);
-    document.addEventListener('touchmove', (e) => {
-      if (!isDragging) return;
-      const rect = container.getBoundingClientRect();
-      const x = Math.max(0, Math.min(e.touches[0].clientX - rect.left, rect.width));
-      const percent = (x / rect.width) * 100;
-      slider.style.left = percent + '%';
-      $('.comp-img-after').style.clipPath = `polygon(${percent}% 0, 100% 0, 100% 100%, ${percent}% 100%)`;
-    });
-  }
-
-  function handleFiles(files) {
-    const file = files[0];
-    if (!file) return;
-
-    // Validate
-    if (!file.type.startsWith('image/') && !file.type.includes('pdf')) {
-      showToast('Please upload an image or PDF file', 'error');
-      return;
     }
 
-    if (file.size > 20 * 1024 * 1024) {
-      showToast('File size must be under 20MB', 'error');
-      return;
+    showActions() {
+        this.actionButtons.style.display = 'flex';
     }
 
-    originalFile = file;
-    
-    // Show preview
-    showPreview(file);
-    
-    // Auto-process with default preset
-    const activePreset = $('.preset-btn.active');
-    const quality = activePreset ? parseFloat(activePreset.dataset.quality) : 0.8;
-    processFile(file, quality);
-  }
-
-  function showPreview(file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const beforeImg = $('.comp-img-before');
-      if (beforeImg) {
-        beforeImg.src = e.target.result;
-      }
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function processFile(file, quality) {
-    const processingArea = $('.processing-area');
-    const progressBar = $('.progress-bar-fill');
-    const progressText = $('.progress-text');
-    
-    processingArea.classList.add('active');
-    progressBar.style.width = '0%';
-    
-    // Simulate progress
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += 5;
-      if (progress > 90) progress = 90;
-      progressBar.style.width = progress + '%';
-      if (progressText) {
-        progressText.innerHTML = `<span>Processing...</span><span>${progress}%</span>`;
-      }
-    }, 100);
-
-    // Use existing worker logic
-    const workerPath = getWorkerPath();
-    worker = new Worker(workerPath);
-    
-    worker.onmessage = (e) => {
-      clearInterval(interval);
-      const { blob, error } = e.data;
-      
-      if (error) {
-        showToast(error, 'error');
-        processingArea.classList.remove('active');
-        return;
-      }
-      
-      processedBlob = blob;
-      progressBar.style.width = '100%';
-      if (progressText) {
-        const savings = ((file.size - blob.size) / file.size * 100).toFixed(1);
-        progressText.innerHTML = `<span>Complete!</span><span>Saved ${savings}%</span>`;
-      }
-      
-      // Show after image
-      const afterUrl = URL.createObjectURL(blob);
-      const afterImg = $('.comp-img-after');
-      if (afterImg) {
-        afterImg.src = afterUrl;
-      }
-      
-      // Show comparison and buttons
-      $('.comparison-wrapper').classList.add('active');
-      $('.action-buttons').classList.add('active');
-      $('.tool-controls').classList.add('active');
-      
-      // Update stats
-      updateStats(file.size, blob.size);
-      
-      showToast('Processing complete!', 'success');
-    };
-
-    worker.onerror = (err) => {
-      clearInterval(interval);
-      showToast('Processing failed: ' + err.message, 'error');
-      processingArea.classList.remove('active');
-    };
-
-    // Send to worker
-    worker.postMessage({
-      file: file,
-      quality: quality,
-      type: getToolType()
-    });
-  }
-
-  function getWorkerPath() {
-    const path = window.location.pathname;
-    if (path.includes('compress')) return '/workers/compress.worker.js';
-    if (path.includes('resize')) return '/workers/resize.worker.js';
-    if (path.includes('convert')) return '/workers/convert.worker.js';
-    if (path.includes('filter')) return '/workers/filter.worker.js';
-    return '/workers/compress.worker.js';
-  }
-
-  function getToolType() {
-    const path = window.location.pathname;
-    if (path.includes('compress')) return 'compress';
-    if (path.includes('resize')) return 'resize';
-    if (path.includes('convert')) return 'convert';
-    if (path.includes('filter')) return 'filter';
-    return 'compress';
-  }
-
-  function updateStats(originalSize, newSize) {
-    const originalStat = $('.stat-original .stat-value');
-    const compressedStat = $('.stat-compressed .stat-value');
-    const savingsStat = $('.stat-savings .stat-value');
-    
-    if (originalStat) originalStat.textContent = formatBytes(originalSize);
-    if (compressedStat) compressedStat.textContent = formatBytes(newSize);
-    if (savingsStat) {
-      const savings = ((originalSize - newSize) / originalSize * 100).toFixed(1);
-      savingsStat.textContent = savings + '%';
+    clearFiles() {
+        const listContainer = this.fileList.querySelector('.fl-items');
+        listContainer.innerHTML = '';
+        this.reset();
     }
-  }
 
-  function formatBytes(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  }
+    reset() {
+        this.dropzone.style.display = 'flex';
+        this.fileList.style.display = 'none';
+        this.progressBar.style.display = 'none';
+        this.actionButtons.style.display = 'none';
+        this.container.querySelector('#fileInput').value = '';
+    }
+}
 
-  function showToast(message, type = 'success') {
-    const container = $('#toast-container') || createToastContainer();
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.innerHTML = `
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        ${type === 'success' 
-          ? '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>'
-          : '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>'}
-      </svg>
-      <span>${message}</span>
+if (!document.getElementById('premium-ui-styles')) {
+    const style = document.createElement('style');
+    style.id = 'premium-ui-styles';
+    style.textContent = `
+        .premium-dropzone {
+            border: 2px dashed #4b5563; border-radius: 12px; padding: 48px 24px;
+            text-align: center; cursor: pointer; transition: all 0.3s ease;
+            background: rgba(55, 65, 81, 0.5);
+        }
+        .premium-dropzone.highlight { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .dz-icon { color: #9ca3af; margin-bottom: 16px; }
+        .dz-limit { font-size: 12px; color: #6b7280; margin-top: 8px; }
+        .premium-filelist { margin-top: 24px; }
+        .fl-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
+        .fl-item { display: flex; align-items: center; padding: 12px; background: #1f2937; border-radius: 8px; margin-bottom: 8px; }
+        .fl-icon { margin-right: 12px; font-size: 20px; }
+        .fl-info { flex: 1; }
+        .fl-name { font-weight: 500; }
+        .fl-size { font-size: 12px; color: #9ca3af; }
+        .fl-status { margin-left: 16px; font-size: 12px; }
+        .status-completed { color: #10b981; }
+        .status-processing { color: #3b82f6; }
+        .status-failed { color: #ef4444; }
+        .fl-remove { background: none; border: none; color: #ef4444; font-size: 20px; cursor: pointer; margin-left: 8px; }
+        .premium-progress { margin-top: 24px; }
+        .progress-info { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+        .progress-bar { height: 8px; background: #374151; border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #3b82f6; transition: width 0.3s ease; }
+        .premium-actions { margin-top: 24px; display: flex; gap: 12px; justify-content: center; }
+        .btn-primary, .btn-secondary { padding: 12px 24px; border-radius: 8px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; border: none; }
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-primary:hover { background: #2563eb; }
+        .btn-secondary { background: #374151; color: white; }
+        .btn-secondary:hover { background: #4b5563; }
+        .btn-text { background: none; border: none; color: #ef4444; cursor: pointer; }
     `;
-    container.appendChild(toast);
-    
-    setTimeout(() => {
-      toast.style.animation = 'slideIn 0.3s ease reverse forwards';
-      setTimeout(() => toast.remove(), 300);
-    }, 4000);
-  }
+    document.head.appendChild(style);
+}
 
-  function createToastContainer() {
-    const container = document.createElement('div');
-    container.id = 'toast-container';
-    container.className = 'toast-container';
-    document.body.appendChild(container);
-    return container;
-  }
-
-  // Download handler
-  window.downloadProcessed = function() {
-    if (!processedBlob) return;
-    const url = URL.createObjectURL(processedBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'pixaroid-processed-' + Date.now() + '.' + getOutputFormat();
-    a.click();
-    URL.revokeObjectURL(url);
-    showToast('Download started!', 'success');
-  };
-
-  function getOutputFormat() {
-    const path = window.location.pathname;
-    if (path.includes('png')) return 'png';
-    if (path.includes('webp')) return 'webp';
-    if (path.includes('jpg') || path.includes('jpeg')) return 'jpg';
-    return 'jpg';
-  }
-
-})();
+window.PremiumUI = PremiumUI;

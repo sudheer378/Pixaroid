@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compress JPEG - Pixaroid Pro</title>
+    <meta name="description" content="Compress JPEG images online with smart quality optimization. Reduce file size up to 90% without visible quality loss.">
+    <link rel="canonical" href="https://pixaroid.com/compression/jpeg-compressor/">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"SoftwareApplication","name":"JPEG Compressor","applicationCategory":"MultimediaApplication","operatingSystem":"Web Browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"Smart compression, Batch processing, Privacy-focused, No upload required"}
+    </script>
+    <style>
+        body{background:#111827;color:#f3f4f6;font-family:system-ui,sans-serif;margin:0;padding:20px}
+        .container{max-width:800px;margin:0 auto}
+        h1{text-align:center;margin-bottom:8px}
+        .subtitle{text-align:center;color:#9ca3af;margin-bottom:32px}
+        #tool-container{min-height:400px}
+        .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:48px}
+        .feature{background:#1f2937;padding:16px;border-radius:8px}
+        .feature h3{margin:0 0 8px 0;color:#3b82f6}
+        .feature p{margin:0;font-size:14px;color:#9ca3af}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Compress JPEG Images</h1>
+        <p class="subtitle">Reduce JPEG file size with intelligent quality optimization</p>
+        <div id="tool-container"></div>
+        <div class="features">
+            <div class="feature"><h3>Fast Processing</h3><p>Client-side compression means instant results without server uploads.</p></div>
+            <div class="feature"><h3>100% Private</h3><p>Your images never leave your device. Complete privacy guaranteed.</p></div>
+            <div class="feature"><h3>Batch Support</h3><p>Compress up to 50 images at once with consistent quality settings.</p></div>
+            <div class="feature"><h3>Smart Quality</h3><p>Binary search algorithm finds optimal quality for target file size.</p></div>
+        </div>
+        <section style="margin-top:48px">
+            <h2>How to Compress JPEG Images</h2>
+            <ol style="line-height:1.8;color:#d1d5db">
+                <li>Drag and drop your JPEG files or click to browse</li>
+                <li>Adjust compression settings (optional)</li>
+                <li>Click Compress and wait for processing</li>
+                <li>Download your optimized images instantly</li>
+            </ol>
+        </section>
+    </div>
+    <script src="/js/pro-engine.js" defer></script>
+    <script src="/js/advanced-worker.js" defer></script>
+    <script src="/js/premium-ui.js" defer></script>
+    <script src="/js/tool-controller-pro.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new ToolControllerPro('compress', {format:'image/jpeg',quality:0.75,targetSize:null});
+        });
+    </script>
+</body>
+</html>
