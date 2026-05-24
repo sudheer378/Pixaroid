@@ -3,7 +3,7 @@ const path = require('path');
 
 const GUIDES_DIR = path.join(__dirname, '..', 'guides');
 const OUTPUT_FILE = path.join(__dirname, '..', 'sitemap-guides.xml');
-const BASE_URL = 'https://pixaroid.com';
+const BASE_URL = 'https://pixaroid.vercel.app';
 
 // Collect guide URLs
 const guideUrls = [];

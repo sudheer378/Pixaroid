@@ -15,7 +15,7 @@ We take the security of Pixaroid seriously. If you believe you have found a secu
 
 ### How to Report
 
-1. **Email**: Send an email to `security@pixaroid.com` (or create a GitHub Security Advisory)
+1. **Email**: Send an email to `support@pixaroid.vercel.app` (or create a GitHub Security Advisory)
 2. **Include**: 
    - Description of the vulnerability
    - Steps to reproduce

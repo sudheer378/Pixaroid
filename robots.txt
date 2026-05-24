@@ -20,7 +20,7 @@ User-agent: PerplexityBot
 Allow: /
 
 # Sitemap Location
-Sitemap: https://pixaroid.vercel.app/sitemap.xml
+Sitemap: https://pixaroid.vercel.app/sitemap-index.xml
 
-# Sitemap
-Sitemap: https://pixaroid.com/sitemap-index.xml
+# Host
+Host: https://pixaroid.vercel.app
