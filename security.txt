@@ -1,7 +1,7 @@
 # ============================================================
 #  Pixaroid — security.txt
 #  Security Policy & Contact Information
-#  Domain: https://pixaroid.app
+#  Domain: https://pixaroid.vercel.app
 #  Last updated: 2026-03-16
 # ============================================================
 
@@ -10,26 +10,26 @@ Contact: mailto:security@pixaroid.app
 Contact: https://github.com/sudheer378/Pixaroid/issues
 
 # Encryption key (PGP)
-Encryption: https://pixaroid.app/pgp-key.txt
+Encryption: https://pixaroid.vercel.app/pgp-key.txt
 
 # Preferred language for security reports
 Preferred-Languages: en
 
 # Security policy location
-Policy: https://pixaroid.app/security-policy.html
+Policy: https://pixaroid.vercel.app/security-policy.html
 
 # Acknowledgments page
-Acknowledgments: https://pixaroid.app/security-acknowledgments.html
+Acknowledgments: https://pixaroid.vercel.app/security-acknowledgments.html
 
 # Hiring security team members (optional)
-Hiring: https://pixaroid.app/careers
+Hiring: https://pixaroid.vercel.app/careers
 
 # Expiration date for this file (1 year from now)
 Expires: 2027-03-16T23:59:59.000Z
 
 # Canonical URL for this security.txt file
-Canonical: https://pixaroid.app/.well-known/security.txt
-Canonical: https://pixaroid.app/security.txt
+Canonical: https://pixaroid.vercel.app/.well-known/security.txt
+Canonical: https://pixaroid.vercel.app/security.txt
 
 # ============================================================
 #  SECURITY NOTES

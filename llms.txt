@@ -5,7 +5,7 @@
 Pixaroid is a free online image and PDF tools platform that processes files entirely in the browser using Web Workers and Canvas API. No server uploads, no privacy concerns.
 
 ## Base URL
-https://pixaroid.app
+https://pixaroid.vercel.app
 
 ## Available Tools
 
@@ -51,7 +51,7 @@ https://pixaroid.app
 All tools are accessible via direct URL navigation. No REST API available.
 
 ## Sitemap
-https://pixaroid.app/sitemap.xml
+https://pixaroid.vercel.app/sitemap.xml
 
 ## Contact
 For inquiries: contact@pixaroid.app

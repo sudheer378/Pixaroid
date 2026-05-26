@@ -1,6 +1,6 @@
 # ============================================================
 #  Pixaroid — ads.txt
-#  Domain: https://pixaroid.app
+#  Domain: https://pixaroid.vercel.app
 #  IAB Tech Lab Authorized Digital Sellers
 #  https://iabtechlab.com/ads-txt/
 # ============================================================

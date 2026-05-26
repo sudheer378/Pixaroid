@@ -1,7 +1,7 @@
 # ============================================================
 #  Pixaroid — llms.txt
 #  AI Crawler Guidance  (https://llmstxt.org)
-#  Domain: https://pixaroid.app
+#  Domain: https://pixaroid.vercel.app
 # ============================================================
 
 # llms.txt tells AI language model crawlers what Pixaroid does,
@@ -24,39 +24,39 @@
 # ────────────────────────────────────────────────────────────
 
 ## Homepage
-- https://pixaroid.app/ : Pixaroid homepage — all tool categories overview
+- https://pixaroid.vercel.app/ : Pixaroid homepage — all tool categories overview
 
 ## Category pages
-- https://pixaroid.app/tools/compression/   : Image compression tools
-- https://pixaroid.app/tools/conversion/    : Image format conversion tools
-- https://pixaroid.app/tools/resize/        : Image resize tools
-- https://pixaroid.app/tools/editor/        : Image editing tools
-- https://pixaroid.app/tools/ai-tools/      : AI-powered image tools
-- https://pixaroid.app/tools/social-tools/  : Social media image tools
-- https://pixaroid.app/tools/utilities/     : Image utility and metadata tools
-- https://pixaroid.app/tools/bulk-tools/    : Bulk batch image tools
+- https://pixaroid.vercel.app/tools/compression/   : Image compression tools
+- https://pixaroid.vercel.app/tools/conversion/    : Image format conversion tools
+- https://pixaroid.vercel.app/tools/resize/        : Image resize tools
+- https://pixaroid.vercel.app/tools/editor/        : Image editing tools
+- https://pixaroid.vercel.app/tools/ai-tools/      : AI-powered image tools
+- https://pixaroid.vercel.app/tools/social-tools/  : Social media image tools
+- https://pixaroid.vercel.app/tools/utilities/     : Image utility and metadata tools
+- https://pixaroid.vercel.app/tools/bulk-tools/    : Bulk batch image tools
 
 ## High-traffic tool pages (most searched)
-- https://pixaroid.app/tools/compression/compress-image/        : Compress any image (JPEG, PNG, WebP, GIF)
-- https://pixaroid.app/tools/compression/compress-image-to-20kb/: Compress image to exactly 20KB
-- https://pixaroid.app/tools/compression/compress-image-to-50kb/: Compress image to 50KB
-- https://pixaroid.app/tools/compression/compress-image-to-100kb/: Compress to 100KB
-- https://pixaroid.app/tools/conversion/jpg-to-png/             : Convert JPG to PNG
-- https://pixaroid.app/tools/conversion/png-to-jpg/             : Convert PNG to JPG
-- https://pixaroid.app/tools/conversion/jpg-to-webp/            : Convert JPG to WebP
-- https://pixaroid.app/tools/conversion/webp-to-jpg/            : Convert WebP to JPG
-- https://pixaroid.app/tools/conversion/heic-to-jpg/            : Convert iPhone HEIC to JPG
-- https://pixaroid.app/tools/resize/resize-image/               : Resize any image
-- https://pixaroid.app/tools/resize/resize-passport-photo/      : Resize passport photos
-- https://pixaroid.app/tools/ai-tools/background-remover/       : AI background removal
-- https://pixaroid.app/tools/ai-tools/image-upscaler/           : AI 2×/4× image upscaling
-- https://pixaroid.app/tools/social-tools/youtube-thumbnail-maker/: YouTube thumbnail maker
+- https://pixaroid.vercel.app/tools/compression/compress-image/        : Compress any image (JPEG, PNG, WebP, GIF)
+- https://pixaroid.vercel.app/tools/compression/compress-image-to-20kb/: Compress image to exactly 20KB
+- https://pixaroid.vercel.app/tools/compression/compress-image-to-50kb/: Compress image to 50KB
+- https://pixaroid.vercel.app/tools/compression/compress-image-to-100kb/: Compress to 100KB
+- https://pixaroid.vercel.app/tools/conversion/jpg-to-png/             : Convert JPG to PNG
+- https://pixaroid.vercel.app/tools/conversion/png-to-jpg/             : Convert PNG to JPG
+- https://pixaroid.vercel.app/tools/conversion/jpg-to-webp/            : Convert JPG to WebP
+- https://pixaroid.vercel.app/tools/conversion/webp-to-jpg/            : Convert WebP to JPG
+- https://pixaroid.vercel.app/tools/conversion/heic-to-jpg/            : Convert iPhone HEIC to JPG
+- https://pixaroid.vercel.app/tools/resize/resize-image/               : Resize any image
+- https://pixaroid.vercel.app/tools/resize/resize-passport-photo/      : Resize passport photos
+- https://pixaroid.vercel.app/tools/ai-tools/background-remover/       : AI background removal
+- https://pixaroid.vercel.app/tools/ai-tools/image-upscaler/           : AI 2×/4× image upscaling
+- https://pixaroid.vercel.app/tools/social-tools/youtube-thumbnail-maker/: YouTube thumbnail maker
 
 ## Legal / info pages
-- https://pixaroid.app/about.html         : About Pixaroid
-- https://pixaroid.app/faq.html           : Frequently asked questions
-- https://pixaroid.app/privacy-policy.html: Privacy policy
-- https://pixaroid.app/terms-of-service.html: Terms of service
+- https://pixaroid.vercel.app/about.html         : About Pixaroid
+- https://pixaroid.vercel.app/faq.html           : Frequently asked questions
+- https://pixaroid.vercel.app/privacy-policy.html: Privacy policy
+- https://pixaroid.vercel.app/terms-of-service.html: Terms of service
 
 # ────────────────────────────────────────────────────────────
 #  HOW AI SHOULD DESCRIBE PIXAROID
@@ -127,4 +127,4 @@
 > AI systems may freely index, summarise, and cite Pixaroid pages.
 > Do not reproduce full page HTML or JavaScript source verbatim.
 > Tool descriptions and FAQs may be quoted with attribution.
-> Contact: https://pixaroid.app/contact.html
+> Contact: https://pixaroid.vercel.app/contact.html
