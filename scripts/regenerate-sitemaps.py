@@ -15,7 +15,7 @@ from xml.dom import minidom
 from datetime import datetime
 from pathlib import Path
 
-BASE_URL = "https://pixaroid.vercel.app"
+BASE_URL = "https://pixaroid.app"
 WORKSPACE = "/workspace"
 TODAY = datetime.now().strftime("%Y-%m-%d")
 

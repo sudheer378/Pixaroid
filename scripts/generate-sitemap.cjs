@@ -4,7 +4,7 @@ const path = require('path');
 const TOOLS_DIR = path.join(__dirname, '..', 'tools');
 const GUIDES_DIR = path.join(__dirname, '..', 'guides');
 const OUTPUT_FILE = path.join(__dirname, '..', 'sitemap.xml');
-const BASE_URL = 'https://pixaroid.vercel.app';
+const BASE_URL = 'https://pixaroid.app';
 
 // Collect all tool URLs
 const toolUrls = [];

@@ -1,11 +1,14 @@
 /**
  * Pixaroid — Global Site Configuration
+ * CANONICAL DOMAIN: https://pixaroid.vercel.app
+ * All sitemaps, canonicals, and SEO must use this domain exclusively.
  */
 const SITE_CONFIG = {
   name:        'Pixaroid',
   tagline:     'Next Generation AI Image Tools',
   description: 'Pixaroid offers 70+ free browser-based image tools: compress, convert, resize, edit, AI enhance, bulk process, and social-media optimise — no upload, no server.',
-  url:         'https://pixaroid.app',
+  url:         'https://pixaroid.vercel.app',
+  canonicalDomain: 'https://pixaroid.vercel.app',
 
   brand: {
     primary:    '#4F46E5',

@@ -11,7 +11,7 @@
 - User-agent: * (allows all bots)
 - Disallow: /admin/, /api/, /private/
 - Allow: /tools/, /guides/, /assets/
-- Sitemap: https://pixaroid.vercel.app/sitemap.xml
+- Sitemap: https://pixaroid.app/sitemap.xml
 
 ### Indexed Pages
 - Homepage: ✅

@@ -1,6 +1,6 @@
 # ============================================================
 #  Pixaroid — robots.txt
-#  Domain: https://pixaroid.vercel.app
+#  Domain: https://pixaroid.app
 #  Last updated: 2026-03-16
 # ============================================================
 
@@ -90,8 +90,8 @@ User-agent: BLEXBot
 Disallow: /
 
 # ── Sitemaps ────────────────────────────────────────────────
-Sitemap: https://pixaroid.vercel.app/sitemap.xml
-Sitemap: https://pixaroid.vercel.app/sitemap-tools.xml
+Sitemap: https://pixaroid.app/sitemap.xml
+Sitemap: https://pixaroid.app/sitemap-tools.xml
 
 # ── Host ────────────────────────────────────────────────────
-Host: https://pixaroid.vercel.app
+Host: https://pixaroid.app
