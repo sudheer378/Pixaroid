@@ -2,15 +2,15 @@
 
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
-    <loc>https://pixaroid.app/sitemap-core.xml</loc>
-    <lastmod>2026-03-17</lastmod>
+    <loc>https://pixaroid.vercel.app/sitemap-core.xml</loc>
+    <lastmod>2026-05-24</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://pixaroid.app/sitemap-categories.xml</loc>
-    <lastmod>2026-03-17</lastmod>
+    <loc>https://pixaroid.vercel.app/sitemap-categories.xml</loc>
+    <lastmod>2026-05-24</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://pixaroid.app/sitemap-tools.xml</loc>
-    <lastmod>2026-03-17</lastmod>
+    <loc>https://pixaroid.vercel.app/sitemap-tools.xml</loc>
+    <lastmod>2026-05-24</lastmod>
   </sitemap>
 </sitemapindex>
