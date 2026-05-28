@@ -1,4 +1,31 @@
 ```
-# Sitemap files (generated)
-sitemap*.xml
+# Web workers
+workers/*.worker.js
+
+# Build artifacts
+dist/
+build/
+*.min.js
+*.bundle.js
+
+# Dependencies
+node_modules/
+
+# Editors
+.vscode/
+.idea/
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# OS generated files
+.DS_Store
+Thumbs.db
 ```
