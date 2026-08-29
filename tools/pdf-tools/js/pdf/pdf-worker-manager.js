@@ -1,51 +1,67 @@
 /**
- * Pixaroid PDF Worker Manager v1.0
- * Manages Web Workers for PDF processing
+ * Pixaroid PDF Worker Manager v2.0 - High Performance
+ * Manages Web Workers for PDF processing with improved concurrency
  */
 
 class PDFWorkerManager {
   constructor() {
     this.workers = [];
-    this.maxWorkers = navigator.hardwareConcurrency ? Math.min(navigator.hardwareConcurrency, 4) : 2;
+    // Use more workers for better parallelization (up to 8)
+    this.maxWorkers = navigator.hardwareConcurrency 
+      ? Math.min(navigator.hardwareConcurrency, 8) 
+      : 4;
     this.jobQueue = [];
     this.activeJobs = new Map();
     this.workerIdCounter = 0;
+    this.initialized = false;
   }
 
   /**
    * Initialize worker pool
    */
-  init() {
+  async init() {
+    if (this.initialized) return this;
+    
     for (let i = 0; i < this.maxWorkers; i++) {
-      this.createWorker();
+      await this.createWorker();
     }
+    this.initialized = true;
     return this;
   }
 
   /**
    * Create a new worker
    */
-  createWorker() {
+  async createWorker() {
     const workerId = this.workerIdCounter++;
-    const worker = new Worker('/workers/pdf.worker.js');
     
-    worker.onmessage = (e) => {
-      this.handleWorkerMessage(workerId, e.data);
-    };
-    
-    worker.onerror = (error) => {
-      console.error(`Worker ${workerId} error:`, error);
-      this.handleWorkerError(workerId, error);
-    };
-    
-    this.workers.push({
-      id: workerId,
-      worker,
-      busy: false,
-      currentJobId: null
+    return new Promise((resolve) => {
+      const worker = new Worker('/workers/pdf.worker.js');
+      
+      worker.onmessage = (e) => {
+        this.handleWorkerMessage(workerId, e.data);
+      };
+      
+      worker.onerror = (error) => {
+        console.error(`Worker ${workerId} error:`, error);
+        this.handleWorkerError(workerId, error);
+      };
+      
+      this.workers.push({
+        id: workerId,
+        worker,
+        busy: false,
+        currentJobId: null,
+        ready: false
+      });
+      
+      // Mark as ready when initialized
+      setTimeout(() => {
+        const w = this.workers.find(w => w.id === workerId);
+        if (w) w.ready = true;
+        resolve(workerId);
+      }, 100);
     });
-    
-    return workerId;
   }
 
   /**

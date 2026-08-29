@@ -1416,18 +1416,18 @@ async function process(file,itype,ctrl){
   var mime=file.type||(file.name&&file.name.endsWith('.pdf')?'application/pdf':'image/jpeg');
   var buf=await readBuf(file);
 
-  // PDF Worker routes
+  // PDF Worker routes - Updated operation names to match worker
   if(itype==='pdf-compress'){
     return runWorker('/workers/pdf.worker.js',{
-      op:'pdf-compress',buffer:buf,mime:'application/pdf',origSize:file.size,
-      quality:clamp(ctrl.quality||72,1,100),dpi:parseInt(ctrl.dpi)||72,
+      op:'compress',buffer:buf,mime:'application/pdf',origSize:file.size,
+      level:ctrl.level||'medium',maxPages:50,
     });
   }
   if(itype==='pdf-extract'||itype==='pdf-to-jpg'||itype==='pdf-to-png'){
+    var fmt=SLUG.includes('png')?'png':'jpeg';
     return runWorker('/workers/pdf.worker.js',{
-      op:'pdf-extract',buffer:buf,mime:'application/pdf',origSize:file.size,
-      format:ctrl.format||'jpeg',dpi:parseInt(ctrl.dpi)||150,
-      page:parseInt(ctrl.page)||0,
+      op:'pdf-to-images',buffer:buf,mime:'application/pdf',origSize:file.size,
+      format:fmt,dpi:parseInt(ctrl.dpi)||150,maxPages:50,quality:90,
     });
   }
   if(itype==='pdf-merge'){
@@ -1436,44 +1436,36 @@ async function process(file,itype,ctrl){
     var files2=fi2&&fi2.files&&fi2.files.length>1?fi2.files:[fi2&&fi2.files&&fi2.files[0]].filter(Boolean);
     var bufs=await Promise.all(Array.from(files2).map(function(f2){return readBuf(f2);}));
     return runWorker('/workers/pdf.worker.js',{
-      op:'pdf-merge',buffers:bufs,origSize:file.size,
+      op:'merge',buffers:bufs,
     });
   }
   if(itype==='pdf-split'){
     return runWorker('/workers/pdf.worker.js',{
-      op:'pdf-split',buffer:buf,mime:'application/pdf',origSize:file.size,
+      op:'split',buffer:buf,mime:'application/pdf',origSize:file.size,
       pages:ctrl.pages||'all',
     });
   }
   if(itype==='pdf-rotate'){
     return runWorker('/workers/pdf.worker.js',{
-      op:'pdf-rotate',buffer:buf,mime:'application/pdf',origSize:file.size,
+      op:'rotate',buffer:buf,mime:'application/pdf',origSize:file.size,
       angle:parseInt(ctrl.angle)||90,pages:ctrl.pages||'all',
     });
   }
   if(itype==='pdf-watermark'){
     return runWorker('/workers/pdf.worker.js',{
-      op:'pdf-watermark',buffer:buf,mime:'application/pdf',origSize:file.size,
-      text:ctrl.text||'Confidential',fontSize:parseInt(ctrl.fontSize)||48,
-      color:ctrl.color||'#FF0000',opacity:clamp(ctrl.opacity||30,5,100),
-      angle:parseInt(ctrl.angle)||45,pages:ctrl.pages||'all',
-    });
-  }
-  if(itype==='pdf-ocr'){
-    return runWorker('/workers/pdf.worker.js',{
-      op:'pdf-ocr',buffer:buf,mime:'application/pdf',origSize:file.size,
-      language:ctrl.language||'eng',
+      op:'watermark',buffer:buf,mime:'application/pdf',origSize:file.size,
+      text:ctrl.text||'CONFIDENTIAL',opacity:clamp(ctrl.opacity||30,5,100),
+      rotation:parseInt(ctrl.angle)||-45,color:ctrl.color||'#808080',pages:ctrl.pages||'all',
     });
   }
   if(itype==='pdf-create'){
     // image → PDF (jpg-to-pdf, png-to-pdf)
     var mime2=file.type||'image/jpeg';
     return runWorker('/workers/pdf.worker.js',{
-      op:'pdf-create',buffer:buf,mime:mime2,origSize:file.size,
-      pageSize:ctrl.pageSize||'A4',fit:ctrl.fit||'contain',
+      op:'image-to-pdf',buffers:[buf],mime:mime2,origSize:file.size,
+      pageSize:ctrl.pageSize||'A4',orientation:ctrl.orientation||'portrait',margin:parseInt(ctrl.margin)||10,
     });
   }
-
 
   if(itype==='compress'){
     return runWorker('/workers/compress.worker.js',{

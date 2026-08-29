@@ -1,6 +1,6 @@
 /**
- * Pixaroid PDF Utils v1.0
- * Shared utility functions for PDF tools
+ * Pixaroid PDF Utils v2.0 - High Performance
+ * Shared utility functions for PDF tools with optimizations
  */
 
 const PDFUtils = {
@@ -16,14 +16,14 @@ const PDFUtils = {
   },
 
   /**
-   * Generate unique ID
+   * Generate unique ID with timestamp
    */
   generateId() {
     return 'pdf-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
   },
 
   /**
-   * Download blob as file
+   * Download blob as file with improved compatibility
    */
   downloadBlob(blob, filename) {
     const url = URL.createObjectURL(blob);
@@ -33,7 +33,7 @@ const PDFUtils = {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 100);
   },
 
   /**
