@@ -1507,6 +1507,7 @@ function buildOps(it,c){
     case'invert':    ops.push({type:'invert'});break;
     case'noise':     ops.push({type:'noise',amount:clamp(c.amount||20,0,100)});break;
     case'denoise':   ops.push({type:'denoise',strength:clamp(c.strength||1.5,0,5)});break;
+    case'round-corners': ops.push({type:'round-corners',radius:parseFloat(c.radius)||30});break;
     default:
       var fs={brightness:0,contrast:0,saturation:0,vibrance:0,temperature:0,highlights:0,shadows:0};
       Object.keys(fs).forEach(function(k){var v=parseFloat(c[k]);if(!isNaN(v)&&v!==0)ops.push({type:k,value:v});});
