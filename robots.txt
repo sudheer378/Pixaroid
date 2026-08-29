@@ -1,26 +1,227 @@
+# ═══════════════════════════════════════════════════
+# Pixaroid Robots.txt — Optimized for SEO & AI Crawlers
+# Last Updated: 2026-05-28
+# Version: 3.0 (Enhanced AI/LLM Support)
+# ═══════════════════════════════════════════════════
+
+# Default rules for all crawlers
 User-agent: *
 Allow: /
+Disallow: /assets/private/
+Disallow: /tmp/
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+Disallow: /*/draft/
 
-# Explicitly allow critical assets for rendering
-Allow: /tools/
-Allow: /guides/
-Allow: /assets/
-Allow: /css/
-Allow: /js/
+# Allow critical rendering resources
+Allow: /tools/*.html
+Allow: /tools/*/index.html
+Allow: /guides/*.html
+Allow: /assets/css/
+Allow: /assets/js/
 Allow: /workers/
+Allow: /assets/svg/
+Allow: /assets/images/*.png
+Allow: /assets/images/*.jpg
+Allow: /assets/images/*.webp
+Allow: /assets/images/*.svg
 
-# AI Crawlers
+# ═══════════════════════════════════════════════════
+# SEARCH ENGINE BOTS
+# ═══════════════════════════════════════════════════
+
+# Google Bot (Full Access)
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Google Mobile
+User-agent: Googlebot-Mobile
+Allow: /
+
+# Bing Bot
+User-agent: bingbot
+Allow: /
+Crawl-delay: 1
+
+# Yahoo Slurp
+User-agent: Slurp
+Allow: /
+Crawl-delay: 2
+
+# DuckDuckGo
+User-agent: DuckDuckBot
+Allow: /
+
+# Baidu
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 3
+
+# Yandex
+User-agent: YandexBot
+Allow: /
+Crawl-delay: 2
+
+# Seznam
+User-agent: SeznamBot
+Allow: /
+Crawl-delay: 2
+
+# Ecosia
+User-agent: EcosiaBot
+Allow: /
+
+# ═══════════════════════════════════════════════════
+# AI & LLM CRAWLERS (Enhanced Access for AEO)
+# ═══════════════════════════════════════════════════
+
+# OpenAI GPTBot
 User-agent: GPTBot
 Allow: /
+Allow: /tools/
+Allow: /guides/
+Allow: /about.html
+Allow: /faq.html
+Disallow: /assets/private/
 
+# OpenAI SearchBot
+User-agent: SearchBot
+Allow: /
+Allow: /tools/
+Allow: /guides/
+
+# Anthropic Claude
 User-agent: Claude-Web
 Allow: /
+Allow: /tools/
+Allow: /guides/
+Allow: /about.html
+Allow: /faq.html
 
+# Perplexity AI
 User-agent: PerplexityBot
 Allow: /
+Allow: /tools/
+Allow: /guides/
+Allow: /about.html
+Allow: /faq.html
 
-# Sitemap Location
+# Amazon Alexa
+User-agent: Amazonbot
+Allow: /
+
+# Apple Extended Security
+User-agent: AppleBot
+Allow: /
+
+# Meta AI
+User-agent: facebookexternalhit
+Allow: /
+
+# Twitter Bot
+User-agent: Twitterbot
+Allow: /
+
+# LinkedIn Bot
+User-agent: LinkedInBot
+Allow: /
+
+# WhatsApp
+User-agent: WhatsApp
+Allow: /
+
+# Telegram Bot
+User-agent: TelegramBot
+Allow: /
+
+# Discord Bot
+User-agent: Discordbot
+Allow: /
+
+# Slack Bot
+User-agent: Slackbot
+Allow: /
+
+# Teams Bot
+User-agent: TeamsBot
+Allow: /
+
+# Zoom Bot
+User-agent: ZoomBot
+Allow: /
+
+# ═══════════════════════════════════════════════════
+# SOCIAL MEDIA & CONTENT PLATFORMS
+# ═══════════════════════════════════════════════════
+
+# Pinterest
+User-agent: Pinterest
+Allow: /
+Allow: /*/og-image.png
+
+# Facebook External Hit
+User-agent: facebookexternalhit
+Allow: /
+
+# Instagram
+User-agent: Instagram
+Allow: /
+
+# TikTok
+User-agent: TikTokSpider
+Allow: /
+
+# Snapchat
+User-agent: SnapURLBot
+Allow: /
+
+# Reddit
+User-agent: RedditBot
+Allow: /
+
+# ═══════════════════════════════════════════════════
+# SECURITY & VERIFICATION BOTS
+# ═══════════════════════════════════════════════════
+
+# Semrush
+User-agent: SemrushBot
+Allow: /
+Crawl-delay: 3
+
+# Ahrefs
+User-agent: AhrefsBot
+Allow: /
+Crawl-delay: 3
+
+# Majestic
+User-agent: MJ12bot
+Allow: /
+Crawl-delay: 3
+
+# DotBot
+User-agent: DotBot
+Allow: /
+Crawl-delay: 3
+
+#BLEXBot
+User-agent: BLEXBot
+Allow: /
+Crawl-delay: 3
+
+# ═══════════════════════════════════════════════════
+# SITEMAP LOCATIONS
+# ═══════════════════════════════════════════════════
+
 Sitemap: https://pixaroid.vercel.app/sitemap-index.xml
+Sitemap: https://pixaroid.vercel.app/sitemap.xml
+Sitemap: https://pixaroid.vercel.app/sitemap-tools.xml
+Sitemap: https://pixaroid.vercel.app/sitemap-guides.xml
+Sitemap: https://pixaroid.vercel.app/sitemap-core.xml
+Sitemap: https://pixaroid.vercel.app/sitemap-categories.xml
 
 # Host
 Host: https://pixaroid.vercel.app
+
+# Contact for crawl issues
+Contact: support@pixaroid.com
