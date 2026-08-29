@@ -1,7 +1,8 @@
 /**
- * Pixaroid PDF Engine v3.0 - Production Grade
+ * Pixaroid PDF Engine v4.0 - High Performance Production Grade
  * Centralized PDF processing engine for all PDF tools
  * Compatible with Sejda.com and iLovePDF.com quality standards
+ * Uses Web Workers for non-blocking processing
  */
 
 class PDFEngine {
@@ -12,6 +13,7 @@ class PDFEngine {
     this.worker = null;
     this.jobCounter = 0;
     this.pendingJobs = new Map();
+    this.workerManager = null;
   }
 
   async init() {

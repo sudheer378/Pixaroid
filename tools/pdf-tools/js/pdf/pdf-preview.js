@@ -1,12 +1,15 @@
 /**
- * Pixaroid PDF Preview v1.0
- * Live preview generation for PDF tools
+ * Pixaroid PDF Preview v2.0 - High Performance
+ * Live preview generation for PDF tools with caching and optimization
  */
 
 class PDFPreview {
   constructor() {
     this.pdfjs = null;
     this.cache = new Map();
+    this.maxCacheSize = 50; // Limit cache size
+    this.renderQueue = [];
+    this.isRendering = false;
   }
 
   async init() {
