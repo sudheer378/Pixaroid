@@ -105,6 +105,23 @@ function editImage(data) {
           case 'invert':
             ctx.filter = (ctx.filter || '') + ' invert(100%)';
             break;
+
+          case 'round-corners':
+            // Round corners using clip path
+            const radius = (op.radius || 30) / 100 * Math.min(canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.moveTo(radius, 0);
+            ctx.lineTo(canvas.width - radius, 0);
+            ctx.quadraticCurveTo(canvas.width, 0, canvas.width, radius);
+            ctx.lineTo(canvas.width, canvas.height - radius);
+            ctx.quadraticCurveTo(canvas.width, canvas.height, canvas.width - radius, canvas.height);
+            ctx.lineTo(radius, canvas.height);
+            ctx.quadraticCurveTo(0, canvas.height, 0, canvas.height - radius);
+            ctx.lineTo(0, radius);
+            ctx.quadraticCurveTo(0, 0, radius, 0);
+            ctx.closePath();
+            ctx.clip();
+            break;
         }
       });
       
