@@ -1,133 +1,52 @@
-```
-# Web Workers
-*.worker.js
+# Examples
 
-# Dependencies
-node_modules/
+    Input:
+    ### Added files:
+    [src/main.py, README.md, config.json]
 
-# Build artifacts
-dist/
-build/
-target/
+    ### Deleted files:
+    [old/unused.py]
+    ### Modified files:
+    [utils.py]
+    ###current .gitignore Content
+    (empty)
+    Expected Output:
+    (empty — output nothing)
 
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-.venv/
-pip-log.txt
-pip-selfcheck.json
+# Example 2 (Project with artifacts):
+Input:
+### Added files:
+[pycache/main.cpython-310.pyc, dist/app.js, .env.local, .vscode/settings.json
 
-# Logs
+### Deleted files:
+    []
+
+### Modified files:
+[]
+### current .gitignore Content
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-desktop.ini
-
-# Environment variables
-.env
-.env.local
-.env.*
-!.env.example
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Archives
-*.zip
-*.tar.gz
-*.tar.bz2
-*.tar.xz
-*.7z
-*.rar
-*.gz
-*.bz2
-*.xz
-*.zst
-
-# Coverage
-coverage/
-htmlcov/
-.coverage
-*.coveragerc
-
-# Testing
-*.pytest_cache/
-.mypy_cache/
-.tox/
-.nyc_output/
-
-# Node
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-node_modules/
-npm-shrinkwrap.json
-package-lock.json
-
-# Java
-*.class
-*.jar
-*.war
-*.ear
-*.nar
-target/
-.gradle/
-build/
-
-# C/C++
-*.o
-*.a
-*.so
-*.dll
-*.exe
-*.out
-*.obj
-
-# Go
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-*.test
-*.prof
-
-# Ruby
-*.gem
-*.rbc
-coverage/
-InstalledFiles
-pkg/
-spec/reports/
-test/tmp/
-test/version_tmp/
-tmp/
-
-# Rust
-target/
-Cargo.lock
-
-# Julia
-julia-*/
-
-# Zig
-zig*/
-```
+Expected Output:
+    #Compiled and build artifacts
+    *.pyc
+    pycache/
+    *.o
+    *.obj
+    dist/
+    build/
+    #Dependencies
+    .venv/
+    venv/
+    node_modules/
+    #Logs and temp files
+    *.log
+    *.tmp
+    *.swp
+    #Environment
+    .env
+    .env.local
+    .env.
+    #Editors
+    .vscode/
+    .idea/
+    #Original rules preserved
+    *.log
