@@ -1,1 +1,1 @@
-Nothing needs to be added to the .gitignore file based on the provided file changes, as they are all HTML files which are source code files and should not be ignored.
+Nothing should be ignored in this case, as the changes only include source/config files (.md, .html) without any build artifacts, dependencies, or temporary files.
