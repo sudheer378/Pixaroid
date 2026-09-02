@@ -2143,6 +2143,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://pixaroid.vercel.app/tools/international/</loc>
+    <lastmod>2026-09-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://pixaroid.vercel.app/tools/pdf-tools/</loc>
     <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
