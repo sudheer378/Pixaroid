@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Script Detector - Identify Writing Systems | Pixaroid</title>
+    <meta name="description" content="Free online script detector tool. Automatically identify writing systems and scripts in any text including Latin, Cyrillic, Arabic, Chinese, Japanese, Korean, and 50+ more scripts.">
+    <meta name="keywords" content="script detector, writing system identifier, text script analyzer, unicode script detection, language script finder, character set detector">
+    <link rel="canonical" href="https://pixaroid.vercel.app/tools/international/script-detector.html">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Script Detector - Identify Writing Systems | Pixaroid">
+    <meta property="og:description" content="Automatically detect writing systems and scripts in any text. Support for 50+ scripts including Latin, Cyrillic, Arabic, CJK, and more.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pixaroid.vercel.app/tools/international/script-detector.html">
+    <meta property="og:image" content="https://pixaroid.vercel.app/assets/images/og-default.png">
+    <meta property="og:site_name" content="Pixaroid">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Script Detector - Identify Writing Systems">
+    <meta name="twitter:description" content="Free tool to detect writing systems in any text. Supports 50+ scripts worldwide.">
+    <meta name="twitter:image" content="https://pixaroid.vercel.app/assets/images/og-default.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/icon-192.png">
+    
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Script Detector",
+        "description": "Automatically identify writing systems and scripts in any text",
+        "applicationCategory": "Utility",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "url": "https://pixaroid.vercel.app/tools/international/script-detector.html",
+        "featureList": "Detect 50+ writing systems, Unicode script analysis, Real-time detection, Batch text processing"
+    }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #00d9ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            color: #b0b0b0;
+            line-height: 1.6;
+        }
+        
+        .tool-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .input-section {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #00d9ff;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #ffffff;
+            font-size: 16px;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #00d9ff;
+        }
+        
+        textarea::placeholder {
+            color: #888;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #00d9ff, #00ff88);
+            color: #1a1a2e;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-block;
+            margin: 10px 5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 217, 255, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+        
+        .results-section {
+            display: none;
+        }
+        
+        .results-section.active {
+            display: block;
+        }
+        
+        .result-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00d9ff;
+        }
+        
+        .script-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00ff88;
+            margin-bottom: 10px;
+        }
+        
+        .script-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .detail-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 8px;
+        }
+        
+        .detail-label {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            color: #ffffff;
+        }
+        
+        .sample-text {
+            font-size: 1.2rem;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            margin-top: 15px;
+            font-style: italic;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00d9ff;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #b0b0b0;
+        }
+        
+        .supported-scripts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .script-tag {
+            background: rgba(0, 217, 255, 0.15);
+            color: #00d9ff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(0, 217, 255, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .tool-card {
+                padding: 20px;
+            }
+            
+            .btn {
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 Script Detector</h1>
+            <p class="subtitle">Automatically identify writing systems and scripts in any text. Supports 50+ scripts including Latin, Cyrillic, Arabic, Chinese, Japanese, Korean, Devanagari, and more.</p>
+        </header>
+        
+        <div class="tool-card">
+            <div class="input-section">
+                <label for="textInput">Enter or paste text to analyze:</label>
+                <textarea id="textInput" placeholder="Type or paste text here... Try mixing different scripts like: Hello Привет مرحبا 你好 こんにちは"></textarea>
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="btn" onclick="detectScripts()">Detect Scripts</button>
+                <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+                <button class="btn btn-secondary" onclick="loadSample()">Load Sample</button>
+            </div>
+        </div>
+        
+        <div id="results" class="results-section">
+            <div class="tool-card">
+                <h2 style="margin-bottom: 20px; color: #00d9ff;">Detection Results</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalScripts">0</div>
+                        <div class="stat-label">Scripts Found</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalChars">0</div>
+                        <div class="stat-label">Characters</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="dominantScript">-</div>
+                        <div class="stat-label">Dominant Script</div>
+                    </div>
+                </div>
+                
+                <div id="scriptResults"></div>
+                
+                <div style="margin-top: 30px;">
+                    <h3 style="color: #00ff88; margin-bottom: 15px;">Supported Scripts:</h3>
+                    <div class="supported-scripts" id="supportedScriptsList"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tool-card">
+            <h2 style="margin-bottom: 20px; color: #00d9ff;">How It Works</h2>
+            <p style="line-height: 1.8; color: #b0b0b0;">
+                Our Script Detector uses Unicode character ranges to identify writing systems. Each script has unique code points in the Unicode standard. 
+                When you enter text, we analyze each character's Unicode value and group them by their respective scripts. 
+                This helps linguists, developers, and content creators understand the composition of multilingual text.
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        const scriptRanges = {
+            'Latin': { range: [/[\u0041-\u007A\u00C0-\u00FF\u0100-\u024F]/], examples: 'Hello, Bonjour, Hola' },
+            'Cyrillic': { range: [/[\u0400-\u04FF]/], examples: 'Привет, Здравствуйте' },
+            'Arabic': { range: [/[\u0600-\u06FF\u0750-\u077F]/], examples: 'مرحبا, أهلا' },
+            'Devanagari': { range: [/[\u0900-\u097F]/], examples: 'नमस्ते, हिन्दी' },
+            'Bengali': { range: [/[\u0980-\u09FF]/], examples: 'নমস্কার, বাংলা' },
+            'Gurmukhi': { range: [/[\u0A00-\u0A7F]/], examples: 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ' },
+            'Gujarati': { range: [/[\u0A80-\u0AFF]/], examples: 'નમસ્તે, ગુજરાતી' },
+            'Oriya': { range: [/[\u0B00-\u0B7F]/], examples: 'ନମସ୍କାର' },
+            'Tamil': { range: [/[\u0B80-\u0BFF]/], examples: 'வணக்கம், தமிழ்' },
+            'Telugu': { range: [/[\u0C00-\u0C7F]/], examples: 'నమస్కారం, తెలుగు' },
+            'Kannada': { range: [/[\u0C80-\u0CFF]/], examples: 'ನಮಸ್ಕಾರ, ಕನ್ನಡ' },
+            'Malayalam': { range: [/[\u0D00-\u0D7F]/], examples: 'നമസ്കാരം, മലയാളം' },
+            'Sinhala': { range: [/[\u0D80-\u0DFF]/], examples: 'ආයුබෝවන්' },
+            'Thai': { range: [/[\u0E00-\u0E7F]/], examples: 'สวัสดี, ไทย' },
+            'Lao': { range: [/[\u0E80-\u0EFF]/], examples: 'ສະບາຍດີ' },
+            'Tibetan': { range: [/[\u0F00-\u0FFF]/], examples: 'བཀྲ་ཤིས་བདེ་ལེགས' },
+            'Myanmar': { range: [/[\u1000-\u109F]/], examples: 'မင်္ဂလာပါ' },
+            'Georgian': { range: [/[\u10A0-\u10FF]/], examples: 'გამარჯობა' },
+            'Hangul': { range: [/[\uAC00-\uD7AF\u1100-\u11FF]/], examples: '안녕하세요, 한국어' },
+            'Hiragana': { range: [/[\u3040-\u309F]/], examples: 'こんにちは, ひらがな' },
+            'Katakana': { range: [/[\u30A0-\u30FF]/], examples: 'コンニチハ, カタカナ' },
+            'Bopomofo': { range: [/[\u3100-\u312F]/], examples: 'ㄅㄆㄇㄈ' },
+            'Han': { range: [/[\u4E00-\u9FFF\u3400-\u4DBF]/], examples: '你好，中文' },
+            'Yi': { range: [/[\uA000-\uA48F]/], examples: 'ꆿꂷ' },
+            'Hebrew': { range: [/[\u0590-\u05FF]/], examples: 'שלום, עברית' },
+            'Greek': { range: [/[\u0370-\u03FF]/], examples: 'Γεια σας, Ελληνικά' },
+            'Armenian': { range: [/[\u0530-\u058F]/], examples: 'Բարև, Հայերեն' },
+            'Ethiopic': { range: [/[\u1200-\u137F]/], examples: 'ሰላም' },
+            'Cherokee': { range: [/[\u13A0-\u13FF]/], examples: 'ᏊᏢᏙ' },
+            'Canadian Aboriginal': { range: [/[\u1400-\u167F]/], examples: 'ᐊᐃᐅᐆ' },
+            'Ogham': { range: [/[\u1680-\u169F]/], examples: '᚛᚛᚛' },
+            'Runic': { range: [/[\u16A0-\u16FF]/], examples: 'ᚠᚢᚦᚨᚱᚲ' },
+            'Khmer': { range: [/[\u1780-\u17FF]/], examples: 'សួស្តី' },
+            'Mongolian': { range: [/[\u1800-\u18AF]/], examples: 'ᠰᠠᠶᠢᠨ ᠪᠠᠶᠢᠨ᠎ᠠ' },
+            'Syriac': { range: [/[\u0700-\u074F]/], examples: 'ܫܠܡ' },
+            'Thaana': { range: [/[\u0780-\u07BF]/], examples: 'ޝުކުރިއްޔާ' },
+            'NKo': { range: [/[\u07C0-\u07FF]/], examples: 'ߒߞߏ' },
+            'Samaritan': { range: [/[\u0800-\u083F]/], examples: 'ࠔࠠࠌࠝࠓࠩࠉࠕ' },
+            'Mandaic': { range: [/[\u0840-\u085F]/], examples: 'ࡌࡀࡍࡃࡀࡉࡉࡀ' },
+            'Sundanese': { range: [/[\u1B80-\u1BBF]/], examples: 'ᮞᮥᮞ᮪ᮏ᮪ᮙ᮪' },
+            'Buginese': { range: [/[\u1A00-\u1A1F]/], examples: 'ᨅᨔ ᨕᨘᨁᨗ' },
+            'Balinese': { range: [/[\u1B00-\u1B7F]/], examples: 'ᬓ᭄ᬬᬵᬦ᭄ᬢᬶ' },
+            'Javanese': { range: [/[\uA980-\uA9DF]/], examples: 'ꦱꦸꦒꦼꦁꦫꦮꦸꦃ' },
+            'Tagalog': { range: [/[\u1700-\u171F]/], examples: 'ᜀᜅ᜔ ᜉᜒᜎᜒᜉᜒᜈᜐ᜔' },
+            'Hanunoo': { range: [/[\u1720-\u173F]/], examples: 'ᜑᜓᜎᜓᜆ᜔' },
+            'Buhid': { range: [/[\u1740-\u175F]/], examples: 'ᜊᜓᜑᜒᜇ᜔' },
+            'Tagbanwa': { range: [/[\u1760-\u177F]/], examples: 'ᜆᜄ᜔ᜊᜒᜈ᜔ᜏ' },
+            'Limbu': { range: [/[\u1900-\u194F]/], examples: 'ᤁ᤹ᤖ᤹ᤙᤴ' },
+            'Tai Le': { range: [/[\u1950-\u197F]/], examples: 'ᥖᥭᥰ ᥑᥨᥒᥰ' },
+            'New Tai Lue': { range: [/[\u1980-\u19DF]/], examples: 'ᦅ᳄ᦎᦷᦎ' },
+            'Phags-pa': { range: [/[\uA840-\uA87F]/], examples: 'ꡏꡡꡃ ꡣꡡꡙ ꡐꡜ' }
+        };
+        
+        function detectScripts() {
+            const text = document.getElementById('textInput').value;
+            if (!text.trim()) {
+                alert('Please enter some text to analyze');
+                return;
+            }
+            
+            const scriptCounts = {};
+            const totalChars = text.length;
+            
+            // Count characters per script
+            for (const char of text) {
+                let found = false;
+                for (const [scriptName, scriptData] of Object.entries(scriptRanges)) {
+                    for (const regex of scriptData.range) {
+                        if (regex.test(char)) {
+                            scriptCounts[scriptName] = (scriptCounts[scriptName] || 0) + 1;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found) break;
+                }
+            }
+            
+            // Display results
+            displayResults(scriptCounts, totalChars, text);
+        }
+        
+        function displayResults(scriptCounts, totalChars, originalText) {
+            const resultsDiv = document.getElementById('results');
+            const scriptResultsDiv = document.getElementById('scriptResults');
+            
+            const sortedScripts = Object.entries(scriptCounts)
+                .sort((a, b) => b[1] - a[1]);
+            
+            document.getElementById('totalScripts').textContent = sortedScripts.length;
+            document.getElementById('totalChars').textContent = totalChars;
+            document.getElementById('dominantScript').textContent = sortedScripts.length > 0 ? sortedScripts[0][0] : '-';
+            
+            scriptResultsDiv.innerHTML = '';
+            
+            if (sortedScripts.length === 0) {
+                scriptResultsDiv.innerHTML = '<div class="result-item"><p>No recognized scripts found. The text may contain symbols, emojis, or unsupported characters.</p></div>';
+            } else {
+                sortedScripts.forEach(([scriptName, count]) => {
+                    const percentage = ((count / totalChars) * 100).toFixed(1);
+                    const scriptData = scriptRanges[scriptName];
+                    
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    resultItem.innerHTML = `
+                        <div class="script-name">${scriptName}</div>
+                        <div class="script-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Character Count</div>
+                                <div class="detail-value">${count}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Percentage</div>
+                                <div class="detail-value">${percentage}%</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Example Text</div>
+                                <div class="detail-value">${scriptData.examples}</div>
+                            </div>
+                        </div>
+                    `;
+                    scriptResultsDiv.appendChild(resultItem);
+                });
+            }
+            
+            resultsDiv.classList.add('active');
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function clearAll() {
+            document.getElementById('textInput').value = '';
+            document.getElementById('results').classList.remove('active');
+        }
+        
+        function loadSample() {
+            const sample = 'Hello World! Привет мир! مرحبا بالعالم! 你好世界！こんにちは世界！안녕하세요 세계! नमस्ते दुनिया!';
+            document.getElementById('textInput').value = sample;
+            detectScripts();
+        }
+        
+        // Initialize supported scripts list
+        function initSupportedScripts() {
+            const container = document.getElementById('supportedScriptsList');
+            const scripts = Object.keys(scriptRanges).sort();
+            
+            scripts.forEach(script => {
+                const tag = document.createElement('span');
+                tag.className = 'script-tag';
+                tag.textContent = script;
+                container.appendChild(tag);
+            });
+        }
+        
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', initSupportedScripts);
+    </script>
+</body>
+</html>
