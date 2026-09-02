@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passport Photo Resizer - Create Compliant Photos | Pixaroid</title>
+    <meta name="description" content="Resize and crop photos to passport, visa, and ID photo requirements for any country. Free online passport photo tool.">
+    <meta name="keywords" content="passport photo resizer, visa photo, id photo, photo dimensions, pixaroid">
+    <link rel="canonical" href="https://pixaroid.vercel.app/tools/international/passport-photo-resizer.html">
+    <meta property="og:title" content="Passport Photo Resizer">
+    <meta property="og:description" content="Create compliant passport and visa photos for any country.">
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        .tool-container { max-width: 800px; margin: 40px auto; padding: 30px; background: #1e1e2f; border-radius: 12px; }
+        h1 { color: #00d4ff; text-align: center; margin-bottom: 30px; }
+        .upload-area { border: 2px dashed #3a3a5a; padding: 40px; text-align: center; border-radius: 8px; margin-bottom: 20px; cursor: pointer; }
+        .upload-area:hover { border-color: #00d4ff; background: #2a2a3e; }
+        .controls { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin: 20px 0; }
+        select, button { padding: 12px 20px; background: #2a2a3e; border: 1px solid #3a3a5a; color: #fff; border-radius: 6px; }
+        button.primary { background: #00d4ff; color: #000; border: none; font-weight: bold; }
+        .preview { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+        .preview-box { background: #2a2a3e; padding: 15px; border-radius: 8px; text-align: center; }
+        canvas { max-width: 100%; border: 1px solid #3a3a5a; }
+        .dimensions { color: #aaa; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <header class="site-header"><nav class="navbar"><div class="container nav-container"><a href="/" class="logo">Pixaroid</a><ul class="nav-menu"><li><a href="/">Home</a></li><li><a href="/tools/">All Tools</a></li></ul></div></nav></header>
+    <main class="container">
+        <div class="tool-container">
+            <h1>📸 Passport Photo Resizer</h1>
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                <p>📁 Click to upload your photo or drag and drop</p>
+                <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="loadImage(event)">
+            </div>
+            <div class="controls">
+                <select id="countrySelect" onchange="updateDimensions()">
+                    <option value="us">USA (2x2 inches)</option>
+                    <option value="uk">UK (35x45 mm)</option>
+                    <option value="eu">EU/Schengen (35x45 mm)</option>
+                    <option value="in">India (35x45 mm)</option>
+                    <option value="cn">China (33x48 mm)</option>
+                    <option value="jp">Japan (35x45 mm)</option>
+                    <option value="au">Australia (35x45 mm)</option>
+                    <option value="custom">Custom</option>
+                </select>
+                <input type="number" id="widthMM" placeholder="Width mm" value="35" style="width:80px" disabled>
+                <input type="number" id="heightMM" placeholder="Height mm" value="45" style="width:80px" disabled>
+                <button class="primary" onclick="resizePhoto()">Resize Photo</button>
+                <button onclick="downloadPhoto()">⬇️ Download</button>
+            </div>
+            <div class="preview">
+                <div class="preview-box"><h4>Original</h4><canvas id="originalCanvas"></canvas><div class="dimensions" id="origDims"></div></div>
+                <div class="preview-box"><h4>Resized</h4><canvas id="resizedCanvas"></canvas><div class="dimensions" id="resizeDims"></div></div>
+            </div>
+        </div>
+    </main>
+    <footer class="site-footer"><div class="container"><p>&copy; 2026 Pixaroid</p><div class="footer-links"><a href="/privacy-policy.html">Privacy</a><a href="/terms-of-service.html">Terms</a></div></div></footer>
+    <script>
+        let originalImage = null;
+        const dims = { us: [51, 51], uk: [35, 45], eu: [35, 45], in: [35, 45], cn: [33, 48], jp: [35, 45], au: [35, 45] };
+        
+        function updateDimensions() {
+            const country = document.getElementById('countrySelect').value;
+            const custom = country === 'custom';
+            document.getElementById('widthMM').disabled = !custom;
+            document.getElementById('heightMM').disabled = !custom;
+            if (!custom && dims[country]) {
+                document.getElementById('widthMM').value = dims[country][0];
+                document.getElementById('heightMM').value = dims[country][1];
+            }
+        }
+        
+        function loadImage(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                originalImage = new Image();
+                originalImage.onload = function() {
+                    const origCanvas = document.getElementById('originalCanvas');
+                    origCanvas.width = Math.min(300, originalImage.width);
+                    origCanvas.height = origCanvas.width * (originalImage.height / originalImage.width);
+                    const ctx = origCanvas.getContext('2d');
+                    ctx.drawImage(originalImage, 0, 0, origCanvas.width, origCanvas.height);
+                    document.getElementById('origDims').textContent = `${originalImage.width} x ${originalImage.height} px`;
+                };
+                originalImage.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function resizePhoto() {
+            if (!originalImage) { alert('Please upload a photo first'); return; }
+            const widthMM = parseFloat(document.getElementById('widthMM').value) || 35;
+            const heightMM = parseFloat(document.getElementById('heightMM').value) || 45;
+            const dpi = 300;
+            const widthPx = Math.round((widthMM / 25.4) * dpi);
+            const heightPx = Math.round((heightMM / 25.4) * dpi);
+            
+            const resizedCanvas = document.getElementById('resizedCanvas');
+            resizedCanvas.width = widthPx;
+            resizedCanvas.height = heightPx;
+            const ctx = resizedCanvas.getContext('2d');
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, 0, widthPx, heightPx);
+            
+            const scale = Math.max(widthPx / originalImage.width, heightPx / originalImage.height);
+            const x = (widthPx - originalImage.width * scale) / 2;
+            const y = (heightPx - originalImage.height * scale) / 2;
+            ctx.drawImage(originalImage, x, y, originalImage.width * scale, originalImage.height * scale);
+            
+            document.getElementById('resizeDims').textContent = `${widthPx} x ${heightPx} px (${widthMM}x${heightMM}mm)`;
+        }
+        
+        function downloadPhoto() {
+            const canvas = document.getElementById('resizedCanvas');
+            if (canvas.width === 0) { alert('Please resize a photo first'); return; }
+            const link = document.createElement('a');
+            link.download = 'passport-photo.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>
