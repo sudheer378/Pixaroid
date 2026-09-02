@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>International Tools - Currency, Timezone & More | Pixaroid</title>
+    <meta name="description" content="Free international tools for global users: currency converter, timezone planner, unit converter, and more. Perfect for travelers and international teams.">
+    <meta name="keywords" content="international tools, currency converter, timezone planner, unit converter, world clock">
+    <link rel="canonical" href="https://pixaroid.vercel.app/tools/international/">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="International Tools - Currency, Timezone & More | Pixaroid">
+    <meta property="og:description" content="Free international tools for global users: currency converter, timezone planner, and more.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pixaroid.vercel.app/tools/international/">
+    <meta property="og:image" content="https://pixaroid.vercel.app/assets/images/og-default.png">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="International Tools - Currency, Timezone & More | Pixaroid">
+    <meta name="twitter:description" content="Free international tools for global users.">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-light: #f1f5f9;
+            --text-gray: #94a3b8;
+            --border: #334155;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1e293b 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-top: 40px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            color: var(--text-gray);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .tool-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.2);
+        }
+        
+        .tool-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .tool-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-light);
+        }
+        
+        .tool-desc {
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .tool-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .tag {
+            background: var(--bg-dark);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 30px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Back to Home</a>
+        
+        <header>
+            <h1>🌍 International Tools</h1>
+            <p class="subtitle">Essential tools for global users, travelers, and international teams. Convert currencies, plan meetings across timezones, and more.</p>
+        </header>
+        
+        <div class="tools-grid">
+            <a href="/tools/international/currency-converter.html" class="tool-card">
+                <div class="tool-icon">💱</div>
+                <h2 class="tool-title">Currency Converter</h2>
+                <p class="tool-desc">Convert between 150+ world currencies instantly with live exchange rates. Perfect for travelers, expats, and international businesses.</p>
+                <div class="tool-tags">
+                    <span class="tag">Finance</span>
+                    <span class="tag">Travel</span>
+                    <span class="tag">Real-time</span>
+                </div>
+            </a>
+            
+            <a href="/tools/international/timezone-planner.html" class="tool-card">
+                <div class="tool-icon">🕐</div>
+                <h2 class="tool-title">World Timezone Planner</h2>
+                <p class="tool-desc">Plan meetings across multiple time zones effortlessly. Compare times in different cities and find the perfect meeting slot.</p>
+                <div class="tool-tags">
+                    <span class="tag">Productivity</span>
+                    <span class="tag">Scheduling</span>
+                    <span class="tag">Teams</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
