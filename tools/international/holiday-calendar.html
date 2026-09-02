@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holiday Calendar - International Holidays by Country | Pixaroid</title>
+    <meta name="description" content="View public holidays and festivals for any country. Free international holiday calendar with dates and descriptions.">
+    <meta name="keywords" content="holiday calendar, public holidays, international holidays, bank holidays, pixaroid">
+    <link rel="canonical" href="https://pixaroid.vercel.app/tools/international/holiday-calendar.html">
+    <meta property="og:title" content="Holiday Calendar - International Holidays">
+    <meta property="og:description" content="View public holidays for any country worldwide.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pixaroid.vercel.app/tools/international/holiday-calendar.html">
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        .calendar-container { max-width: 900px; margin: 40px auto; padding: 30px; background: #1e1e2f; border-radius: 12px; }
+        h1 { color: #00d4ff; text-align: center; margin-bottom: 30px; }
+        .controls { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 30px; }
+        select, input { padding: 12px; background: #2a2a3e; border: 1px solid #3a3a5a; color: #fff; border-radius: 6px; font-size: 1rem; }
+        .holidays-list { max-height: 500px; overflow-y: auto; }
+        .holiday-item { display: flex; justify-content: space-between; padding: 15px; background: #2a2a3e; margin-bottom: 10px; border-radius: 8px; align-items: center; }
+        .holiday-date { background: #00d4ff; color: #000; padding: 8px 15px; border-radius: 20px; font-weight: bold; }
+        .holiday-name { flex: 1; margin-left: 20px; font-weight: 500; }
+        .holiday-type { color: #aaa; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <header class="site-header"><nav class="navbar"><div class="container nav-container"><a href="/" class="logo">Pixaroid</a><ul class="nav-menu"><li><a href="/">Home</a></li><li><a href="/tools/">All Tools</a></li></ul></div></nav></header>
+    <main class="container">
+        <div class="calendar-container">
+            <h1>📅 Holiday Calendar</h1>
+            <div class="controls">
+                <select id="countrySelect" onchange="loadHolidays()"></select>
+                <input type="number" id="yearInput" value="2026" min="2020" max="2030" onchange="loadHolidays()" style="width:100px;">
+            </div>
+            <div class="holidays-list" id="holidaysList"></div>
+        </div>
+    </main>
+    <footer class="site-footer"><div class="container"><p>&copy; 2026 Pixaroid</p><div class="footer-links"><a href="/privacy-policy.html">Privacy</a><a href="/terms-of-service.html">Terms</a></div></div></footer>
+    <script>
+        const countries = ["United States", "United Kingdom", "Canada", "Australia", "India", "Germany", "France", "Japan", "China", "Brazil", "Mexico", "Spain", "Italy", "Russia", "South Korea"];
+        const holidaysData = {
+            "United States": [
+                { date: "Jan 1", name: "New Year's Day", type: "Public" },
+                { date: "Jan 20", name: "Martin Luther King Jr. Day", type: "Federal" },
+                { date: "Feb 16", name: "Presidents' Day", type: "Federal" },
+                { date: "May 25", name: "Memorial Day", type: "Federal" },
+                { date: "Jul 4", name: "Independence Day", type: "Federal" },
+                { date: "Sep 1", name: "Labor Day", type: "Federal" },
+                { date: "Oct 13", name: "Columbus Day", type: "Federal" },
+                { date: "Nov 11", name: "Veterans Day", type: "Federal" },
+                { date: "Nov 27", name: "Thanksgiving Day", type: "Federal" },
+                { date: "Dec 25", name: "Christmas Day", type: "Federal" }
+            ],
+            "United Kingdom": [
+                { date: "Jan 1", name: "New Year's Day", type: "Bank Holiday" },
+                { date: "Apr 18", name: "Good Friday", type: "Bank Holiday" },
+                { date: "Apr 21", name: "Easter Monday", type: "Bank Holiday" },
+                { date: "May 5", name: "Early May Bank Holiday", type: "Bank Holiday" },
+                { date: "May 26", name: "Spring Bank Holiday", type: "Bank Holiday" },
+                { date: "Aug 25", name: "Summer Bank Holiday", type: "Bank Holiday" },
+                { date: "Dec 25", name: "Christmas Day", type: "Bank Holiday" },
+                { date: "Dec 26", name: "Boxing Day", type: "Bank Holiday" }
+            ],
+            "India": [
+                { date: "Jan 26", name: "Republic Day", type: "National" },
+                { date: "Mar 14", name: "Holi", type: "Festival" },
+                { date: "Aug 15", name: "Independence Day", type: "National" },
+                { date: "Oct 2", name: "Gandhi Jayanti", type: "National" },
+                { date: "Oct 20", name: "Diwali", type: "Festival" },
+                { date: "Dec 25", name: "Christmas", type: "Festival" }
+            ]
+        };
+        
+        function init() {
+            const sel = document.getElementById('countrySelect');
+            sel.innerHTML = countries.map(c => `<option value="${c}">${c}</option>`).join('');
+            loadHolidays();
+        }
+        
+        function loadHolidays() {
+            const country = document.getElementById('countrySelect').value;
+            const list = document.getElementById('holidaysList');
+            const holidays = holidaysData[country] || [];
+            
+            if (holidays.length === 0) {
+                list.innerHTML = '<p style="text-align:center;color:#aaa;">Select a country to view holidays.</p>';
+                return;
+            }
+            
+            list.innerHTML = holidays.map(h => `
+                <div class="holiday-item">
+                    <span class="holiday-date">${h.date}</span>
+                    <span class="holiday-name">${h.name}</span>
+                    <span class="holiday-type">${h.type}</span>
+                </div>
+            `).join('');
+        }
+        
+        init();
+    </script>
+</body>
+</html>

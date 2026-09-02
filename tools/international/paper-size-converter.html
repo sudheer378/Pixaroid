@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paper Size Converter - International Paper Formats | Pixaroid</title>
+    <meta name="description" content="Convert between international paper sizes (A, B, C series) and North American sizes (Letter, Legal, Tabloid). Free paper size converter tool.">
+    <meta name="keywords" content="paper size converter, A4 to letter, ISO paper sizes, paper dimensions, pixaroid">
+    <link rel="canonical" href="https://pixaroid.vercel.app/tools/international/paper-size-converter.html">
+    <meta property="og:title" content="Paper Size Converter">
+    <meta property="og:description" content="Convert between international paper sizes instantly.">
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        .converter-container { max-width: 900px; margin: 40px auto; padding: 30px; background: #1e1e2f; border-radius: 12px; }
+        h1 { color: #00d4ff; text-align: center; margin-bottom: 30px; }
+        .size-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 30px; }
+        .size-card { background: #2a2a3e; padding: 20px; border-radius: 8px; text-align: center; cursor: pointer; transition: transform 0.2s; border: 2px solid transparent; }
+        .size-card:hover { transform: translateY(-3px); border-color: #00d4ff; }
+        .size-card.selected { border-color: #00d4ff; background: #32324a; }
+        .size-name { font-size: 1.5rem; color: #00d4ff; font-weight: bold; margin-bottom: 10px; }
+        .size-dims { color: #fff; margin-bottom: 5px; }
+        .size-mm { color: #aaa; font-size: 0.9rem; }
+        .comparison { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
+        .paper-visual { background: #fff; border: 2px solid #00d4ff; position: relative; }
+        .paper-label { position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%); color: #fff; white-space: nowrap; }
+        .controls { text-align: center; margin: 20px 0; }
+        button { padding: 12px 30px; background: #00d4ff; color: #000; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <header class="site-header"><nav class="navbar"><div class="container nav-container"><a href="/" class="logo">Pixaroid</a><ul class="nav-menu"><li><a href="/">Home</a></li><li><a href="/tools/">All Tools</a></li></ul></div></nav></header>
+    <main class="container">
+        <div class="converter-container">
+            <h1>📄 Paper Size Converter</h1>
+            <p style="text-align:center;color:#aaa;margin-bottom:30px;">Select any two paper sizes to compare their dimensions</p>
+            
+            <div class="controls">
+                <button onclick="showSeries('A')">A Series (ISO)</button>
+                <button onclick="showSeries('B')">B Series (ISO)</button>
+                <button onclick="showSeries('C')">C Series (Envelopes)</button>
+                <button onclick="showSeries('NA')">North American</button>
+            </div>
+            
+            <div class="size-grid" id="sizeGrid"></div>
+            
+            <div class="comparison" id="comparison" style="display:none;">
+                <div><div class="paper-visual" id="visual1"></div><div class="paper-label" id="label1"></div></div>
+                <div><div class="paper-visual" id="visual2"></div><div class="paper-label" id="label2"></div></div>
+            </div>
+        </div>
+    </main>
+    <footer class="site-footer"><div class="container"><p>&copy; 2026 Pixaroid</p><div class="footer-links"><a href="/privacy-policy.html">Privacy</a><a href="/terms-of-service.html">Terms</a></div></div></footer>
+    <script>
+        const paperSizes = {
+            A: [
+                { name: 'A0', mm: [841, 1189], inches: [33.1, 46.8] },
+                { name: 'A1', mm: [594, 841], inches: [23.4, 33.1] },
+                { name: 'A2', mm: [420, 594], inches: [16.5, 23.4] },
+                { name: 'A3', mm: [297, 420], inches: [11.7, 16.5] },
+                { name: 'A4', mm: [210, 297], inches: [8.27, 11.69] },
+                { name: 'A5', mm: [148, 210], inches: [5.83, 8.27] },
+                { name: 'A6', mm: [105, 148], inches: [4.13, 5.83] },
+                { name: 'A7', mm: [74, 105], inches: [2.91, 4.13] }
+            ],
+            B: [
+                { name: 'B0', mm: [1000, 1414], inches: [39.4, 55.7] },
+                { name: 'B1', mm: [707, 1000], inches: [27.8, 39.4] },
+                { name: 'B2', mm: [500, 707], inches: [19.7, 27.8] },
+                { name: 'B3', mm: [353, 500], inches: [13.9, 19.7] },
+                { name: 'B4', mm: [250, 353], inches: [9.84, 13.9] },
+                { name: 'B5', mm: [176, 250], inches: [6.93, 9.84] }
+            ],
+            C: [
+                { name: 'C0', mm: [917, 1297], inches: [36.1, 51.1] },
+                { name: 'C1', mm: [648, 917], inches: [25.5, 36.1] },
+                { name: 'C2', mm: [458, 648], inches: [18.0, 25.5] },
+                { name: 'C3', mm: [324, 458], inches: [12.8, 18.0] },
+                { name: 'C4', mm: [229, 324], inches: [9.0, 12.8] },
+                { name: 'C5', mm: [162, 229], inches: [6.4, 9.0] },
+                { name: 'C6', mm: [114, 162], inches: [4.5, 6.4] }
+            ],
+            NA: [
+                { name: 'Letter', mm: [215.9, 279.4], inches: [8.5, 11] },
+                { name: 'Legal', mm: [215.9, 355.6], inches: [8.5, 14] },
+                { name: 'Tabloid', mm: [279.4, 431.8], inches: [11, 17] },
+                { name: 'Ledger', mm: [431.8, 279.4], inches: [17, 11] },
+                { name: 'Statement', mm: [139.7, 215.9], inches: [5.5, 8.5] }
+            ]
+        };
+        
+        let selected = [];
+        
+        function showSeries(series) {
+            const grid = document.getElementById('sizeGrid');
+            const sizes = paperSizes[series];
+            grid.innerHTML = sizes.map(s => `
+                <div class="size-card" onclick="selectSize('${series}', '${s.name}', ${s.mm[0]}, ${s.mm[1]})">
+                    <div class="size-name">${s.name}</div>
+                    <div class="size-dims">${s.inches[0]}" × ${s.inches[1]}"</div>
+                    <div class="size-mm">${s.mm[0]} × ${s.mm[1]} mm</div>
+                </div>
+            `).join('');
+            selected = [];
+            document.getElementById('comparison').style.display = 'none';
+        }
+        
+        function selectSize(series, name, w, h) {
+            if (selected.length >= 2) selected = [];
+            selected.push({ name, w, h });
+            
+            document.querySelectorAll('.size-card').forEach(c => c.classList.remove('selected'));
+            event.target.closest('.size-card').classList.add('selected');
+            
+            if (selected.length === 2) {
+                showComparison();
+            }
+        }
+        
+        function showComparison() {
+            const comp = document.getElementById('comparison');
+            comp.style.display = 'flex';
+            
+            const scale = 0.3;
+            const v1 = document.getElementById('visual1');
+            const v2 = document.getElementById('visual2');
+            
+            v1.style.width = (selected[0].w * scale) + 'px';
+            v1.style.height = (selected[0].h * scale) + 'px';
+            document.getElementById('label1').textContent = `${selected[0].name}: ${selected[0].w}×${selected[0].h}mm`;
+            
+            v2.style.width = (selected[1].w * scale) + 'px';
+            v2.style.height = (selected[1].h * scale) + 'px';
+            document.getElementById('label2').textContent = `${selected[1].name}: ${selected[1].w}×${selected[1].h}mm`;
+        }
+        
+        showSeries('A');
+    </script>
+</body>
+</html>
