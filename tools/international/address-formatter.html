@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Formatter - International Address Standardizer | Pixaroid</title>
+    <meta name="description" content="Free online address formatter tool. Format and validate international addresses according to local standards for 50+ countries. Perfect for shipping, mailing, and data entry.">
+    <meta name="keywords" content="address formatter, international address, address validator, mailing address format, shipping address, postal address standardizer">
+    <link rel="canonical" href="https://pixaroid.vercel.app/tools/international/address-formatter.html">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Address Formatter - International Address Standardizer | Pixaroid">
+    <meta property="og:description" content="Format international addresses correctly for any country. Supports 50+ countries with local postal standards.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pixaroid.vercel.app/tools/international/address-formatter.html">
+    <meta property="og:image" content="https://pixaroid.vercel.app/assets/images/og-default.png">
+    <meta property="og:site_name" content="Pixaroid">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Address Formatter - International Address Standardizer">
+    <meta name="twitter:description" content="Free tool to format addresses for 50+ countries. Ensure your mail reaches its destination.">
+    <meta name="twitter:image" content="https://pixaroid.vercel.app/assets/images/og-default.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/icon-192.png">
+    
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Address Formatter",
+        "description": "Format and validate international addresses according to local standards",
+        "applicationCategory": "Utility",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "url": "https://pixaroid.vercel.app/tools/international/address-formatter.html",
+        "featureList": "50+ country formats, Address validation, Multiple output formats, Copy to clipboard"
+    }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #00d9ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            color: #b0b0b0;
+            line-height: 1.6;
+        }
+        
+        .tool-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #00d9ff;
+            font-size: 0.9rem;
+        }
+        
+        select, input {
+            padding: 12px 15px;
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #ffffff;
+            font-size: 15px;
+            transition: border-color 0.3s;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: #00d9ff;
+        }
+        
+        select option {
+            background: #1a1a2e;
+            color: #ffffff;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #ffffff;
+            font-size: 16px;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #00d9ff;
+        }
+        
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #00d9ff, #00ff88);
+            color: #1a1a2e;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 217, 255, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+        
+        .output-section {
+            display: none;
+        }
+        
+        .output-section.active {
+            display: block;
+        }
+        
+        .formatted-address {
+            background: rgba(0, 217, 255, 0.1);
+            border: 2px solid #00d9ff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+        
+        .format-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .format-option {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .format-option:hover {
+            background: rgba(0, 217, 255, 0.1);
+        }
+        
+        .format-option.selected {
+            border-color: #00d9ff;
+            background: rgba(0, 217, 255, 0.15);
+        }
+        
+        .format-option h4 {
+            color: #00ff88;
+            margin-bottom: 8px;
+        }
+        
+        .format-option p {
+            font-size: 0.85rem;
+            color: #b0b0b0;
+        }
+        
+        .country-info {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .country-info h3 {
+            color: #00d9ff;
+            margin-bottom: 15px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .info-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 8px;
+        }
+        
+        .info-label {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-weight: 600;
+            color: #ffffff;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .tool-card {
+                padding: 20px;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌍 Address Formatter</h1>
+            <p class="subtitle">Format and validate international addresses according to local postal standards. Supports 50+ countries with proper formatting rules for shipping and mailing.</p>
+        </header>
+        
+        <div class="tool-card">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="country">Select Country</label>
+                    <select id="country" onchange="updateFormFields()">
+                        <option value="">-- Choose a Country --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="outputFormat">Output Format</label>
+                    <select id="outputFormat">
+                        <option value="standard">Standard (Local Format)</option>
+                        <option value="international">International (English)</option>
+                        <option value="oneline">Single Line</option>
+                        <option value="xml">XML</option>
+                        <option value="json">JSON</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="recipientName">Recipient Name</label>
+                    <input type="text" id="recipientName" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="company">Company (Optional)</label>
+                    <input type="text" id="company" placeholder="Company Name">
+                </div>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="streetAddress">Street Address</label>
+                    <input type="text" id="streetAddress" placeholder="123 Main Street">
+                </div>
+                <div class="form-group">
+                    <label for="streetAddress2">Address Line 2 (Optional)</label>
+                    <input type="text" id="streetAddress2" placeholder="Apt 4B">
+                </div>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" placeholder="New York">
+                </div>
+                <div class="form-group">
+                    <label for="state">State/Province</label>
+                    <input type="text" id="state" placeholder="NY">
+                </div>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="postalCode">Postal/ZIP Code</label>
+                    <input type="text" id="postalCode" placeholder="10001">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone (Optional)</label>
+                    <input type="text" id="phone" placeholder="+1 212-555-1234">
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn" onclick="formatAddress()">Format Address</button>
+                <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+                <button class="btn btn-secondary" onclick="loadSample()">Load Sample</button>
+            </div>
+        </div>
+        
+        <div id="output" class="output-section">
+            <div class="tool-card">
+                <h2 style="margin-bottom: 20px; color: #00d9ff;">Formatted Address</h2>
+                
+                <div class="formatted-address" id="formattedResult"></div>
+                
+                <div class="btn-group">
+                    <button class="btn" onclick="copyToClipboard()">Copy to Clipboard</button>
+                </div>
+                
+                <div class="format-options">
+                    <div class="format-option selected" onclick="selectFormat('standard')">
+                        <h4>Standard</h4>
+                        <p>Local postal format</p>
+                    </div>
+                    <div class="format-option" onclick="selectFormat('international')">
+                        <h4>International</h4>
+                        <p>English format for global mail</p>
+                    </div>
+                    <div class="format-option" onclick="selectFormat('oneline')">
+                        <h4>Single Line</h4>
+                        <p>Comma-separated format</p>
+                    </div>
+                    <div class="format-option" onclick="selectFormat('xml')">
+                        <h4>XML</h4>
+                        <p>Structured XML format</p>
+                    </div>
+                    <div class="format-option" onclick="selectFormat('json')">
+                        <h4>JSON</h4>
+                        <p>JSON data format</p>
+                    </div>
+                </div>
+                
+                <div class="country-info" id="countryInfo">
+                    <h3>Country Information</h3>
+                    <div class="info-grid" id="infoGrid"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tool-card">
+            <h2 style="margin-bottom: 20px; color: #00d9ff;">How It Works</h2>
+            <p style="line-height: 1.8; color: #b0b0b0;">
+                Our Address Formatter applies country-specific postal standards to ensure your addresses are correctly formatted for delivery. 
+                Each country has unique requirements for address structure, postal code format, and required fields. 
+                This tool helps prevent delivery delays and returned mail by formatting addresses according to local postal service guidelines.
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        const countries = {
+            'US': { name: 'United States', code: 'US', postalFormat: '#####-####', requireState: true, fields: ['Name', 'Street', 'City', 'State', 'ZIP'] },
+            'GB': { name: 'United Kingdom', code: 'GB', postalFormat: 'XX# #XX', requireState: false, fields: ['Name', 'Street', 'City', 'Postcode'] },
+            'CA': { name: 'Canada', code: 'CA', postalFormat: 'X#X #X#', requireState: true, fields: ['Name', 'Street', 'City', 'Province', 'Postal Code'] },
+            'AU': { name: 'Australia', code: 'AU', postalFormat: '####', requireState: true, fields: ['Name', 'Street', 'Suburb', 'State', 'Postcode'] },
+            'DE': { name: 'Germany', code: 'DE', postalFormat: '#####', requireState: false, fields: ['Name', 'Street', 'Postcode', 'City'] },
+            'FR': { name: 'France', code: 'FR', postalFormat: '#####', requireState: false, fields: ['Name', 'Street', 'Postcode', 'City'] },
+            'IT': { name: 'Italy', code: 'IT', postalFormat: '#####', requireState: false, fields: ['Name', 'Street', 'Postcode', 'City', 'Province'] },
+            'ES': { name: 'Spain', code: 'ES', postalFormat: '#####', requireState: false, fields: ['Name', 'Street', 'Postcode', 'City', 'Province'] },
+            'NL': { name: 'Netherlands', code: 'NL', postalFormat: '#### XX', requireState: false, fields: ['Name', 'Street', 'Postcode', 'City'] },
+            'BE': { name: 'Belgium', code: 'BE', postalFormat: '####', requireState: false, fields: ['Name', 'Street', 'Postcode', 'City'] },
+            'CH': { name: 'Switzerland', code: 'CH', postalFormat: '####', requireState: false, fields: ['Name', 'Street', 'Postcode', 'City'] },
+            'AT': { name: 'Austria', code: 'AT', postalFormat: '####', requireState: false, fields: ['Name', 'Street', 'Postcode', 'City'] },
+            'SE': { name: 'Sweden', code: 'SE', postalFormat: '### ##', requireState: false, fields: ['Name', 'Street', 'Postcode', 'City'] },
+            'NO': { name: 'Norway', code: 'NO', postalFormat: '####', requireState: false, fields: ['Name', 'Street', 'Postcode', 'City'] },
+            'DK': { name: 'Denmark', code: 'DK', postalFormat: '####', requireState: false, fields: ['Name', 'Street', 'Postcode', 'City'] },
+            'FI': { name: 'Finland', code: 'FI', postalFormat: '#####', requireState: false, fields: ['Name', 'Street', 'Postcode', 'City'] },
+            'PL': { name: 'Poland', code: 'PL', postalFormat: '##-###', requireState: false, fields: ['Name', 'Street', 'Postcode', 'City'] },
+            'CZ': { name: 'Czech Republic', code: 'CZ', postalFormat: '### ##', requireState: false, fields: ['Name', 'Street', 'Postcode', 'City'] },
+            'IE': { name: 'Ireland', code: 'IE', postalFormat: 'XXX XXXX', requireState: false, fields: ['Name', 'Street', 'City', 'Postcode'] },
+            'PT': { name: 'Portugal', code: 'PT', postalFormat: '####-###', requireState: false, fields: ['Name', 'Street', 'Postcode', 'City'] },
+            'GR': { name: 'Greece', code: 'GR', postalFormat: '### ##', requireState: false, fields: ['Name', 'Street', 'Postcode', 'City'] },
+            'JP': { name: 'Japan', code: 'JP', postalFormat: '###-####', requireState: true, fields: ['Name', 'Prefecture', 'City', 'District', 'Postal Code'] },
+            'CN': { name: 'China', code: 'CN', postalFormat: '######', requireState: true, fields: ['Name', 'Province', 'City', 'District', 'Street', 'Postal Code'] },
+            'KR': { name: 'South Korea', code: 'KR', postalFormat: '#####', requireState: true, fields: ['Name', 'City/Do', 'District', 'Street', 'Postal Code'] },
+            'IN': { name: 'India', code: 'IN', postalFormat: '######', requireState: true, fields: ['Name', 'Street', 'City', 'State', 'PIN Code'] },
+            'BR': { name: 'Brazil', code: 'BR', postalFormat: '#####-###', requireState: true, fields: ['Name', 'Street', 'Number', 'Complement', 'City', 'State', 'CEP'] },
+            'MX': { name: 'Mexico', code: 'MX', postalFormat: '#####', requireState: true, fields: ['Name', 'Street', 'Number', 'Colonia', 'City', 'State', 'CP'] },
+            'AR': { name: 'Argentina', code: 'AR', postalFormat: '####', requireState: true, fields: ['Name', 'Street', 'Number', 'City', 'Province', 'CPA'] },
+            'CL': { name: 'Chile', code: 'CL', postalFormat: '#######', requireState: true, fields: ['Name', 'Street', 'Number', 'City', 'Region', 'Postal Code'] },
+            'CO': { name: 'Colombia', code: 'CO', postalFormat: '######', requireState: true, fields: ['Name', 'Street', 'Number', 'City', 'Department', 'Postal Code'] },
+            'ZA': { name: 'South Africa', code: 'ZA', postalFormat: '####', requireState: false, fields: ['Name', 'Street', 'Suburb', 'City', 'Postal Code'] },
+            'NZ': { name: 'New Zealand', code: 'NZ', postalFormat: '####', requireState: false, fields: ['Name', 'Street', 'Suburb', 'City', 'Postcode'] },
+            'SG': { name: 'Singapore', code: 'SG', postalFormat: '######', requireState: false, fields: ['Name', 'Street', 'Unit', 'Postal Code'] },
+            'MY': { name: 'Malaysia', code: 'MY', postalFormat: '#####', requireState: true, fields: ['Name', 'Street', 'City', 'State', 'Postcode'] },
+            'TH': { name: 'Thailand', code: 'TH', postalFormat: '#####', requireState: true, fields: ['Name', 'Street', 'District', 'Province', 'Postal Code'] },
+            'PH': { name: 'Philippines', code: 'PH', postalFormat: '####', requireState: true, fields: ['Name', 'Street', 'Barangay', 'City', 'Province', 'Postal Code'] },
+            'ID': { name: 'Indonesia', code: 'ID', postalFormat: '#####', requireState: true, fields: ['Name', 'Street', 'City', 'Province', 'Postal Code'] },
+            'VN': { name: 'Vietnam', code: 'VN', postalFormat: '#####', requireState: true, fields: ['Name', 'Street', 'District', 'City', 'Postal Code'] },
+            'AE': { name: 'United Arab Emirates', code: 'AE', postalFormat: '', requireState: true, fields: ['Name', 'Street', 'Area', 'City', 'Emirate'] },
+            'SA': { name: 'Saudi Arabia', code: 'SA', postalFormat: '#####', requireState: false, fields: ['Name', 'Street', 'District', 'City', 'Postal Code'] },
+            'IL': { name: 'Israel', code: 'IL', postalFormat: '#######', requireState: false, fields: ['Name', 'Street', 'Number', 'City', 'Postal Code'] },
+            'TR': { name: 'Turkey', code: 'TR', postalFormat: '#####', requireState: true, fields: ['Name', 'Street', 'District', 'City', 'Postal Code'] },
+            'RU': { name: 'Russia', code: 'RU', postalFormat: '######', requireState: true, fields: ['Name', 'Street', 'Building', 'City', 'Region', 'Postal Code'] },
+            'UA': { name: 'Ukraine', code: 'UA', postalFormat: '#####', requireState: true, fields: ['Name', 'Street', 'City', 'Region', 'Postal Code'] },
+            'EG': { name: 'Egypt', code: 'EG', postalFormat: '#####', requireState: true, fields: ['Name', 'Street', 'District', 'City', 'Governorate', 'Postal Code'] },
+            'NG': { name: 'Nigeria', code: 'NG', postalFormat: '######', requireState: true, fields: ['Name', 'Street', 'City', 'State', 'Postal Code'] },
+            'KE': { name: 'Kenya', code: 'KE', postalFormat: '#####', requireState: false, fields: ['Name', 'Street', 'City', 'Postal Code'] },
+            'HK': { name: 'Hong Kong', code: 'HK', postalFormat: '', requireState: false, fields: ['Name', 'Street', 'Building', 'Flat'] },
+            'TW': { name: 'Taiwan', code: 'TW', postalFormat: '###', requireState: true, fields: ['Name', 'City/County', 'District', 'Street', 'Postal Code'] },
+            'PK': { name: 'Pakistan', code: 'PK', postalFormat: '#####', requireState: true, fields: ['Name', 'Street', 'City', 'Province', 'Postal Code'] }
+        };
+        
+        let currentCountry = null;
+        let currentFormat = 'standard';
+        
+        function initCountries() {
+            const select = document.getElementById('country');
+            const sortedCountries = Object.entries(countries).sort((a, b) => a[1].name.localeCompare(b[1].name));
+            
+            sortedCountries.forEach(([code, data]) => {
+                const option = document.createElement('option');
+                option.value = code;
+                option.textContent = data.name;
+                select.appendChild(option);
+            });
+        }
+        
+        function updateFormFields() {
+            const countryCode = document.getElementById('country').value;
+            if (!countryCode) {
+                currentCountry = null;
+                return;
+            }
+            
+            currentCountry = countries[countryCode];
+            displayCountryInfo();
+        }
+        
+        function displayCountryInfo() {
+            if (!currentCountry) return;
+            
+            const infoGrid = document.getElementById('infoGrid');
+            infoGrid.innerHTML = `
+                <div class="info-item">
+                    <div class="info-label">Country Code</div>
+                    <div class="info-value">${currentCountry.code}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Postal Format</div>
+                    <div class="info-value">${currentCountry.postalFormat || 'Not specified'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">State Required</div>
+                    <div class="info-value">${currentCountry.requireState ? 'Yes' : 'No'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Required Fields</div>
+                    <div class="info-value">${currentCountry.fields.join(', ')}</div>
+                </div>
+            `;
+        }
+        
+        function formatAddress() {
+            const recipient = document.getElementById('recipientName').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const street = document.getElementById('streetAddress').value.trim();
+            const street2 = document.getElementById('streetAddress2').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const state = document.getElementById('state').value.trim();
+            const postal = document.getElementById('postalCode').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            
+            if (!recipient || !street || !city) {
+                alert('Please fill in at least Recipient Name, Street Address, and City');
+                return;
+            }
+            
+            if (!currentCountry) {
+                alert('Please select a country');
+                return;
+            }
+            
+            let formatted = '';
+            
+            switch (currentFormat) {
+                case 'standard':
+                    formatted = formatStandard(recipient, company, street, street2, city, state, postal, currentCountry);
+                    break;
+                case 'international':
+                    formatted = formatInternational(recipient, company, street, street2, city, state, postal, currentCountry);
+                    break;
+                case 'oneline':
+                    formatted = formatOneLine(recipient, company, street, street2, city, state, postal, currentCountry);
+                    break;
+                case 'xml':
+                    formatted = formatXML(recipient, company, street, street2, city, state, postal, currentCountry);
+                    break;
+                case 'json':
+                    formatted = formatJSON(recipient, company, street, street2, city, state, postal, currentCountry);
+                    break;
+            }
+            
+            document.getElementById('formattedResult').textContent = formatted;
+            document.getElementById('output').classList.add('active');
+            document.getElementById('output').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function formatStandard(recipient, company, street, street2, city, state, postal, country) {
+            const lines = [];
+            lines.push(recipient);
+            if (company) lines.push(company);
+            lines.push(street + (street2 ? ', ' + street2 : ''));
+            
+            // Country-specific formatting
+            switch (country.code) {
+                case 'US':
+                case 'CA':
+                    lines.push(`${city}, ${state} ${postal}`);
+                    break;
+                case 'GB':
+                case 'IE':
+                    lines.push(city);
+                    lines.push(postal);
+                    break;
+                case 'DE':
+                case 'FR':
+                case 'IT':
+                case 'ES':
+                case 'NL':
+                case 'BE':
+                case 'CH':
+                case 'AT':
+                case 'SE':
+                case 'NO':
+                case 'DK':
+                case 'FI':
+                case 'PL':
+                case 'CZ':
+                case 'PT':
+                case 'GR':
+                    lines.push(`${postal} ${city}`);
+                    break;
+                case 'JP':
+                    lines.push(`${state} ${city}`);
+                    lines.push(postal);
+                    break;
+                case 'CN':
+                case 'KR':
+                case 'IN':
+                case 'BR':
+                case 'MX':
+                    lines.push(`${state} ${city} ${postal}`);
+                    break;
+                default:
+                    if (state && country.requireState) {
+                        lines.push(`${city}, ${state} ${postal}`);
+                    } else {
+                        lines.push(`${city} ${postal}`);
+                    }
+            }
+            
+            lines.push(country.name.toUpperCase());
+            return lines.join('\n');
+        }
+        
+        function formatInternational(recipient, company, street, street2, city, state, postal, country) {
+            const lines = [];
+            lines.push(recipient);
+            if (company) lines.push(company);
+            lines.push(street + (street2 ? ', ' + street2 : ''));
+            lines.push(`${postal} ${city}`.trim());
+            if (state && country.requireState) lines.push(state);
+            lines.push(country.name);
+            return lines.join('\n');
+        }
+        
+        function formatOneLine(recipient, company, street, street2, city, state, postal, country) {
+            const parts = [recipient];
+            if (company) parts.push(company);
+            parts.push(street + (street2 ? ', ' + street2 : ''));
+            parts.push(city);
+            if (state && country.requireState) parts.push(state);
+            if (postal) parts.push(postal);
+            parts.push(country.name);
+            return parts.join(', ');
+        }
+        
+        function formatXML(recipient, company, street, street2, city, state, postal, country) {
+            return `<?xml version="1.0" encoding="UTF-8"?>
+<address>
+    <recipient>${escapeXML(recipient)}</recipient>
+    ${company ? `<company>${escapeXML(company)}</company>` : ''}
+    <street>${escapeXML(street)}</street>
+    ${street2 ? `<street2>${escapeXML(street2)}</street2>` : ''}
+    <city>${escapeXML(city)}</city>
+    ${state && country.requireState ? `<state>${escapeXML(state)}</state>` : ''}
+    <postalCode>${escapeXML(postal)}</postalCode>
+    <country>${escapeXML(country.name)}</country>
+    <countryCode>${country.code}</countryCode>
+</address>`;
+        }
+        
+        function formatJSON(recipient, company, street, street2, city, state, postal, country) {
+            const obj = {
+                recipient: recipient,
+                street: street,
+                city: city,
+                postalCode: postal,
+                country: country.name,
+                countryCode: country.code
+            };
+            
+            if (company) obj.company = company;
+            if (street2) obj.street2 = street2;
+            if (state && country.requireState) obj.state = state;
+            
+            return JSON.stringify(obj, null, 2);
+        }
+        
+        function escapeXML(str) {
+            return str.replace(/[&<>"']/g, char => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&apos;'
+            })[char]);
+        }
+        
+        function selectFormat(format) {
+            currentFormat = format;
+            document.querySelectorAll('.format-option').forEach(opt => opt.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            
+            if (document.getElementById('output').classList.contains('active')) {
+                formatAddress();
+            }
+        }
+        
+        function copyToClipboard() {
+            const text = document.getElementById('formattedResult').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Address copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+        
+        function clearAll() {
+            document.getElementById('recipientName').value = '';
+            document.getElementById('company').value = '';
+            document.getElementById('streetAddress').value = '';
+            document.getElementById('streetAddress2').value = '';
+            document.getElementById('city').value = '';
+            document.getElementById('state').value = '';
+            document.getElementById('postalCode').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('country').value = '';
+            document.getElementById('output').classList.remove('active');
+            currentCountry = null;
+        }
+        
+        function loadSample() {
+            const samples = {
+                'US': { recipient: 'John Smith', company: 'Tech Corp', street: '123 Main Street', street2: 'Suite 400', city: 'New York', state: 'NY', postal: '10001' },
+                'GB': { recipient: 'James Wilson', street: '45 Baker Street', city: 'London', postal: 'NW1 6XE' },
+                'JP': { recipient: 'Tanaka Yuki', street: '1-2-3 Shibuya', city: 'Tokyo', state: 'Tokyo', postal: '150-0001' },
+                'DE': { recipient: 'Hans Mueller', street: 'Hauptstraße 42', city: 'Berlin', postal: '10115' }
+            };
+            
+            const countryCode = document.getElementById('country').value;
+            const sample = samples[countryCode] || samples['US'];
+            
+            document.getElementById('recipientName').value = sample.recipient || '';
+            document.getElementById('company').value = sample.company || '';
+            document.getElementById('streetAddress').value = sample.street || '';
+            document.getElementById('streetAddress2').value = sample.street2 || '';
+            document.getElementById('city').value = sample.city || '';
+            document.getElementById('state').value = sample.state || '';
+            document.getElementById('postalCode').value = sample.postal || '';
+            
+            if (countryCode) {
+                updateFormFields();
+            }
+        }
+        
+        window.addEventListener('DOMContentLoaded', initCountries);
+    </script>
+</body>
+</html>
