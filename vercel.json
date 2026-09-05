@@ -1,6 +1,6 @@
 {
   "framework": null,
-  "buildCommand": null,
+  "buildCommand": "node scripts/generate-sitemap-tools.cjs",
   "outputDirectory": ".",
   "installCommand": null,
   "cleanUrls": true,
