@@ -4,7 +4,7 @@
   "outputDirectory": ".",
   "installCommand": null,
   "cleanUrls": true,
-  "trailingSlash": false,
+  "trailingSlash": true,
   "headers": [
     {
       "source": "/(.*)",
@@ -59,10 +59,6 @@
     }
   ],
   "rewrites": [
-    { "source": "/tools/compression/compress-image", "destination": "/tools/compression/compress-image/index.html" },
-    { "source": "/tools/compression/compress-image/", "destination": "/tools/compression/compress-image/index.html" },
-    { "source": "/tools/conversion/heic-to-jpg", "destination": "/tools/conversion/heic-to-jpg/index.html" },
-    { "source": "/tools/conversion/heic-to-jpg/", "destination": "/tools/conversion/heic-to-jpg/index.html" },
     { "source": "/compress", "destination": "/tools/compression/index.html" },
     { "source": "/convert", "destination": "/tools/conversion/index.html" },
     { "source": "/resize", "destination": "/tools/resize/index.html" },
