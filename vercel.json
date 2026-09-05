@@ -1,6 +1,6 @@
 {
   "framework": null,
-  "buildCommand": "node scripts/generate-sitemap-tools.cjs",
+  "buildCommand": "node scripts/generate-sitemap-tools.cjs && node scripts/optimize-seo.cjs",
   "outputDirectory": ".",
   "installCommand": null,
   "cleanUrls": true,
