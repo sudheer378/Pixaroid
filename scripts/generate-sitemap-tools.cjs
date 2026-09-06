@@ -5,6 +5,7 @@ const ROOT_DIR = path.join(__dirname, '..');
 const TOOLS_DIR = path.join(ROOT_DIR, 'tools');
 const OUTPUT_FILE = path.join(ROOT_DIR, 'sitemap-tools.xml');
 const BASE_URL = 'https://pixaroid.vercel.app';
+const MAX_URLS_PER_SITEMAP = 50000;
 
 function normalizeUrl(value) {
   return value
@@ -31,8 +32,6 @@ function getAllToolUrls(dir) {
       if (!entry.isFile() || !entry.name.endsWith('.html')) continue;
 
       const relativePath = path.relative(ROOT_DIR, fullPath).replace(/\\/g, '/');
-      // Index pages use clean trailing-slash URLs; legacy/static .html tools keep
-      // their real filename so the sitemap points at the deployed resource.
       const urlPath = relativePath.endsWith('/index.html')
         ? '/' + relativePath.slice(0, -'index.html'.length)
         : '/' + relativePath;
@@ -42,7 +41,6 @@ function getAllToolUrls(dir) {
         || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']robots["'][^>]*>/i);
       const robotsContent = robotsMatch?.[1]?.toLowerCase() || '';
 
-      // Sitemap only indexable URLs. noindex pages should never be advertised here.
       if (/\bnoindex\b/.test(robotsContent)) {
         excludedNoindex += 1;
         continue;
@@ -52,7 +50,6 @@ function getAllToolUrls(dir) {
         || html.match(/<link[^>]+href=["']([^"']+)["'][^>]+rel=["']canonical["'][^>]*>/i);
       const canonical = canonicalMatch?.[1];
 
-      // If a page explicitly declares another canonical URL, advertise only the canonical.
       if (canonical && normalizeUrl(canonical) !== normalizeUrl(`${BASE_URL}${urlPath}`)) {
         excludedCanonical += 1;
         continue;
@@ -94,6 +91,10 @@ try {
   console.log(`Found ${result.urls.length} indexable tool pages`);
   console.log(`Excluded ${result.excludedNoindex} noindex pages`);
   console.log(`Excluded ${result.excludedCanonical} non-canonical pages`);
+
+  if (result.urls.length > MAX_URLS_PER_SITEMAP) {
+    throw new Error(`Tool URL count ${result.urls.length} exceeds sitemap limit ${MAX_URLS_PER_SITEMAP}`);
+  }
 
   fs.writeFileSync(OUTPUT_FILE, generateSitemap(result.urls), 'utf8');
   console.log(`✓ Sitemap generated: ${OUTPUT_FILE}`);
