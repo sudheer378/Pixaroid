@@ -2,7 +2,9 @@
   "name": "pixaroid",
   "version": "1.0.0",
   "description": "AI-powered browser-based image tools SaaS",
-  "scripts": {},
+  "scripts": {
+    "build": "node scripts/build-seo.cjs"
+  },
   "type": "module",
   "engines": {
     "node": ">=18.0.0"
