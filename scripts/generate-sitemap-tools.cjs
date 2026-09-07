@@ -32,9 +32,15 @@ function getAllToolUrls(dir) {
       if (!entry.isFile() || !entry.name.endsWith('.html')) continue;
 
       const relativePath = path.relative(ROOT_DIR, fullPath).replace(/\\/g, '/');
-      const urlPath = relativePath.endsWith('/index.html')
-        ? '/' + relativePath.slice(0, -'index.html'.length)
-        : '/' + relativePath;
+      let urlPath;
+      if (relativePath.endsWith('/index.html')) {
+        urlPath = '/' + relativePath.slice(0, -'index.html'.length);
+      } else if (relativePath.startsWith('tools/international/')) {
+        // International tools are real .html files but Vercel cleanUrls exposes them as clean trailing-slash URLs.
+        urlPath = '/' + relativePath.slice(0, -'.html'.length) + '/';
+      } else {
+        urlPath = '/' + relativePath;
+      }
 
       const html = fs.readFileSync(fullPath, 'utf8');
       const robotsMatch = html.match(/<meta[^>]+name=["']robots["'][^>]+content=["']([^"']+)["'][^>]*>/i)
