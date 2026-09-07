@@ -145,7 +145,7 @@ const pages = {
   }
 };
 
-function esc(s) { return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function esc(s) { return s.replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
 function meta(html, name, value) {
   const re = new RegExp(`<meta\\s+name=["']${name}["'][^>]*>`, 'i');
   return re.test(html) ? html.replace(re, `<meta name="${name}" content="${esc(value)}"/>`) : html.replace(/<head>/i, `<head>\n<meta name="${name}" content="${esc(value)}"/>`);
@@ -155,15 +155,15 @@ function prop(html, name, value) {
   return re.test(html) ? html.replace(re, `<meta property="${name}" content="${esc(value)}"/>`) : html;
 }
 function canonical(html, url) {
-  const re = /<link\\s+rel=["']canonical["'][^>]*>/i;
+  const re = new RegExp('<link\\s+rel=["\']canonical["\'][^>]*>', 'i');
   return re.test(html) ? html.replace(re, `<link rel="canonical" href="${url}"/>`) : html.replace(/<head>/i, `<head>\n<link rel="canonical" href="${url}"/>`);
 }
-function title(html, value) { return /<title>[^<]*<\\/title>/i.test(html) ? html.replace(/<title>[^<]*<\\/title>/i, `<title>${esc(value)}</title>`) : html.replace(/<head>/i, `<head><title>${esc(value)}</title>`); }
+function title(html, value) { return /<title>[^<]*<\/title>/i.test(html) ? html.replace(/<title>[^<]*<\/title>/i, `<title>${esc(value)}</title>`) : html.replace(/<head>/i, `<head><title>${esc(value)}</title>`); }
 function stripGenerated(html) { return html.replace(/\s*<section data-seo-tier-a="true">[\s\S]*?<\/section>\s*/gi, '\n'); }
 function process(rel, data) {
   const file = path.join(root, rel);
   if (!fs.existsSync(file)) { console.warn(`[tier-a] Missing: ${rel}`); return false; }
-  const url = `${BASE}/${rel.replace(/\/index\.html$/, '/')}`;
+  const url = `${BASE}/${rel.replace(/\\index\.html$/, '/')}`;
   const original = fs.readFileSync(file, 'utf8');
   let html = original;
   html = title(html, data.title);
