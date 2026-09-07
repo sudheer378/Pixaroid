@@ -1,6 +1,6 @@
 {
   "framework": null,
-  "buildCommand": "node scripts/index-noindex-pages.cjs && node scripts/normalize-international-seo.cjs && node scripts/optimize-international-seo.cjs && node scripts/generate-sitemap-tools.cjs && node scripts/optimize-seo.cjs && node scripts/add-priority-links.cjs",
+  "buildCommand": "node scripts/index-noindex-pages.cjs && node scripts/normalize-international-seo.cjs && node scripts/optimize-international-seo.cjs && node scripts/generate-sitemap-tools.cjs && node scripts/optimize-seo.cjs && node scripts/add-priority-links.cjs && node scripts/audit-indexability.cjs && node scripts/audit-duplicate-clusters.cjs",
   "outputDirectory": ".",
   "installCommand": null,
   "cleanUrls": true,
@@ -33,8 +33,7 @@
       "headers": [
         { "key": "Content-Type", "value": "application/javascript; charset=utf-8" },
         { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
-        { "key": "Cross-Origin-Embedder-Policy", "value": "require-corp" },
-        { "key": "Cache-Control", "value": "public, max-age=86400, immutable" }
+        { "key": "Cross-Origin-Embedder-Policy", "value": "require-corp" }
       ]
     },
     {
