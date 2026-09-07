@@ -68,6 +68,18 @@
     { "source": "/bulk", "destination": "/tools/bulk-tools/index.html" },
     { "source": "/pdf", "destination": "/tools/pdf-tools/index.html" },
     { "source": "/utilities", "destination": "/tools/utilities/index.html" },
-    { "source": "/guides", "destination": "/guides/index.html" }
+    { "source": "/guides", "destination": "/guides/index.html" },
+    { "source": "/tools/international/currency-converter/", "destination": "/tools/international/currency-converter.html" },
+    { "source": "/tools/international/timezone-planner/", "destination": "/tools/international/timezone-planner.html" },
+    { "source": "/tools/international/text-translator/", "destination": "/tools/international/text-translator.html" },
+    { "source": "/tools/international/phone-code-finder/", "destination": "/tools/international/phone-code-finder.html" },
+    { "source": "/tools/international/unit-converter/", "destination": "/tools/international/unit-converter.html" },
+    { "source": "/tools/international/holiday-calendar/", "destination": "/tools/international/holiday-calendar.html" },
+    { "source": "/tools/international/passport-photo-resizer/", "destination": "/tools/international/passport-photo-resizer.html" },
+    { "source": "/tools/international/vat-calculator/", "destination": "/tools/international/vat-calculator.html" },
+    { "source": "/tools/international/paper-size-converter/", "destination": "/tools/international/paper-size-converter.html" },
+    { "source": "/tools/international/script-detector/", "destination": "/tools/international/script-detector.html" },
+    { "source": "/tools/international/address-formatter/", "destination": "/tools/international/address-formatter.html" },
+    { "source": "/tools/international/packing-list-generator/", "destination": "/tools/international/packing-list-generator.html" }
   ]
 }
