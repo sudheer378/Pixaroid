@@ -1,6 +1,6 @@
 {
   "framework": null,
-  "buildCommand": "node scripts/index-noindex-pages.cjs && node scripts/normalize-international-seo.cjs && node scripts/optimize-international-seo.cjs && node scripts/optimize-tier-a-seo.cjs && node scripts/generate-sitemap-tools.cjs && node scripts/optimize-seo.cjs && node scripts/add-priority-links.cjs && node scripts/audit-indexability.cjs && node scripts/audit-duplicate-clusters.cjs",
+  "buildCommand": "node scripts/index-noindex-pages.cjs && node scripts/normalize-international-seo.cjs && node scripts/optimize-international-seo.cjs && node scripts/optimize-tier-a-seo.cjs && node scripts/generate-sitemap-tools.cjs && node scripts/optimize-seo.cjs && node scripts/add-priority-links.cjs",
   "outputDirectory": ".",
   "installCommand": null,
   "cleanUrls": true,
