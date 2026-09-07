@@ -155,7 +155,7 @@ function prop(html, name, value) {
   return re.test(html) ? html.replace(re, `<meta property="${name}" content="${esc(value)}"/>`) : html;
 }
 function canonical(html, url) {
-  const re = new RegExp('<link\\s+rel=["\']canonical["\'][^>]*>', 'i');
+  const re = /<link\s+rel=["']canonical["'][^>]*>/i;
   return re.test(html) ? html.replace(re, `<link rel="canonical" href="${url}"/>`) : html.replace(/<head>/i, `<head>\n<link rel="canonical" href="${url}"/>`);
 }
 function title(html, value) { return /<title>[^<]*<\/title>/i.test(html) ? html.replace(/<title>[^<]*<\/title>/i, `<title>${esc(value)}</title>`) : html.replace(/<head>/i, `<head><title>${esc(value)}</title>`); }
