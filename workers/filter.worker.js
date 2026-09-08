@@ -1,480 +1,230 @@
-/**
- * Pixaroid Filter/Editor Worker v4.0 - High Performance
- * Handles image filters and edits (rotate, flip, crop, watermark, blur, etc.)
- * Features: OffscreenCanvas, Parallel Batch Processing, Smart Filters
- * Optimized for speed with concurrent processing and enhanced quality
- */
+/** Pixaroid Editor/Filter Worker v5 — browser Worker safe */
 'use strict';
 
-const useOffscreen = typeof OffscreenCanvas !== 'undefined';
-const MAX_CONCURRENT = 4; // Process 4 images in parallel for batch operations
-
-self.onmessage = function(e) {
-  const data = e.data;
-  const jobId = data.jobId;
-
+const MAX_CONCURRENT = 4;
+self.onmessage = async (e) => {
+  const d = e.data || {};
   try {
-    if (data.op === 'edit') {
-      editImage(data);
-    } else if (data.op === 'edit-batch') {
-      editBatchParallel(data);
-    } else {
-      throw new Error('Unknown operation: ' + data.op);
-    }
+    if (d.op === 'edit') return await edit(d);
+    if (d.op === 'edit-batch') return await batch(d);
+    throw new Error('Unknown operation: ' + d.op);
   } catch (err) {
-    self.postMessage({ jobId: jobId, error: err.message, stack: err.stack });
+    self.postMessage({ jobId: d.jobId, error: err?.message || String(err) });
   }
 };
 
-// Parallel batch processing for multiple images
-async function editBatchParallel(data) {
-  const { jobId, items, format, quality } = data;
-  const results = [];
-  let completed = 0;
-  
-  // Process in chunks of MAX_CONCURRENT
-  const chunks = [];
-  for (let i = 0; i < items.length; i += MAX_CONCURRENT) {
-    chunks.push(items.slice(i, i + MAX_CONCURRENT));
+function assertSupport() {
+  if (typeof OffscreenCanvas === 'undefined' || typeof createImageBitmap === 'undefined') {
+    throw new Error('This browser does not support local image editing (OffscreenCanvas/createImageBitmap required).');
   }
-  
-  for (const chunk of chunks) {
-    const promises = chunk.map(item => 
-      processEditItem(item, format, quality)
-        .then(result => {
-          completed++;
-          self.postMessage({ jobId, type: 'progress', progress: Math.round((completed / items.length) * 100) });
-          return { success: true, ...result };
-        })
-        .catch(err => {
-          completed++;
-          return { success: false, error: err.message, id: item.id };
-        })
-    );
-    
-    const chunkResults = await Promise.all(promises);
-    results.push(...chunkResults);
+}
+
+async function decode(buffer, mime) {
+  assertSupport();
+  return createImageBitmap(new Blob([buffer], { type: mime || 'application/octet-stream' }));
+}
+
+function mimeOf(format) {
+  const f = String(format || '').toLowerCase();
+  if (f === 'png') return 'image/png';
+  if (f === 'webp') return 'image/webp';
+  if (f === 'avif') return 'image/avif';
+  return 'image/jpeg';
+}
+
+function qualityOf(value) {
+  return Math.max(0.1, Math.min(1, (Number(value) || 90) / 100));
+}
+
+async function encode(canvas, format, quality) {
+  const type = mimeOf(format);
+  const blob = await canvas.convertToBlob({ type, quality: type === 'image/png' ? undefined : qualityOf(quality) });
+  if (!blob) throw new Error('Edit failed - no output');
+  return [blob, type];
+}
+
+function rounded(ctx, width, height, radius) {
+  const r = Math.max(0, Math.min(Number(radius) || 0, Math.min(width, height) / 2));
+  ctx.beginPath();
+  ctx.moveTo(r, 0);
+  ctx.lineTo(width - r, 0);
+  ctx.quadraticCurveTo(width, 0, width, r);
+  ctx.lineTo(width, height - r);
+  ctx.quadraticCurveTo(width, height, width - r, height);
+  ctx.lineTo(r, height);
+  ctx.quadraticCurveTo(0, height, 0, height - r);
+  ctx.lineTo(0, r);
+  ctx.quadraticCurveTo(0, 0, r, 0);
+  ctx.closePath();
+  ctx.clip();
+}
+
+function applyFilters(ctx, operations) {
+  const filters = [];
+  for (const op of Array.isArray(operations) ? operations : []) {
+    const type = op.type;
+    if (type === 'brightness') filters.push('brightness(' + (100 + (Number(op.value) || 0)) + '%)');
+    else if (type === 'contrast') filters.push('contrast(' + (100 + (Number(op.value) || 0)) + '%)');
+    else if (type === 'saturation') filters.push('saturate(' + (100 + (Number(op.value) || 0)) + '%)');
+    else if (type === 'blur') filters.push('blur(' + Math.max(0, Number(op.radius) || 2) + 'px)');
+    else if (type === 'grayscale') filters.push('grayscale(100%)');
+    else if (type === 'sepia') filters.push('sepia(' + Math.max(0, Math.min(1, (Number(op.intensity) || 80) / 100)) + ')');
+    else if (type === 'invert') filters.push('invert(100%)');
   }
-  
-  self.postMessage({ jobId, type: 'complete', results });
+  ctx.filter = filters.length ? filters.join(' ') : 'none';
 }
 
-async function processEditItem(item, format, quality) {
-  return new Promise((resolve, reject) => {
-    const { buffer, mime, operations, id } = item;
-    
-    const blob = new Blob([buffer], { type: mime });
-    const img = new Image();
-    
-    img.onload = function() {
-      try {
-        const canvas = useOffscreen ? new OffscreenCanvas(img.naturalWidth, img.naturalHeight) : document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        
-        if (!useOffscreen) {
-          canvas.width = img.naturalWidth;
-          canvas.height = img.naturalHeight;
-        }
-        
-        let width = canvas.width;
-        let height = canvas.height;
-        
-        // Calculate final dimensions after transforms
-        operations.forEach(op => {
-          if (op.type === 'rotate' && (op.angle === 90 || op.angle === 270 || op.angle === -90 || op.angle === -270)) {
-            const tmp = width;
-            width = height;
-            height = tmp;
-          }
-        });
-        
-        if (width !== canvas.width || height !== canvas.height) {
-          const newCanvas = useOffscreen ? new OffscreenCanvas(width, height) : document.createElement('canvas');
-          if (!useOffscreen) {
-            newCanvas.width = width;
-            newCanvas.height = height;
-          }
-          const newCtx = newCanvas.getContext('2d');
-          newCtx.imageSmoothingEnabled = true;
-          newCtx.imageSmoothingQuality = 'high';
-          newCtx.drawImage(canvas, 0, 0, width, height);
-          canvas.width = width;
-          canvas.height = height;
-          ctx.drawImage(newCanvas, 0, 0);
-        }
-        
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
-        
-        // Apply operations
-        ctx.save();
-        
-        operations.forEach(op => {
-          switch (op.type) {
-            case 'rotate':
-              ctx.translate(canvas.width / 2, canvas.height / 2);
-              ctx.rotate((op.angle || 90) * Math.PI / 180);
-              ctx.translate(-canvas.width / 2, -canvas.height / 2);
-              break;
-              
-            case 'flip':
-              ctx.scale(op.horizontal ? -1 : 1, op.vertical ? -1 : 1);
-              if (op.horizontal) ctx.translate(-canvas.width, 0);
-              if (op.vertical) ctx.translate(0, -canvas.height);
-              break;
-              
-            case 'brightness':
-              ctx.filter = (ctx.filter || '') + ' brightness(' + (100 + (op.value || 0)) + '%)';
-              break;
-              
-            case 'contrast':
-              ctx.filter = (ctx.filter || '') + ' contrast(' + (100 + (op.value || 0)) + '%)';
-              break;
-              
-            case 'saturation':
-              ctx.filter = (ctx.filter || '') + ' saturate(' + (100 + (op.value || 0)) + '%)';
-              break;
-              
-            case 'blur':
-              ctx.filter = (ctx.filter || '') + ' blur(' + (op.radius || 2) + 'px)';
-              break;
-              
-            case 'grayscale':
-              ctx.filter = (ctx.filter || '') + ' grayscale(100%)';
-              break;
-              
-            case 'sepia':
-              ctx.filter = (ctx.filter || '') + ' sepia(' + ((op.intensity || 80) / 100) + ')';
-              break;
-              
-            case 'invert':
-              ctx.filter = (ctx.filter || '') + ' invert(100%)';
-              break;
-              
-            case 'round-corners':
-              const radius = (op.radius || 30) / 100 * Math.min(canvas.width, canvas.height);
-              ctx.beginPath();
-              ctx.moveTo(radius, 0);
-              ctx.lineTo(canvas.width - radius, 0);
-              ctx.quadraticCurveTo(canvas.width, 0, canvas.width, radius);
-              ctx.lineTo(canvas.width, canvas.height - radius);
-              ctx.quadraticCurveTo(canvas.width, canvas.height, canvas.width - radius, canvas.height);
-              ctx.lineTo(radius, canvas.height);
-              ctx.quadraticCurveTo(0, canvas.height, 0, canvas.height - radius);
-              ctx.lineTo(0, radius);
-              ctx.quadraticCurveTo(0, 0, radius, 0);
-              ctx.closePath();
-              ctx.clip();
-              break;
-          }
-        });
-        
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        ctx.restore();
-        
-        // Apply text overlays
-        operations.forEach(op => {
-          if (op.type === 'watermark' || op.type === 'text') {
-            applyTextOverlay(ctx, canvas, op);
-          }
-        });
-        
-        // Determine output MIME type
-        let outputMime = mime;
-        if (format === 'jpeg' || format === 'jpg') outputMime = 'image/jpeg';
-        else if (format === 'png') outputMime = 'image/png';
-        else if (format === 'webp') outputMime = 'image/webp';
-        
-        const q = Math.max(0.1, Math.min(1.0, (quality || 90) / 100));
-        
-        canvas.toBlob(
-          resultBlob => {
-            if (!resultBlob) {
-              reject(new Error('Edit failed - no output'));
-              return;
-            }
-            
-            const reader = new FileReader();
-            reader.onload = ev => {
-              resolve({
-                id,
-                buffer: ev.target.result,
-                mime: resultBlob.type,
-                width: canvas.width,
-                height: canvas.height,
-                size: resultBlob.size
-              });
-            };
-            reader.onerror = () => reject(new Error('Failed to read blob'));
-            reader.readAsArrayBuffer(resultBlob);
-          },
-          outputMime,
-          outputMime === 'image/png' ? undefined : q
-        );
-      } catch (err) {
-        reject(err);
-      }
-    };
-    
-    img.onerror = () => reject(new Error('Failed to load image'));
-    img.src = URL.createObjectURL(blob);
-  });
-}
-
-function editImage(data) {
-  const { jobId, buffer, mime, origSize, operations, format, quality } = data;
-
-  const blob = new Blob([buffer], { type: mime });
-  const img = new Image();
-
-  img.onload = function() {
-    try {
-      const canvas = useOffscreen ? new OffscreenCanvas(img.naturalWidth, img.naturalHeight) : document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      
-      if (!useOffscreen) {
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-      }
-
-      let width = canvas.width;
-      let height = canvas.height;
-
-      // First pass: calculate final dimensions after transforms
-      operations.forEach(op => {
-        if (op.type === 'rotate' && (op.angle === 90 || op.angle === 270 || op.angle === -90 || op.angle === -270)) {
-          const tmp = width;
-          width = height;
-          height = tmp;
-        }
-      });
-
-      if (width !== canvas.width || height !== canvas.height) {
-        const newCanvas = useOffscreen ? new OffscreenCanvas(width, height) : document.createElement('canvas');
-        if (!useOffscreen) {
-          newCanvas.width = width;
-          newCanvas.height = height;
-        }
-        const newCtx = newCanvas.getContext('2d');
-        newCtx.imageSmoothingEnabled = true;
-        newCtx.imageSmoothingQuality = 'high';
-        newCtx.drawImage(canvas, 0, 0, width, height);
-        canvas.width = width;
-        canvas.height = height;
-        ctx.drawImage(newCanvas, 0, 0);
-      }
-
-      // High quality rendering
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-
-      // Apply operations
-      ctx.save();
-
-      operations.forEach(op => {
-        switch (op.type) {
-          case 'rotate':
-            ctx.translate(canvas.width / 2, canvas.height / 2);
-            ctx.rotate((op.angle || 90) * Math.PI / 180);
-            ctx.translate(-canvas.width / 2, -canvas.height / 2);
-            break;
-
-          case 'flip':
-            ctx.scale(op.horizontal ? -1 : 1, op.vertical ? -1 : 1);
-            if (op.horizontal) ctx.translate(-canvas.width, 0);
-            if (op.vertical) ctx.translate(0, -canvas.height);
-            break;
-
-          case 'crop':
-            // Crop handled separately
-            break;
-
-          case 'brightness':
-            ctx.filter = (ctx.filter || '') + ' brightness(' + (100 + (op.value || 0)) + '%)';
-            break;
-
-          case 'contrast':
-            ctx.filter = (ctx.filter || '') + ' contrast(' + (100 + (op.value || 0)) + '%)';
-            break;
-
-          case 'saturation':
-            ctx.filter = (ctx.filter || '') + ' saturate(' + (100 + (op.value || 0)) + '%)';
-            break;
-
-          case 'blur':
-            ctx.filter = (ctx.filter || '') + ' blur(' + (op.radius || 2) + 'px)';
-            break;
-
-          case 'grayscale':
-            ctx.filter = (ctx.filter || '') + ' grayscale(100%)';
-            break;
-
-          case 'sepia':
-            ctx.filter = (ctx.filter || '') + ' sepia(' + ((op.intensity || 80) / 100) + ')';
-            break;
-
-          case 'invert':
-            ctx.filter = (ctx.filter || '') + ' invert(100%)';
-            break;
-
-          case 'round-corners':
-            const radius = (op.radius || 30) / 100 * Math.min(canvas.width, canvas.height);
-            ctx.beginPath();
-            ctx.moveTo(radius, 0);
-            ctx.lineTo(canvas.width - radius, 0);
-            ctx.quadraticCurveTo(canvas.width, 0, canvas.width, radius);
-            ctx.lineTo(canvas.width, canvas.height - radius);
-            ctx.quadraticCurveTo(canvas.width, canvas.height, canvas.width - radius, canvas.height);
-            ctx.lineTo(radius, canvas.height);
-            ctx.quadraticCurveTo(0, canvas.height, 0, canvas.height - radius);
-            ctx.lineTo(0, radius);
-            ctx.quadraticCurveTo(0, 0, radius, 0);
-            ctx.closePath();
-            ctx.clip();
-            break;
-        }
-      });
-
-      // Draw the image with transforms applied
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-      ctx.restore();
-
-      // Apply additional post-processing operations
-      operations.forEach(op => {
-        if (op.type === 'watermark' || op.type === 'text') {
-          applyTextOverlay(ctx, canvas, op);
-        }
-      });
-
-      // Determine output MIME type
-      let outputMime = mime;
-      let outputFormat = autoFormat(mime);
-
-      if (format === 'jpeg' || format === 'jpg') {
-        outputMime = 'image/jpeg';
-        outputFormat = 'jpeg';
-      } else if (format === 'png') {
-        outputMime = 'image/png';
-        outputFormat = 'png';
-      } else if (format === 'webp') {
-        outputMime = 'image/webp';
-        outputFormat = 'webp';
-      }
-
-      const q = Math.max(0.1, Math.min(1.0, (quality || 90) / 100));
-
-      canvas.toBlob(
-        function(resultBlob) {
-          if (!resultBlob) {
-            self.postMessage({ jobId: jobId, error: 'Edit failed - no output' });
-            return;
-          }
-
-          const reader = new FileReader();
-          reader.onload = function(ev) {
-            self.postMessage({
-              jobId: jobId,
-              buffer: ev.target.result,
-              mime: resultBlob.type,
-              width: canvas.width,
-              height: canvas.height,
-              format: outputFormat,
-              originalSize: origSize,
-              editedSize: resultBlob.size
-            });
-          };
-          reader.onerror = function() {
-            self.postMessage({ jobId: jobId, error: 'Failed to read edited blob' });
-          };
-          reader.readAsArrayBuffer(resultBlob);
-        },
-        outputMime,
-        outputMime === 'image/png' ? undefined : q
-      );
-    } catch (err) {
-      self.postMessage({ jobId: jobId, error: err.message, stack: err.stack });
-    }
-  };
-
-  img.onerror = function() {
-    self.postMessage({ jobId: jobId, error: 'Failed to load image' });
-  };
-
-  img.src = URL.createObjectURL(blob);
-}
-
-function applyTextOverlay(ctx, canvas, op) {
+function drawBase(ctx, image, width, height, operations) {
+  const ops = Array.isArray(operations) ? operations : [];
+  const rotation = ops.reduce((sum, op) => sum + (op.type === 'rotate' ? (Number(op.angle) || 90) : 0), 0);
+  const flipH = ops.some(op => op.type === 'flip' && op.horizontal);
+  const flipV = ops.some(op => op.type === 'flip' && op.vertical);
   ctx.save();
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.translate(width / 2, height / 2);
+  ctx.rotate(rotation * Math.PI / 180);
+  ctx.scale(flipH ? -1 : 1, flipV ? -1 : 1);
+  applyFilters(ctx, ops);
+  ctx.drawImage(image, -image.width / 2, -image.height / 2, image.width, image.height);
+  ctx.restore();
+  ctx.filter = 'none';
+}
 
-  if (op.type === 'watermark' || op.type === 'text') {
-    const text = op.text || '© Pixaroid';
-    const fontSize = op.fontSize || 40;
-    const color = op.color || '#ffffff';
-    const opacity = (op.opacity || 50) / 100;
-    const position = op.position || 'bottom-right';
-
+function applyOverlays(ctx, canvas, operations) {
+  for (const op of Array.isArray(operations) ? operations : []) {
+    if (op.type !== 'watermark' && op.type !== 'text') continue;
+    ctx.save();
+    const fontSize = Number(op.fontSize) || 40;
+    const text = String(op.text || '© Pixaroid');
+    const opacity = Math.max(0, Math.min(1, (Number(op.opacity) ?? 50) / 100));
     ctx.globalAlpha = opacity;
     ctx.font = 'bold ' + fontSize + 'px Arial';
-    ctx.fillStyle = color;
+    ctx.fillStyle = op.color || '#ffffff';
     ctx.strokeStyle = op.strokeColor || '#000000';
-    ctx.lineWidth = op.strokeWidth || 2;
-
-    const metrics = ctx.measureText(text);
-    const textWidth = metrics.width;
-    const textHeight = fontSize;
-
-    let x, y;
+    ctx.lineWidth = Number(op.strokeWidth) || 2;
+    const textWidth = ctx.measureText(text).width;
     const padding = 20;
-
-    switch (position) {
-      case 'top-left':
-        x = padding;
-        y = padding + textHeight;
-        break;
-      case 'top-right':
-        x = canvas.width - textWidth - padding;
-        y = padding + textHeight;
-        break;
-      case 'bottom-left':
-        x = padding;
-        y = canvas.height - padding;
-        break;
-      case 'center':
-        x = (canvas.width - textWidth) / 2;
-        y = canvas.height / 2;
-        break;
-      case 'bottom-right':
-      default:
-        x = canvas.width - textWidth - padding;
-        y = canvas.height - padding;
-        break;
-    }
-
-    if (op.tile) {
-      // Tile watermark across image
-      for (let tx = 0; tx < canvas.width; tx += textWidth + 50) {
-        for (let ty = 0; ty < canvas.height; ty += textHeight + 50) {
-          if (op.strokeWidth > 0) {
-            ctx.strokeText(text, tx, ty);
-          }
-          ctx.fillText(text, tx, ty);
-        }
-      }
-    } else {
-      if (op.strokeWidth > 0) {
-        ctx.strokeText(text, x, y);
-      }
-      ctx.fillText(text, x, y);
-    }
+    let x = canvas.width - textWidth - padding;
+    let y = canvas.height - padding;
+    const position = op.position || 'bottom-right';
+    if (position === 'top-left') { x = padding; y = padding + fontSize; }
+    else if (position === 'top-right') { x = canvas.width - textWidth - padding; y = padding + fontSize; }
+    else if (position === 'bottom-left') { x = padding; }
+    else if (position === 'center') { x = (canvas.width - textWidth) / 2; y = canvas.height / 2; }
+    if (op.stroke !== false) ctx.strokeText(text, x, y);
+    ctx.fillText(text, x, y);
+    ctx.restore();
   }
-
-  ctx.restore();
 }
 
-function autoFormat(mime) {
-  if (mime === 'image/png') return 'png';
-  if (mime === 'image/webp') return 'webp';
-  if (mime === 'image/gif') return 'gif';
-  return 'jpeg';
+async function edit(data) {
+  const image = await decode(data.buffer, data.mime);
+  try {
+    const operations = Array.isArray(data.operations) ? data.operations : [];
+    let width = image.width;
+    let height = image.height;
+    const quarterTurns = operations.reduce((count, op) => {
+      if (op.type !== 'rotate') return count;
+      const normalized = ((Number(op.angle) || 0) % 360 + 360) % 360;
+      return count + (normalized === 90 || normalized === 270 ? 1 : 0);
+    }, 0);
+    if (quarterTurns % 2) [width, height] = [height, width];
+
+    const outputType = mimeOf(data.format || 'jpeg');
+    let crop = operations.find(op => op.type === 'crop');
+    if (crop && Number(crop.width) > 0 && Number(crop.height) > 0 && quarterTurns % 2 === 0) {
+      width = Math.max(1, Math.round(Number(crop.width)));
+      height = Math.max(1, Math.round(Number(crop.height)));
+    }
+
+    const canvas = new OffscreenCanvas(width, height);
+    const ctx = canvas.getContext('2d', { alpha: outputType !== 'image/jpeg' });
+    if (!ctx) throw new Error('Could not create editor canvas.');
+    if (outputType === 'image/jpeg') {
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, width, height);
+    }
+
+    if (crop && Number(crop.width) > 0 && Number(crop.height) > 0 && quarterTurns % 2 === 0) {
+      const sx = Math.max(0, Math.min(image.width - 1, Number(crop.x) || 0));
+      const sy = Math.max(0, Math.min(image.height - 1, Number(crop.y) || 0));
+      const sw = Math.max(1, Math.min(image.width - sx, Number(crop.width)));
+      const sh = Math.max(1, Math.min(image.height - sy, Number(crop.height)));
+      ctx.save();
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(image, sx, sy, sw, sh, 0, 0, width, height);
+      ctx.restore();
+    } else {
+      drawBase(ctx, image, width, height, operations);
+    }
+
+    for (const op of operations) {
+      if (op.type === 'round-corners') rounded(ctx, width, height, (Number(op.radius) || 30) / 100 * Math.min(width, height));
+    }
+    applyOverlays(ctx, canvas, operations);
+
+    const [blob, type] = await encode(canvas, data.format || 'jpeg', data.quality);
+    self.postMessage({
+      jobId: data.jobId,
+      buffer: await blob.arrayBuffer(),
+      mime: type,
+      width: canvas.width,
+      height: canvas.height,
+      format: data.format || 'jpeg',
+      originalSize: data.origSize || 0,
+      editedSize: blob.size
+    });
+  } finally {
+    image.close?.();
+  }
+}
+
+async function batch(data) {
+  const items = Array.isArray(data.items) ? data.items : [];
+  const results = [];
+  let completed = 0;
+  for (let i = 0; i < items.length; i += MAX_CONCURRENT) {
+    const chunk = items.slice(i, i + MAX_CONCURRENT);
+    const chunkResults = await Promise.all(chunk.map(async item => {
+      try {
+        const result = await renderBatchItem(item, Array.isArray(item.operations) ? item.operations : [], data.format || item.format || 'jpeg', data.quality ?? item.quality);
+        completed++;
+        self.postMessage({ jobId: data.jobId, type: 'progress', progress: Math.round(completed / Math.max(1, items.length) * 100) });
+        return { success: true, id: item.id, ...result };
+      } catch (err) {
+        completed++;
+        return { success: false, id: item.id, error: err?.message || String(err) };
+      }
+    }));
+    results.push(...chunkResults);
+  }
+  self.postMessage({ jobId: data.jobId, type: 'complete', results });
+}
+
+async function renderBatchItem(item, operations, format, quality) {
+  const image = await decode(item.buffer, item.mime);
+  try {
+    let width = image.width;
+    let height = image.height;
+    const quarterTurns = operations.reduce((count, op) => {
+      if (op.type !== 'rotate') return count;
+      const normalized = ((Number(op.angle) || 0) % 360 + 360) % 360;
+      return count + (normalized === 90 || normalized === 270 ? 1 : 0);
+    }, 0);
+    if (quarterTurns % 2) [width, height] = [height, width];
+    const type = mimeOf(format || 'jpeg');
+    const canvas = new OffscreenCanvas(width, height);
+    const ctx = canvas.getContext('2d', { alpha: type !== 'image/jpeg' });
+    if (!ctx) throw new Error('Could not create editor canvas.');
+    if (type === 'image/jpeg') { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, width, height); }
+    drawBase(ctx, image, width, height, operations);
+    for (const op of operations) if (op.type === 'round-corners') rounded(ctx, width, height, (Number(op.radius) || 30) / 100 * Math.min(width, height));
+    applyOverlays(ctx, canvas, operations);
+    const [blob] = await encode(canvas, format || 'jpeg', quality);
+    return { buffer: await blob.arrayBuffer(), mime: blob.type, width, height, size: blob.size };
+  } finally {
+    image.close?.();
+  }
 }
