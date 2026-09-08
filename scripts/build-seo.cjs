@@ -20,6 +20,7 @@ const steps = [
   'repair-filter-worker.cjs',
   'repair-tool-runner.cjs',
   'remove-stale-bulk-runner.cjs',
+  'generate-execution-migration-report.cjs',
   'audit-execution-paths.cjs',
   'audit-tool-functionality.cjs'
 ];
