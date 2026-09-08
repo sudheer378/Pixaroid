@@ -8,12 +8,13 @@ const steps = [
   'optimize-tier-a-seo.cjs',
   'generate-sitemap-tools.cjs',
   'optimize-seo.cjs',
-  'add-priority-links.cjs'
+  'add-priority-links.cjs',
+  'generate-llms.cjs'
 ];
 
 for (const script of steps) {
-  console.log(`\n[Pixaroid SEO] Running ${script}`);
+  console.log(`\n[Pixaroid SEO/GEO] Running ${script}`);
   execFileSync(process.execPath, [`scripts/${script}`], { stdio: 'inherit' });
 }
 
-console.log('\n[Pixaroid SEO] Build pipeline completed successfully.');
+console.log('\n[Pixaroid SEO/GEO] Build pipeline completed successfully.');
