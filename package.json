@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "AI-powered browser-based image tools SaaS",
   "scripts": {
-    "build": "node scripts/build-seo.cjs && node scripts/inject-quge5-ad.cjs"
+    "build": "node scripts/build-seo.cjs && node scripts/inject-quge5-ad.cjs && node scripts/inject-quge5-all-pages.cjs"
   },
   "type": "module",
   "engines": {
