@@ -17,6 +17,7 @@ const steps = [
   'add-priority-links.cjs',
   'fix-category-nav.cjs',
   'repair-heic-and-formats.cjs',
+  'repair-filter-worker.cjs',
   'audit-tool-functionality.cjs'
 ];
 
