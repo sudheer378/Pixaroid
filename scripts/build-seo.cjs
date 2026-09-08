@@ -19,6 +19,7 @@ const steps = [
   'repair-heic-and-formats.cjs',
   'repair-filter-worker.cjs',
   'repair-tool-runner.cjs',
+  'remove-stale-bulk-runner.cjs',
   'audit-execution-paths.cjs',
   'audit-tool-functionality.cjs'
 ];
