@@ -3,6 +3,7 @@ const { execFileSync } = require('node:child_process');
 
 const steps = [
   'index-noindex-pages.cjs',
+  'upgrade-international-tools.cjs',
   'normalize-international-seo.cjs',
   'optimize-international-seo.cjs',
   'optimize-tier-a-seo.cjs',
@@ -13,8 +14,7 @@ const steps = [
   'generate-sitemap-tools.cjs',
   'optimize-seo.cjs',
   'add-priority-links.cjs',
-  'fix-category-nav.cjs',
-  'upgrade-international-tools.cjs'
+  'fix-category-nav.cjs'
 ];
 
 for (const script of steps) {
