@@ -23,7 +23,6 @@ const steps = [
   'remove-stale-bulk-runner.cjs',
   'validate-tool-capabilities.cjs',
   'generate-execution-migration-report.cjs',
-  'migrate-compression-tools.cjs',
   'audit-execution-paths.cjs',
   'audit-tool-functionality.cjs'
 ];
