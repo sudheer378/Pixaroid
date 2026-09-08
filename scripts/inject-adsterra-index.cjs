@@ -12,10 +12,15 @@ if (!fs.existsSync(file)) throw new Error('index.html not found');
 let html = fs.readFileSync(file, 'utf8');
 if (!/<body\b[^>]*>/i.test(html)) throw new Error('index.html has no body element');
 
-const blockPattern = new RegExp(`${START.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}[\\s\\S]*?${END.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}`, 'gi');
-html = html.replace(blockPattern, '');
-html = html.split(TAG).join('');
+while (true) {
+  const start = html.indexOf(START);
+  if (start === -1) break;
+  const end = html.indexOf(END, start);
+  if (end === -1) throw new Error('Incomplete Adsterra marker block in index.html');
+  html = html.slice(0, start) + html.slice(end + END.length);
+}
 
+html = html.split(TAG).join('');
 const block = `\n${START}\n${TAG}\n${END}\n`;
 html = html.replace(/(<body\b[^>]*>)/i, `$1${block}`);
 fs.writeFileSync(file, html, 'utf8');
