@@ -18,13 +18,13 @@ function walk(dir, files = []) {
 }
 
 function inject(html, file) {
-  if (Buffer.byteLength(html, 'utf8') < MIN_HTML_BYTES) {
-    throw new Error(`Refusing to modify suspiciously small HTML: ${path.relative(ROOT, file)}`);
-  }
+  const size = Buffer.byteLength(html, 'utf8');
+  // Verification/minimal HTML files are intentionally not ad pages.
+  if (size < MIN_HTML_BYTES) return html;
+  if (!/<body\b[^>]*>/i.test(html)) return html;
 
   html = html.replace(/\s*<!-- PIXAROID_QUge5_AD_START -->[\s\S]*?<!-- PIXAROID_QUge5_AD_END -->\s*/gi, '\n');
   html = html.split(TAG).join('');
-  if (!/<body\b[^>]*>/i.test(html)) return html;
 
   const block = `\n<!-- PIXAROID_QUge5_AD_START -->\n<div ${MARKER} class="pixaroid-ad-slot" role="complementary" aria-label="Advertisement">\n  <div class="pixaroid-ad-slot__label">Advertisement</div>\n  ${TAG}\n</div>\n<style>.pixaroid-ad-slot{position:relative;z-index:1;width:100%;min-height:90px;margin:0 auto 16px;padding:8px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden;text-align:center}.pixaroid-ad-slot__label{font:10px/1.2 system-ui,sans-serif;opacity:.55;margin-bottom:4px}.pixaroid-ad-slot + *{position:relative;z-index:2}@media(max-width:640px){.pixaroid-ad-slot{min-height:70px;margin-bottom:12px}}</style>\n</div>\n<!-- PIXAROID_QUge5_AD_END -->\n`;
   return html.replace(/(<body\b[^>]*>)/i, `$1${block}`);
@@ -32,12 +32,15 @@ function inject(html, file) {
 
 const files = walk(ROOT);
 let changed = 0;
+let skipped = 0;
 for (const file of files) {
   const original = fs.readFileSync(file, 'utf8');
   const updated = inject(original, file);
-  if (updated !== original) {
-    fs.writeFileSync(file, updated, 'utf8');
-    changed++;
+  if (updated === original) {
+    skipped++;
+    continue;
   }
+  fs.writeFileSync(file, updated, 'utf8');
+  changed++;
 }
-console.log(`✓ Quge5 ad slots installed on ${changed}/${files.length} HTML pages`);
+console.log(`✓ Quge5 ad slots installed on ${changed}/${files.length} HTML pages (${skipped} intentionally skipped)`);
