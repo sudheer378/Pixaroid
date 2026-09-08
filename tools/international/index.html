@@ -1,298 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>International Tools - Currency, Timezone & More | Pixaroid</title>
-    <meta name="description" content="Free international tools for global users: currency converter, timezone planner, unit converter, and more. Perfect for travelers and international teams.">
-    <meta name="keywords" content="international tools, currency converter, timezone planner, unit converter, world clock">
-    <link rel="canonical" href="https://pixaroid.vercel.app/tools/international/">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="International Tools - Currency, Timezone & More | Pixaroid">
-    <meta property="og:description" content="Free international tools for global users: currency converter, timezone planner, and more.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://pixaroid.vercel.app/tools/international/">
-    <meta property="og:image" content="https://pixaroid.vercel.app/assets/images/og-default.png">
-    
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="International Tools - Currency, Timezone & More | Pixaroid">
-    <meta name="twitter:description" content="Free international tools for global users.">
-    
-    <style>
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --bg-dark: #0f172a;
-            --bg-card: #1e293b;
-            --text-light: #f1f5f9;
-            --text-gray: #94a3b8;
-            --border: #334155;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--bg-dark) 0%, #1e293b 100%);
-            color: var(--text-light);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 50px;
-            padding-top: 40px;
-        }
-        
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .subtitle {
-            color: var(--text-gray);
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px;
-            margin-top: 40px;
-        }
-        
-        .tool-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 30px;
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-        
-        .tool-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.2);
-        }
-        
-        .tool-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-        
-        .tool-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--text-light);
-        }
-        
-        .tool-desc {
-            color: var(--text-gray);
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        
-        .tool-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        
-        .tag {
-            background: var(--bg-dark);
-            color: var(--primary);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            border: 1px solid var(--border);
-        }
-        
-        .back-link {
-            display: inline-block;
-            margin-bottom: 30px;
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .tools-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <a href="/" class="back-link">← Back to Home</a>
-        
-        <header>
-            <h1>🌍 International Tools</h1>
-            <p class="subtitle">Essential tools for global users, travelers, and international teams. Convert currencies, plan meetings across timezones, and more.</p>
-        </header>
-        
-        <div class="tools-grid">
-            <a href="/tools/international/currency-converter.html" class="tool-card">
-                <div class="tool-icon">💱</div>
-                <h2 class="tool-title">Currency Converter</h2>
-                <p class="tool-desc">Convert between 150+ world currencies instantly with live exchange rates. Perfect for travelers, expats, and international businesses.</p>
-                <div class="tool-tags">
-                    <span class="tag">Finance</span>
-                    <span class="tag">Travel</span>
-                    <span class="tag">Real-time</span>
-                </div>
-            </a>
-            
-            <a href="/tools/international/timezone-planner.html" class="tool-card">
-                <div class="tool-icon">🕐</div>
-                <h2 class="tool-title">World Timezone Planner</h2>
-                <p class="tool-desc">Plan meetings across multiple time zones effortlessly. Compare times in different cities and find the perfect meeting slot.</p>
-                <div class="tool-tags">
-                    <span class="tag">Productivity</span>
-                    <span class="tag">Scheduling</span>
-                    <span class="tag">Teams</span>
-                </div>
-            </a>
-
-            <a href="/tools/international/text-translator.html" class="tool-card">
-                <div class="tool-icon">🌐</div>
-                <h2 class="tool-title">Text Translator</h2>
-                <p class="tool-desc">Translate text between 100+ languages with automatic language detection. Fast and accurate translations.</p>
-                <div class="tool-tags">
-                    <span class="tag">Language</span>
-                    <span class="tag">Translation</span>
-                    <span class="tag">AI</span>
-                </div>
-            </a>
-
-            <a href="/tools/international/phone-code-finder.html" class="tool-card">
-                <div class="tool-icon">📞</div>
-                <h2 class="tool-title">Phone Code Finder</h2>
-                <p class="tool-desc">Find international dialing codes for 50+ countries with flags. Make international calls easily.</p>
-                <div class="tool-tags">
-                    <span class="tag">Communication</span>
-                    <span class="tag">Reference</span>
-                    <span class="tag">Travel</span>
-                </div>
-            </a>
-
-            <a href="/tools/international/unit-converter.html" class="tool-card">
-                <div class="tool-icon">📏</div>
-                <h2 class="tool-title">Unit Converter</h2>
-                <p class="tool-desc">Convert length, weight, temperature, volume, and area units instantly. Supports metric and imperial systems.</p>
-                <div class="tool-tags">
-                    <span class="tag">Conversion</span>
-                    <span class="tag">Education</span>
-                    <span class="tag">Utility</span>
-                </div>
-            </a>
-
-            <a href="/tools/international/holiday-calendar.html" class="tool-card">
-                <div class="tool-icon">📅</div>
-                <h2 class="tool-title">Holiday Calendar</h2>
-                <p class="tool-desc">View public holidays for 15+ countries worldwide. Plan your trips and events around national holidays.</p>
-                <div class="tool-tags">
-                    <span class="tag">Calendar</span>
-                    <span class="tag">Travel</span>
-                    <span class="tag">Planning</span>
-                </div>
-            </a>
-
-            <a href="/tools/international/passport-photo-resizer.html" class="tool-card">
-                <div class="tool-icon">📸</div>
-                <h2 class="tool-title">Passport Photo Resizer</h2>
-                <p class="tool-desc">Resize photos for passport and visa requirements for multiple countries. Get the perfect size instantly.</p>
-                <div class="tool-tags">
-                    <span class="tag">Photo</span>
-                    <span class="tag">Travel</span>
-                    <span class="tag">Document</span>
-                </div>
-            </a>
-
-            <a href="/tools/international/vat-calculator.html" class="tool-card">
-                <div class="tool-icon">🧮</div>
-                <h2 class="tool-title">VAT Calculator</h2>
-                <p class="tool-desc">Calculate VAT for all EU countries and the UK. Add or remove VAT from prices instantly.</p>
-                <div class="tool-tags">
-                    <span class="tag">Finance</span>
-                    <span class="tag">Business</span>
-                    <span class="tag">Tax</span>
-                </div>
-            </a>
-
-            <a href="/tools/international/paper-size-converter.html" class="tool-card">
-                <div class="tool-icon">📄</div>
-                <h2 class="tool-title">Paper Size Converter</h2>
-                <p class="tool-desc">Convert between A/B/C series and North American paper sizes (Letter, Legal, Tabloid). Perfect for printing.</p>
-                <div class="tool-tags">
-                    <span class="tag">Print</span>
-                    <span class="tag">Conversion</span>
-                    <span class="tag">Office</span>
-                </div>
-            </a>
-
-            <a href="/tools/international/script-detector.html" class="tool-card">
-                <div class="tool-icon">🔤</div>
-                <h2 class="tool-title">Script Detector</h2>
-                <p class="tool-desc">Identify writing systems in any text. Supports 50+ scripts including Latin, Cyrillic, Arabic, Chinese, and more.</p>
-                <div class="tool-tags">
-                    <span class="tag">Language</span>
-                    <span class="tag">Detection</span>
-                    <span class="tag">Utility</span>
-                </div>
-            </a>
-
-            <a href="/tools/international/address-formatter.html" class="tool-card">
-                <div class="tool-icon">🏠</div>
-                <h2 class="tool-title">Address Formatter</h2>
-                <p class="tool-desc">Format addresses correctly for 50+ countries. Ensure your mail and packages reach their destination.</p>
-                <div class="tool-tags">
-                    <span class="tag">Utility</span>
-                    <span class="tag">International</span>
-                    <span class="tag">Shipping</span>
-                </div>
-            </a>
-
-            <a href="/tools/international/packing-list-generator.html" class="tool-card">
-                <div class="tool-icon">🧳</div>
-                <h2 class="tool-title">Packing List Generator</h2>
-                <p class="tool-desc">Create customized travel packing lists based on your destination, trip duration, and activities.</p>
-                <div class="tool-tags">
-                    <span class="tag">Travel</span>
-                    <span class="tag">Planning</span>
-                    <span class="tag">Organization</span>
-                </div>
-            </a>
-        </div>
-    </div>
-</body>
-</html>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>International Tools - Currency, Timezone & Utilities | Pixaroid</title>
+<meta name="description" content="Free browser-based international tools including currency, timezone, phone codes, unit conversion, passport photo sizing, VAT and travel planning.">
+<link rel="canonical" href="https://pixaroid.vercel.app/tools/international/">
+<meta name="robots" content="index, follow">
+<style>body{margin:0;font-family:system-ui,sans-serif;background:#0f172a;color:#f8fafc;padding:20px}.container{max-width:1200px;margin:auto}.back{color:#a5b4fc}.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}.tool-card{background:#1e293b;border:1px solid #334155;border-radius:16px;padding:22px;color:inherit;text-decoration:none}.tool-card:hover{border-color:#6366f1;transform:translateY(-2px)}.tool-icon{font-size:2rem}.tool-title{font-size:1.2rem}.tool-desc{color:#94a3b8;line-height:1.55}.tag{display:inline-block;margin:4px 4px 0 0;padding:4px 9px;border-radius:999px;background:#0f172a;color:#a5b4fc;font-size:.78rem}.new-badge{display:inline-block;margin-left:8px;padding:2px 7px;border-radius:999px;background:#312e81;color:#c4b5fd;font-size:.7rem}.note{margin:28px 0;padding:16px;border:1px solid #334155;border-radius:12px;color:#94a3b8}</style>
+</head><body><div class="container"><a class="back" href="/">← Back to Home</a><header><h1>🌍 International Tools</h1><p class="tool-desc">Tools for travel, global communication, calculations and everyday international utility.</p></header><div class="tools-grid">
+<a class="tool-card" href="/tools/international/currency-converter/"><div class="tool-icon">💱</div><h2 class="tool-title">Currency Converter</h2><p class="tool-desc">Convert between supported world currencies with transparent built-in rates.</p><span class="tag">Finance</span><span class="tag">Travel</span></a>
+<a class="tool-card" href="/tools/international/timezone-planner/"><div class="tool-icon">🕐</div><h2 class="tool-title">World Timezone Planner</h2><p class="tool-desc">Compare local times across cities for meetings and travel.</p><span class="tag">Time</span><span class="tag">Productivity</span></a>
+<a class="tool-card" href="/tools/international/text-translator/"><div class="tool-icon">🌐</div><h2 class="tool-title">Text Translator</h2><p class="tool-desc">API-ready translation interface. Live translations require a configured provider.</p><span class="tag">Language</span></a>
+<a class="tool-card" href="/tools/international/phone-code-finder/"><div class="tool-icon">📞</div><h2 class="tool-title">Phone Code Finder</h2><p class="tool-desc">Find international dialing codes by country.</p><span class="tag">Reference</span></a>
+<a class="tool-card" href="/tools/international/unit-converter/"><div class="tool-icon">📏</div><h2 class="tool-title">Unit Converter</h2><p class="tool-desc">Convert common length, weight, volume, area and temperature units.</p><span class="tag">Conversion</span></a>
+<a class="tool-card" href="/tools/international/holiday-calendar/"><div class="tool-icon">📅</div><h2 class="tool-title">Holiday Calendar</h2><p class="tool-desc">Review public holiday information included by the tool.</p><span class="tag">Planning</span></a>
+<a class="tool-card" href="/tools/international/passport-photo-resizer/"><div class="tool-icon">📸</div><h2 class="tool-title">Passport Photo Resizer</h2><p class="tool-desc">Resize photos for supported document and travel presets.</p><span class="tag">Photo</span></a>
+<a class="tool-card" href="/tools/international/vat-calculator/"><div class="tool-icon">🧮</div><h2 class="tool-title">VAT Calculator</h2><p class="tool-desc">Calculate VAT and tax-inclusive totals for a supplied rate.</p><span class="tag">Finance</span></a>
+<a class="tool-card" href="/tools/international/paper-size-converter/"><div class="tool-icon">📄</div><h2 class="tool-title">Paper Size Converter</h2><p class="tool-desc">Compare common ISO and North American paper sizes.</p><span class="tag">Printing</span></a>
+<a class="tool-card" href="/tools/international/script-detector/"><div class="tool-icon">🔤</div><h2 class="tool-title">Script Detector</h2><p class="tool-desc">Identify writing systems represented in pasted text.</p><span class="tag">Language</span></a>
+<a class="tool-card" href="/tools/international/address-formatter/"><div class="tool-icon">🏠</div><h2 class="tool-title">Address Formatter</h2><p class="tool-desc">Organize international address fields into a cleaner format.</p><span class="tag">Shipping</span></a>
+<a class="tool-card" href="/tools/international/packing-list-generator/"><div class="tool-icon">🧳</div><h2 class="tool-title">Packing List Generator</h2><p class="tool-desc">Build a practical travel checklist for your trip.</p><span class="tag">Travel</span></a>
+<a class="tool-card" href="/tools/international/qr-code-generator/"><div class="tool-icon">▦</div><h2 class="tool-title">QR Code Generator <span class="new-badge">NEW</span></h2><p class="tool-desc">Prepare QR-code content locally in your browser without a remote API.</p><span class="tag">Utility</span></a>
+<a class="tool-card" href="/tools/international/word-counter/"><div class="tool-icon">🔢</div><h2 class="tool-title">Word Counter <span class="new-badge">NEW</span></h2><p class="tool-desc">Count words and characters instantly.</p><span class="tag">Writing</span></a>
+<a class="tool-card" href="/tools/international/json-formatter/"><div class="tool-icon">{ }</div><h2 class="tool-title">JSON Formatter <span class="new-badge">NEW</span></h2><p class="tool-desc">Format and validate JSON locally.</p><span class="tag">Developer</span></a>
+<a class="tool-card" href="/tools/international/password-generator/"><div class="tool-icon">🔐</div><h2 class="tool-title">Password Generator <span class="new-badge">NEW</span></h2><p class="tool-desc">Generate random passwords locally with Web Crypto.</p><span class="tag">Security</span></a>
+<a class="tool-card" href="/tools/international/base64-encoder-decoder/"><div class="tool-icon">🔁</div><h2 class="tool-title">Base64 Encoder & Decoder <span class="new-badge">NEW</span></h2><p class="tool-desc">Encode or decode Base64 text in the browser.</p><span class="tag">Developer</span></a>
+<a class="tool-card" href="/tools/international/case-converter/"><div class="tool-icon">Aa</div><h2 class="tool-title">Case Converter <span class="new-badge">NEW</span></h2><p class="tool-desc">Convert text case for writing and formatting.</p><span class="tag">Writing</span></a>
+<a class="tool-card" href="/tools/international/timestamp-converter/"><div class="tool-icon">⏱</div><h2 class="tool-title">Timestamp Converter <span class="new-badge">NEW</span></h2><p class="tool-desc">Convert Unix timestamps to readable dates.</p><span class="tag">Developer</span></a>
+<a class="tool-card" href="/tools/international/percentage-calculator/"><div class="tool-icon">%</div><h2 class="tool-title">Percentage Calculator <span class="new-badge">NEW</span></h2><p class="tool-desc">Solve common percentage calculations instantly.</p><span class="tag">Calculator</span></a>
+<a class="tool-card" href="/tools/international/age-calculator/"><div class="tool-icon">🎂</div><h2 class="tool-title">Age Calculator <span class="new-badge">NEW</span></h2><p class="tool-desc">Calculate age from a birth date.</p><span class="tag">Calculator</span></a>
+<a class="tool-card" href="/tools/international/text-to-speech/"><div class="tool-icon">🔊</div><h2 class="tool-title">Text to Speech <span class="new-badge">NEW</span></h2><p class="tool-desc">Read text aloud using your browser's speech engine.</p><span class="tag">Accessibility</span></a>
+<a class="tool-card" href="/tools/international/morse-code-translator/"><div class="tool-icon">·−</div><h2 class="tool-title">Morse Code Translator <span class="new-badge">NEW</span></h2><p class="tool-desc">Convert text to Morse code in your browser.</p><span class="tag">Language</span></a>
+<a class="tool-card" href="/tools/international/url-encoder-decoder/"><div class="tool-icon">🔗</div><h2 class="tool-title">URL Encoder & Decoder <span class="new-badge">NEW</span></h2><p class="tool-desc">Encode and decode URI components locally.</p><span class="tag">Developer</span></a>
+<a class="tool-card" href="/tools/international/uuid-generator/"><div class="tool-icon">🆔</div><h2 class="tool-title">UUID Generator <span class="new-badge">NEW</span></h2><p class="tool-desc">Generate UUIDs locally with the Web Crypto API.</p><span class="tag">Developer</span></a>
+<a class="tool-card" href="/tools/international/color-picker/"><div class="tool-icon">🎨</div><h2 class="tool-title">Color Picker <span class="new-badge">NEW</span></h2><p class="tool-desc">Pick a color and inspect its HEX value.</p><span class="tag">Design</span></a>
+</div><div class="note">New international utility pages are browser-first. Tools that require a third-party service, such as live translation or current market data, are clearly labeled instead of returning fabricated results.</div></div></body></html>
