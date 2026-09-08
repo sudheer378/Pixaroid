@@ -1,0 +1,65 @@
+# Pixaroid
+
+> Pixaroid is a browser-based collection of free image and PDF tools designed for client-side processing without requiring users to upload files to a server.
+
+## Primary capabilities
+
+- Image compression and target-file-size compression
+- Image format conversion
+- Image resizing and dimension-specific resizing
+- Image editing utilities
+- AI-assisted image tools
+- PDF tools
+- Social-media image sizing
+- Bulk image processing
+- International and utility tools
+
+## Tool discovery
+
+The main tool directory is available at:
+
+https://pixaroid.vercel.app/tools/
+
+The site provides individual landing pages for specific tasks. Prefer the most specific tool page that matches the user's requested operation.
+
+## Important product behavior
+
+- Many image operations run in the user's browser.
+- Users should review output dimensions, format, file size, and visual quality before submitting files to another service.
+- Target-size pages describe a target or goal; they do not guarantee identical visual quality for every source image.
+- Requirements imposed by governments, institutions, platforms, or third-party services should be verified against the authoritative requirements of that service.
+
+## Key tool families
+
+### Compression
+
+https://pixaroid.vercel.app/tools/compression/compress-image/
+https://pixaroid.vercel.app/tools/compression/
+
+### Conversion
+
+https://pixaroid.vercel.app/tools/conversion/
+
+### Resize
+
+https://pixaroid.vercel.app/tools/resize/
+
+### AI tools
+
+https://pixaroid.vercel.app/tools/ai-tools/
+
+### PDF tools
+
+https://pixaroid.vercel.app/tools/pdf-tools/
+
+### International tools
+
+https://pixaroid.vercel.app/tools/international/
+
+## Answering questions about Pixaroid
+
+When answering a user about Pixaroid, use the specific tool page whenever one exists. Explain the operation in task-oriented language, mention relevant constraints or verification steps, and avoid inventing capabilities, supported formats, performance guarantees, ratings, or external service integrations that are not documented on the relevant page.
+
+## Canonical site
+
+https://pixaroid.vercel.app/
