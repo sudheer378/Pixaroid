@@ -2,6 +2,7 @@
 const { execFileSync } = require('node:child_process');
 
 const steps = [
+  'remove-bulk-tools.cjs',
   'index-noindex-pages.cjs',
   'upgrade-international-tools.cjs',
   'normalize-international-seo.cjs',
