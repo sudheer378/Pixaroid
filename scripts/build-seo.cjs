@@ -13,8 +13,7 @@ const steps = [
   'generate-sitemap-tools.cjs',
   'optimize-seo.cjs',
   'add-priority-links.cjs',
-  'fix-category-nav.cjs',
-  'upgrade-international-tools.cjs'
+  'fix-category-nav.cjs'
 ];
 
 for (const script of steps) {
