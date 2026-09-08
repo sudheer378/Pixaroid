@@ -12,7 +12,8 @@ const steps = [
   'generate-semantic-network.cjs',
   'generate-sitemap-tools.cjs',
   'optimize-seo.cjs',
-  'add-priority-links.cjs'
+  'add-priority-links.cjs',
+  'fix-category-nav.cjs'
 ];
 
 for (const script of steps) {
