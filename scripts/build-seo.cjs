@@ -8,6 +8,7 @@ const steps = [
   'optimize-tier-a-seo.cjs',
   'generate-aeo.cjs',
   'generate-llms.cjs',
+  'generate-entity-seo.cjs',
   'generate-sitemap-tools.cjs',
   'optimize-seo.cjs',
   'add-priority-links.cjs'
