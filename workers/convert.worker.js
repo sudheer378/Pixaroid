@@ -1,427 +1,46 @@
-/**
- * Pixaroid Convert Worker v3.0 - Ultra High Performance
- * Handles image format conversion with advanced quality control
- * Features: OffscreenCanvas, AVIF support, smart quality mapping, batch parallelization
- * Performance: 2-3x faster than v2.0
- */
+/** Pixaroid Convert Worker v4 - browser-safe conversion */
 'use strict';
+const MIME={jpeg:'image/jpeg',jpg:'image/jpeg',png:'image/png',webp:'image/webp',avif:'image/avif',bmp:'image/bmp'};
+const DEFAULT_Q={jpeg:.90,jpg:.90,webp:.85,avif:.75};
 
-const useOffscreen = typeof OffscreenCanvas !== 'undefined';
-const MAX_CONCURRENT = 4; // Parallel conversions for batch
-
-// Smart quality mapping by target format
-const QUALITY_MAP = {
-  jpeg: { default: 90, min: 10, max: 100 },
-  jpg: { default: 90, min: 10, max: 100 },
-  webp: { default: 85, min: 10, max: 100 },
-  avif: { default: 75, min: 10, max: 100 },
-  png: { default: 100, min: 100, max: 100 },
-  bmp: { default: 100, min: 100, max: 100 }
+self.onmessage=async e=>{
+ const d=e.data||{};
+ try{
+  if(d.op==='convert'||d.op==='convert-advanced') self.postMessage({jobId:d.jobId,...await convert(d)},[]);
+  else if(d.op==='convert-batch') await batch(d);
+  else throw Error('Unknown conversion operation: '+d.op);
+ }catch(err){self.postMessage({jobId:d.jobId,error:err.message||String(err)});}
 };
 
-// MIME type mapping
-const MIME_MAP = {
-  jpeg: 'image/jpeg',
-  jpg: 'image/jpeg',
-  png: 'image/png',
-  webp: 'image/webp',
-  avif: 'image/avif',
-  bmp: 'image/bmp'
-};
-
-self.onmessage = function(e) {
-  const data = e.data;
-  const jobId = data.jobId;
-
-  try {
-    if (data.op === 'convert') {
-      convertImage(data);
-    } else if (data.op === 'convert-batch') {
-      convertBatchParallel(data);
-    } else if (data.op === 'convert-advanced') {
-      convertAdvanced(data);
-    } else {
-      throw new Error('Unknown operation: ' + data.op);
-    }
-  } catch (err) {
-    self.postMessage({ jobId: jobId, error: err.message, stack: err.stack });
-  }
-};
-
-function convertImage(data) {
-  const { jobId, buffer, mime, origSize, targetFormat, quality, background, lossless } = data;
-
-  const blob = new Blob([buffer], { type: mime });
-  const img = new Image();
-
-  img.onload = function() {
-    try {
-      // Use OffscreenCanvas if available for better performance
-      let canvas, ctx;
-      if (useOffscreen) {
-        canvas = new OffscreenCanvas(img.naturalWidth, img.naturalHeight);
-        ctx = canvas.getContext('2d', { 
-          alpha: targetFormat !== 'jpeg' && targetFormat !== 'jpg',
-          willReadFrequently: false 
-        });
-      } else {
-        canvas = document.createElement('canvas');
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-        ctx = canvas.getContext('2d');
-      }
-
-      // Apply background for transparent images converting to JPEG
-      if (targetFormat === 'jpeg' || targetFormat === 'jpg') {
-        ctx.fillStyle = background || '#ffffff';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
-
-      // High-quality image smoothing
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-      ctx.drawImage(img, 0, 0);
-
-      // Determine output MIME type using map
-      const outputMime = MIME_MAP[targetFormat] || 'image/jpeg';
-
-      // Smart quality mapping or explicit quality setting
-      let q;
-      if (targetFormat === 'png' || targetFormat === 'bmp') {
-        q = undefined; // Lossless formats
-      } else {
-        const qMap = QUALITY_MAP[targetFormat] || QUALITY_MAP.jpeg;
-        const effectiveQuality = quality !== undefined ? quality : qMap.default;
-        q = Math.max(qMap.min / 100, Math.min(qMap.max / 100, effectiveQuality / 100));
-      }
-
-      canvas.toBlob(
-        function(resultBlob) {
-          if (!resultBlob) {
-            self.postMessage({ jobId: jobId, error: 'Conversion failed - no output' });
-            return;
-          }
-
-          const reader = new FileReader();
-          reader.onload = function(ev) {
-            self.postMessage({
-              jobId: jobId,
-              buffer: ev.target.result,
-              mime: resultBlob.type,
-              width: canvas.width,
-              height: canvas.height,
-              format: targetFormat,
-              originalSize: origSize,
-              convertedSize: resultBlob.size,
-              savings: origSize > 0 ? Math.round((1 - resultBlob.size / origSize) * 100) : 0
-            });
-          };
-          reader.onerror = function() {
-            self.postMessage({ jobId: jobId, error: 'Failed to read converted blob' });
-          };
-          reader.readAsArrayBuffer(resultBlob);
-        },
-        outputMime,
-        q
-      );
-    } catch (err) {
-      self.postMessage({ jobId: jobId, error: err.message });
-    }
-  };
-
-  img.onerror = function() {
-    self.postMessage({ jobId: jobId, error: 'Failed to load image' });
-  };
-
-  img.src = URL.createObjectURL(blob);
+async function convert(d){
+ if(typeof createImageBitmap!=='function'||typeof OffscreenCanvas==='undefined') throw Error('Image conversion requires a current browser with Web Worker image support.');
+ const target=String(d.targetFormat||'jpeg').toLowerCase();
+ const mime=MIME[target]||'image/jpeg';
+ const bitmap=await createImageBitmap(new Blob([d.buffer],{type:d.mime||'application/octet-stream'}));
+ try{
+  let w=bitmap.width,h=bitmap.height;
+  const scale=Number(d.scale);
+  if(Number.isFinite(scale)&&scale>0&&scale!==1){w=Math.max(1,Math.round(w*scale));h=Math.max(1,Math.round(h*scale));}
+  const max=Number(d.maxDimension);
+  if(Number.isFinite(max)&&max>0&&Math.max(w,h)>max){const r=max/Math.max(w,h);w=Math.max(1,Math.round(w*r));h=Math.max(1,Math.round(h*r));}
+  const canvas=new OffscreenCanvas(w,h),ctx=canvas.getContext('2d',{alpha:mime!=='image/jpeg'});
+  if(!ctx) throw Error('Unable to create conversion canvas.');
+  if(mime==='image/jpeg'){ctx.fillStyle=d.background||'#fff';ctx.fillRect(0,0,w,h);}
+  ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(bitmap,0,0,w,h);
+  const q=(d.lossless||target==='png'||target==='bmp')?undefined:Math.max(.05,Math.min(1,d.quality==null?(DEFAULT_Q[target]??.9):Number(d.quality)/100));
+  const blob=await canvas.convertToBlob({type:mime,...(q===undefined?{}:{quality:q})});
+  const buffer=await blob.arrayBuffer();
+  return {buffer,mime:blob.type||mime,width:w,height:h,format:target==='jpg'?'jpeg':target,originalSize:Number(d.origSize)||d.buffer.byteLength,convertedSize:blob.size,savings:Number(d.origSize)>0?Math.round((1-blob.size/d.origSize)*100):0,advanced:d.op==='convert-advanced'};
+ }finally{bitmap.close();}
 }
 
-// Parallel batch conversion with concurrency control
-async function convertBatchParallel(data) {
-  const { jobId, files, options } = data;
-  const results = [];
-  const total = files.length;
-  let completed = 0;
-
-  // Process files in parallel chunks
-  const processChunk = async (startIdx, endIdx) => {
-    const promises = [];
-    for (let i = startIdx; i < endIdx && i < total; i++) {
-      promises.push(processFile(files[i], i));
-    }
-    return Promise.all(promises);
-  };
-
-  const processFile = async (file, index) => {
-    try {
-      const buffer = await readFileAsArrayBuffer(file);
-      const result = await convertImagePromise({
-        jobId: jobId + '_' + index,
-        buffer: buffer,
-        mime: file.type,
-        origSize: file.size,
-        targetFormat: options.targetFormat || 'jpeg',
-        quality: options.quality || 90,
-        background: options.background || '#ffffff'
-      });
-
-      completed++;
-      self.postMessage({
-        jobId: jobId,
-        type: 'progress',
-        percent: Math.round((completed / total) * 100),
-        current: file.name,
-        total: total
-      });
-
-      return {
-        name: file.name,
-        success: true,
-        ...result
-      };
-    } catch (err) {
-      completed++;
-      return {
-        name: file.name,
-        success: false,
-        error: err.message
-      };
-    }
-  };
-
-  // Process in chunks of MAX_CONCURRENT
-  for (let i = 0; i < total; i += MAX_CONCURRENT) {
-    const chunkResults = await processChunk(i, i + MAX_CONCURRENT);
-    results.push(...chunkResults);
-  }
-
-  self.postMessage({
-    jobId: jobId,
-    type: 'batch-complete',
-    results: results,
-    stats: {
-      total: total,
-      successful: results.filter(r => r.success).length,
-      failed: results.filter(r => !r.success).length
-    }
-  });
+async function batch(d){
+ const files=Array.isArray(d.files)?d.files:[],o=d.options||{},results=[];
+ for(let i=0;i<files.length;i++){
+  const f=files[i];try{const b=f.arrayBuffer?await f.arrayBuffer():await read(f);results.push({name:f.name,success:true,...await convert({buffer:b,mime:f.type,origSize:f.size,targetFormat:o.targetFormat||'jpeg',quality:o.quality,background:o.background,lossless:o.lossless})});}
+  catch(err){results.push({name:f?.name||('file-'+i),success:false,error:err.message});}
+  self.postMessage({jobId:d.jobId,type:'progress',percent:Math.round((i+1)/Math.max(1,files.length)*100),current:f?.name||'',total:files.length});
+ }
+ self.postMessage({jobId:d.jobId,type:'batch-complete',results,stats:{total:results.length,successful:results.filter(x=>x.success).length,failed:results.filter(x=>!x.success).length}});
 }
-
-// Convert single image with Promise wrapper
-function convertImagePromise(data) {
-  return new Promise((resolve, reject) => {
-    const originalOnMessage = self.onmessage;
-    const tempHandler = (e) => {
-      if (e.data && e.data.jobId === data.jobId) {
-        self.onmessage = originalOnMessage;
-        if (e.data.error) {
-          reject(new Error(e.data.error));
-        } else {
-          resolve(e.data);
-        }
-      } else if (originalOnMessage) {
-        originalOnMessage(e);
-      }
-    };
-    self.onmessage = tempHandler;
-    convertImage(data);
-    
-    // Timeout after 60 seconds
-    setTimeout(() => {
-      self.onmessage = originalOnMessage;
-      reject(new Error('Conversion timeout'));
-    }, 60000);
-  });
-}
-
-// Legacy batch function (deprecated - use convertBatchParallel)
-async function convertBatch(data) {
-  const { jobId, files, options } = data;
-  const results = [];
-  const total = files.length;
-
-  for (let i = 0; i < total; i++) {
-    const file = files[i];
-    const buffer = await readFileAsArrayBuffer(file);
-
-    try {
-      const result = await convertImagePromise({
-        jobId: jobId + '_' + i,
-        buffer: buffer,
-        mime: file.type,
-        origSize: file.size,
-        targetFormat: options.targetFormat || 'jpeg',
-        quality: options.quality || 90,
-        background: options.background || '#ffffff'
-      });
-
-      results.push({
-        name: file.name,
-        success: true,
-        ...result
-      });
-
-      self.postMessage({
-        jobId: jobId,
-        type: 'progress',
-        percent: Math.round(((i + 1) / total) * 100),
-        current: file.name
-      });
-
-    } catch (err) {
-      results.push({
-        name: file.name,
-        error: err.message
-      });
-    }
-  }
-
-  self.postMessage({
-    jobId: jobId,
-    type: 'batch-complete',
-    results: results,
-    stats: {
-      total: total,
-      successful: results.filter(r => r.success).length,
-      failed: results.filter(r => !r.success || r.error).length
-    }
-  });
-}
-
-// Advanced conversion with additional options
-function convertAdvanced(data) {
-  const { 
-    jobId, buffer, mime, origSize, targetFormat, quality, 
-    background, lossless, preserveMetadata, stripEXIF,
-    maxDimension, scale 
-  } = data;
-
-  const blob = new Blob([buffer], { type: mime });
-  const img = new Image();
-
-  img.onload = function() {
-    try {
-      // Calculate dimensions with optional scaling
-      let width = img.naturalWidth;
-      let height = img.naturalHeight;
-
-      if (scale && scale !== 1) {
-        width = Math.round(width * scale);
-        height = Math.round(height * scale);
-      }
-
-      if (maxDimension && Math.max(width, height) > maxDimension) {
-        const ratio = maxDimension / Math.max(width, height);
-        width = Math.round(width * ratio);
-        height = Math.round(height * ratio);
-      }
-
-      // Use OffscreenCanvas for performance
-      let canvas, ctx;
-      if (useOffscreen) {
-        canvas = new OffscreenCanvas(width, height);
-        ctx = canvas.getContext('2d', { 
-          alpha: targetFormat !== 'jpeg' && targetFormat !== 'jpg',
-          willReadFrequently: false 
-        });
-      } else {
-        canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        ctx = canvas.getContext('2d');
-      }
-
-      // Apply background for JPEG output
-      if (targetFormat === 'jpeg' || targetFormat === 'jpg') {
-        ctx.fillStyle = background || '#ffffff';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
-
-      // High-quality rendering
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-      ctx.drawImage(img, 0, 0, width, height);
-
-      // Get MIME type and quality
-      const outputMime = MIME_MAP[targetFormat] || 'image/jpeg';
-      let q;
-      
-      if (lossless || targetFormat === 'png' || targetFormat === 'bmp') {
-        q = undefined;
-      } else {
-        const qMap = QUALITY_MAP[targetFormat] || QUALITY_MAP.jpeg;
-        const effectiveQuality = quality !== undefined ? quality : qMap.default;
-        q = Math.max(qMap.min / 100, Math.min(qMap.max / 100, effectiveQuality / 100));
-      }
-
-      canvas.toBlob(
-        function(resultBlob) {
-          if (!resultBlob) {
-            self.postMessage({ 
-              jobId: jobId, 
-              error: 'Conversion failed - no output',
-              advanced: true 
-            });
-            return;
-          }
-
-          const reader = new FileReader();
-          reader.onload = function(ev) {
-            self.postMessage({
-              jobId: jobId,
-              buffer: ev.target.result,
-              mime: resultBlob.type,
-              width: canvas.width,
-              height: canvas.height,
-              format: targetFormat,
-              originalSize: origSize,
-              convertedSize: resultBlob.size,
-              savings: origSize > 0 ? Math.round((1 - resultBlob.size / origSize) * 100) : 0,
-              advanced: true,
-              metadata: {
-                originalWidth: img.naturalWidth,
-                originalHeight: img.naturalHeight,
-                scaled: width !== img.naturalWidth || height !== img.naturalHeight
-              }
-            });
-          };
-          reader.onerror = function() {
-            self.postMessage({ 
-              jobId: jobId, 
-              error: 'Failed to read converted blob',
-              advanced: true 
-            });
-          };
-          reader.readAsArrayBuffer(resultBlob);
-        },
-        outputMime,
-        q
-      );
-    } catch (err) {
-      self.postMessage({ 
-        jobId: jobId, 
-        error: err.message,
-        advanced: true 
-      });
-    }
-  };
-
-  img.onerror = function() {
-    self.postMessage({ 
-      jobId: jobId, 
-      error: 'Failed to load image',
-      advanced: true 
-    });
-  };
-
-  img.src = URL.createObjectURL(blob);
-}
-
-function readFileAsArrayBuffer(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = () => reject(new Error('Failed to read file'));
-    reader.readAsArrayBuffer(file);
-  });
-}
+function read(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(Error('Failed to read file'));r.readAsArrayBuffer(f);});}
