@@ -10,7 +10,17 @@
  *    API/fetch  → Network-First  (any dynamic fetch)
  *    Workers    → Cache-First  (Web Worker JS files)
  * ═══════════════════════════════════════════════════════════════════
+ *
+ *  Monetag integration:
+ *    The Monetag root service-worker configuration is imported here
+ *    because /sw.js can only have one service-worker entry point.
+ *    Pixaroid's existing PWA/cache logic remains in this same worker.
  */
+
+// Monetag-provided root service-worker integration.
+// Do not remove: Monetag requires this import for the HTTPS ad format
+// associated with zone 11742921.
+importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw');
 
 const VERSION      = 'pixaroid-v3.1.0';
 const SHELL_CACHE  = `${VERSION}-shell`;
