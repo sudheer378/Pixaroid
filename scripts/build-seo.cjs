@@ -18,6 +18,7 @@ const steps = [
   'fix-category-nav.cjs',
   'repair-heic-and-formats.cjs',
   'repair-filter-worker.cjs',
+  'repair-tool-runner.cjs',
   'audit-tool-functionality.cjs'
 ];
 
