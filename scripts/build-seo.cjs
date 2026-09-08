@@ -9,6 +9,7 @@ const steps = [
   'generate-aeo.cjs',
   'generate-llms.cjs',
   'generate-entity-seo.cjs',
+  'generate-semantic-network.cjs',
   'generate-sitemap-tools.cjs',
   'optimize-seo.cjs',
   'add-priority-links.cjs'
