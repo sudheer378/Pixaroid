@@ -1,4 +1,4 @@
-/** Pixaroid Editor/Filter Worker v5 — browser Worker safe */
+/** Pixaroid Editor/Filter Worker v6 — browser Worker safe */
 'use strict';
 
 const MAX_CONCURRENT = 4;
@@ -74,19 +74,35 @@ function applyFilters(ctx, operations) {
   ctx.filter = filters.length ? filters.join(' ') : 'none';
 }
 
-function drawBase(ctx, image, width, height, operations) {
-  const ops = Array.isArray(operations) ? operations : [];
-  const rotation = ops.reduce((sum, op) => sum + (op.type === 'rotate' ? (Number(op.angle) || 90) : 0), 0);
-  const flipH = ops.some(op => op.type === 'flip' && op.horizontal);
-  const flipV = ops.some(op => op.type === 'flip' && op.vertical);
+function rotationInfo(operations) {
+  let angle = 0;
+  for (const op of Array.isArray(operations) ? operations : []) {
+    if (op.type === 'rotate') angle += Number(op.angle) || 90;
+  }
+  angle = ((angle % 360) + 360) % 360;
+  return { angle, radians: angle * Math.PI / 180 };
+}
+
+function drawImageWithOperations(ctx, image, width, height, operations, crop) {
+  const { angle, radians } = rotationInfo(operations);
+  const flipH = operations.some(op => op.type === 'flip' && op.horizontal);
+  const flipV = operations.some(op => op.type === 'flip' && op.vertical);
   ctx.save();
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
   ctx.translate(width / 2, height / 2);
-  ctx.rotate(rotation * Math.PI / 180);
+  ctx.rotate(radians);
   ctx.scale(flipH ? -1 : 1, flipV ? -1 : 1);
-  applyFilters(ctx, ops);
-  ctx.drawImage(image, -image.width / 2, -image.height / 2, image.width, image.height);
+  applyFilters(ctx, operations);
+  if (crop) {
+    const sx = Math.max(0, Math.min(image.width - 1, Number(crop.x) || 0));
+    const sy = Math.max(0, Math.min(image.height - 1, Number(crop.y) || 0));
+    const sw = Math.max(1, Math.min(image.width - sx, Number(crop.width)));
+    const sh = Math.max(1, Math.min(image.height - sy, Number(crop.height)));
+    ctx.drawImage(image, sx, sy, sw, sh, -width / 2, -height / 2, width, height);
+  } else {
+    ctx.drawImage(image, -image.width / 2, -image.height / 2, image.width, image.height);
+  }
   ctx.restore();
   ctx.filter = 'none';
 }
@@ -118,26 +134,31 @@ function applyOverlays(ctx, canvas, operations) {
   }
 }
 
+function dimensionsFor(operations, image) {
+  let width = image.width;
+  let height = image.height;
+  let quarterTurns = 0;
+  for (const op of Array.isArray(operations) ? operations : []) {
+    if (op.type !== 'rotate') continue;
+    const normalized = ((Number(op.angle) || 0) % 360 + 360) % 360;
+    if (normalized === 90 || normalized === 270) quarterTurns++;
+  }
+  if (quarterTurns % 2) [width, height] = [height, width];
+  const crop = operations.find(op => op.type === 'crop' && Number(op.width) > 0 && Number(op.height) > 0);
+  if (crop) {
+    width = Math.max(1, Math.round(Number(crop.width)));
+    height = Math.max(1, Math.round(Number(crop.height)));
+  }
+  return { width, height };
+}
+
 async function edit(data) {
   const image = await decode(data.buffer, data.mime);
   try {
     const operations = Array.isArray(data.operations) ? data.operations : [];
-    let width = image.width;
-    let height = image.height;
-    const quarterTurns = operations.reduce((count, op) => {
-      if (op.type !== 'rotate') return count;
-      const normalized = ((Number(op.angle) || 0) % 360 + 360) % 360;
-      return count + (normalized === 90 || normalized === 270 ? 1 : 0);
-    }, 0);
-    if (quarterTurns % 2) [width, height] = [height, width];
-
-    const outputType = mimeOf(data.format || 'jpeg');
-    let crop = operations.find(op => op.type === 'crop');
-    if (crop && Number(crop.width) > 0 && Number(crop.height) > 0 && quarterTurns % 2 === 0) {
-      width = Math.max(1, Math.round(Number(crop.width)));
-      height = Math.max(1, Math.round(Number(crop.height)));
-    }
-
+    const { width, height } = dimensionsFor(operations, image);
+    const outputFormat = data.format || 'jpeg';
+    const outputType = mimeOf(outputFormat);
     const canvas = new OffscreenCanvas(width, height);
     const ctx = canvas.getContext('2d', { alpha: outputType !== 'image/jpeg' });
     if (!ctx) throw new Error('Could not create editor canvas.');
@@ -146,34 +167,24 @@ async function edit(data) {
       ctx.fillRect(0, 0, width, height);
     }
 
-    if (crop && Number(crop.width) > 0 && Number(crop.height) > 0 && quarterTurns % 2 === 0) {
-      const sx = Math.max(0, Math.min(image.width - 1, Number(crop.x) || 0));
-      const sy = Math.max(0, Math.min(image.height - 1, Number(crop.y) || 0));
-      const sw = Math.max(1, Math.min(image.width - sx, Number(crop.width)));
-      const sh = Math.max(1, Math.min(image.height - sy, Number(crop.height)));
-      ctx.save();
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-      ctx.drawImage(image, sx, sy, sw, sh, 0, 0, width, height);
-      ctx.restore();
-    } else {
-      drawBase(ctx, image, width, height, operations);
-    }
-
+    const crop = operations.find(op => op.type === 'crop' && Number(op.width) > 0 && Number(op.height) > 0);
+    drawImageWithOperations(ctx, image, width, height, operations, crop);
     for (const op of operations) {
       if (op.type === 'round-corners') rounded(ctx, width, height, (Number(op.radius) || 30) / 100 * Math.min(width, height));
     }
     applyOverlays(ctx, canvas, operations);
 
-    const [blob, type] = await encode(canvas, data.format || 'jpeg', data.quality);
+    const [blob, type] = await encode(canvas, outputFormat, data.quality);
+    const resultBuffer = await blob.arrayBuffer();
     self.postMessage({
       jobId: data.jobId,
-      buffer: await blob.arrayBuffer(),
+      blob,
+      buffer: resultBuffer,
       mime: type,
       width: canvas.width,
       height: canvas.height,
-      format: data.format || 'jpeg',
-      originalSize: data.origSize || 0,
+      format: outputFormat,
+      originalSize: Number(data.origSize) || 0,
       editedSize: blob.size
     });
   } finally {
@@ -206,24 +217,18 @@ async function batch(data) {
 async function renderBatchItem(item, operations, format, quality) {
   const image = await decode(item.buffer, item.mime);
   try {
-    let width = image.width;
-    let height = image.height;
-    const quarterTurns = operations.reduce((count, op) => {
-      if (op.type !== 'rotate') return count;
-      const normalized = ((Number(op.angle) || 0) % 360 + 360) % 360;
-      return count + (normalized === 90 || normalized === 270 ? 1 : 0);
-    }, 0);
-    if (quarterTurns % 2) [width, height] = [height, width];
+    const { width, height } = dimensionsFor(operations, image);
     const type = mimeOf(format || 'jpeg');
     const canvas = new OffscreenCanvas(width, height);
     const ctx = canvas.getContext('2d', { alpha: type !== 'image/jpeg' });
     if (!ctx) throw new Error('Could not create editor canvas.');
     if (type === 'image/jpeg') { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, width, height); }
-    drawBase(ctx, image, width, height, operations);
+    const crop = operations.find(op => op.type === 'crop' && Number(op.width) > 0 && Number(op.height) > 0);
+    drawImageWithOperations(ctx, image, width, height, operations, crop);
     for (const op of operations) if (op.type === 'round-corners') rounded(ctx, width, height, (Number(op.radius) || 30) / 100 * Math.min(width, height));
     applyOverlays(ctx, canvas, operations);
     const [blob] = await encode(canvas, format || 'jpeg', quality);
-    return { buffer: await blob.arrayBuffer(), mime: blob.type, width, height, size: blob.size };
+    return { blob, buffer: await blob.arrayBuffer(), mime: blob.type, width, height, size: blob.size };
   } finally {
     image.close?.();
   }
