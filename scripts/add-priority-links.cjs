@@ -36,6 +36,15 @@ const INTERNATIONAL = [
   ['/tools/international/packing-list-generator/', 'Packing List Generator']
 ];
 
+const GROUPS = [
+  { match: /\/tools\/compression\//, title: 'Popular Image Compression Tools', paths: PRIORITY.slice(0, 3) },
+  { match: /\/tools\/conversion\//, title: 'Popular Image Conversion Tools', paths: PRIORITY.slice(3, 8) },
+  { match: /\/tools\/resize\//, title: 'Popular Image Resize Tools', paths: PRIORITY.slice(8, 10) },
+  { match: /\/tools\/ai-tools\//, title: 'Popular AI Image Tools', paths: PRIORITY.slice(10, 13) },
+  { match: /\/tools\/pdf-tools\//, title: 'Popular PDF Tools', paths: PRIORITY.slice(13, 16) },
+  { match: /\/tools\/international\//, title: 'International & Travel Tools', paths: INTERNATIONAL }
+];
+
 function walk(dir) {
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
@@ -47,12 +56,13 @@ function walk(dir) {
 function relativeUrl(file) {
   const rel = '/' + path.relative(ROOT, file).replace(/\\/g, '/');
   if (rel.endsWith('/index.html')) return rel.slice(0, -'index.html'.length);
-  return rel;
+  return rel.replace(/\.html$/, '/');
 }
 function makeBlock(group) {
   const links = group.paths.map(([href, label]) => `<a href="${href}">${label}</a>`).join('');
   return `\n<section data-seo-priority-links="true" aria-labelledby="seo-priority-links-title"><h2 id="seo-priority-links-title">${group.title}</h2><nav aria-label="${group.title}">${links}</nav></section>\n`;
 }
+
 const files = [path.join(ROOT, 'index.html'), ...walk(path.join(ROOT, 'tools'))];
 let changed = 0;
 for (const file of files) {
@@ -71,12 +81,3 @@ for (const file of files) {
   changed++;
 }
 console.log(`SEO Job 3: added/updated contextual internal-link blocks on ${changed} HTML pages.`);
-
-const GROUPS = [
-  { match: /\/tools\/compression\//, title: 'Popular Image Compression Tools', paths: PRIORITY.slice(0, 3) },
-  { match: /\/tools\/conversion\//, title: 'Popular Image Conversion Tools', paths: PRIORITY.slice(3, 8) },
-  { match: /\/tools\/resize\//, title: 'Popular Image Resize Tools', paths: PRIORITY.slice(8, 10) },
-  { match: /\/tools\/ai-tools\//, title: 'Popular AI Image Tools', paths: PRIORITY.slice(10, 13) },
-  { match: /\/tools\/pdf-tools\//, title: 'Popular PDF Tools', paths: PRIORITY.slice(13, 16) },
-  { match: /\/tools\/international\//, title: 'International & Travel Tools', paths: INTERNATIONAL }
-];
