@@ -15,7 +15,8 @@ const steps = [
   'generate-sitemap-tools.cjs',
   'optimize-seo.cjs',
   'add-priority-links.cjs',
-  'fix-category-nav.cjs'
+  'fix-category-nav.cjs',
+  'audit-tool-functionality.cjs'
 ];
 
 for (const script of steps) {
