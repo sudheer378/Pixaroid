@@ -44,7 +44,13 @@ export function wireSmartlink(container, slot = 0) {
 
 export function loadMonetag() {
   if (typeof document === 'undefined') return;
-  if (document.querySelector('script[data-pixaroid-monetag]')) return;
+
+  // The one-time site migration placed the Monetag tag directly in <head>.
+  // Treat that tag as authoritative and never inject a second copy.
+  const existing = document.querySelector(
+    `script[data-pixaroid-monetag], script[src="${MONETAG_SRC}"], script[src^="${MONETAG_SRC}?"], script[data-zone="${MONETAG_ZONE}"]`
+  );
+  if (existing) return;
 
   const script = document.createElement('script');
   script.src = MONETAG_SRC;
@@ -57,7 +63,7 @@ export function loadMonetag() {
 
 export function mountSponsoredUnit() {
   if (typeof document === 'undefined') return;
-  if (document.querySelector('[data-pixaroid-sponsored-unit]')) return;
+  if (document.querySelector('[data-pixaroid-sponsored-unit], [data-pixaroid-static-sponsored]')) return;
 
   const unit = document.createElement('aside');
   unit.dataset.pixaroidSponsoredUnit = 'true';
