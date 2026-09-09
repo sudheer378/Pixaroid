@@ -41,7 +41,19 @@ const SITE_CONFIG = {
   },
 
   analytics: { ga4: 'G-XXXXXXXXXX', clarity: '' },
-  ads:        { adsense: 'pub-XXXXXXXXXXXXXXXX', enabled: false },
+
+  monetization: {
+    provider: 'Monetag',
+    zoneId: '277292',
+    script: 'https://quge5.com/88/tag.min.js',
+    smartlinks: [
+      'https://sordidcopper.com/ah4q89k44?key=b7b2b4355e9576b54f29b8445e7d6775',
+      'https://sordidcopper.com/a7buqkb8ii?key=717a52ca31ccb8da56a9ae0bee29d372',
+    ],
+    enabled: true,
+  },
+
+  ads: { adsense: 'pub-XXXXXXXXXXXXXXXX', enabled: false },
   deployment: { provider: 'vercel', outputDir: 'dist' },
 };
 
