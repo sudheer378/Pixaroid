@@ -21,6 +21,7 @@ const steps = [
   'repair-tool-runner.cjs',
   'repair-runner-ready.cjs',
   'remove-stale-bulk-runner.cjs',
+  'repair-tool-config.cjs',
   'validate-tool-capabilities.cjs',
   'generate-execution-migration-report.cjs',
   'audit-execution-paths.cjs',
