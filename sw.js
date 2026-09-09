@@ -1,22 +1,17 @@
-/**
- * Pixaroid Service Worker  ·  sw.js
- *
- * Keeps the PWA/cache layer isolated from page content.
- * Monetag owns the external service-worker bootstrap below.
- */
-
 self.options = {
-  domain: '5gvci.com',
-  zoneId: 277292
+  "domain": "5gvci.com",
+  "zoneId": 11742921
 };
-self.lary = '';
+self.lary = "";
 
-// Monetag root service-worker bootstrap for the active Pixaroid zone.
-importScripts('https://quge5.com/88/tag.min.js');
+// Monetag-provided service worker bootstrap from the publisher dashboard.
+importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw');
 
-const VERSION      = 'pixaroid-v3.2.0';
-const SHELL_CACHE  = `${VERSION}-shell`;
-const PAGES_CACHE  = `${VERSION}-pages`;
+// Keep Pixaroid's offline cache layer in this same worker so the Monetag
+// bootstrap remains available while existing PWA behavior is preserved.
+const VERSION = 'pixaroid-v3.2.0';
+const SHELL_CACHE = `${VERSION}-shell`;
+const PAGES_CACHE = `${VERSION}-pages`;
 const ASSETS_CACHE = `${VERSION}-assets`;
 
 const SHELL_URLS = [
