@@ -3,9 +3,11 @@
  *
  * Entry point loaded on every page.
  * Initialises: theme, service worker, performance module, prefetch,
- *              lazy loading, scroll reveal, tool link injection.
+ *              lazy loading, scroll reveal, tool link injection,
+ *              and isolated monetisation loading.
  */
 import { init as initPerf } from '/js/modules/performance.js';
+import { loadMonetag } from '/js/modules/monetag.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -18,6 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ── Performance module ───────────────────────────────── */
   initPerf();
+
+  /* ── Monetag ──────────────────────────────────────────── */
+  // Deliberately isolated from tool/content markup.
+  try { loadMonetag(); } catch (err) { console.warn('[Monetag] load failed:', err); }
 
   /* ── Service Worker ───────────────────────────────────── */
   if ('serviceWorker' in navigator) {
