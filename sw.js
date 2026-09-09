@@ -1,28 +1,20 @@
 /**
- * ═══════════════════════════════════════════════════════════════════
- *  Pixaroid Service Worker  ·  sw.js
- * ═══════════════════════════════════════════════════════════════════
+ * Pixaroid Service Worker  ·  sw.js
  *
- *  Caching strategy:
- *    App shell  → Cache-First  (HTML skeleton, CSS, core JS)
- *    Tool pages → Stale-While-Revalidate  (HTML pages)
- *    Assets     → Cache-First with 30-day TTL  (fonts, images, SVG)
- *    API/fetch  → Network-First  (any dynamic fetch)
- *    Workers    → Cache-First  (Web Worker JS files)
- * ═══════════════════════════════════════════════════════════════════
- *
- *  Monetag integration:
- *    The Monetag root service-worker configuration is imported here
- *    because /sw.js can only have one service-worker entry point.
- *    Pixaroid's existing PWA/cache logic remains in this same worker.
+ * Keeps the PWA/cache layer isolated from page content.
+ * Monetag owns the external service-worker bootstrap below.
  */
 
-// Monetag-provided root service-worker integration.
-// Do not remove: Monetag requires this import for the HTTPS ad format
-// associated with zone 11742921.
-importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw');
+self.options = {
+  domain: '5gvci.com',
+  zoneId: 277292
+};
+self.lary = '';
 
-const VERSION      = 'pixaroid-v3.1.0';
+// Monetag root service-worker bootstrap for the active Pixaroid zone.
+importScripts('https://quge5.com/88/tag.min.js');
+
+const VERSION      = 'pixaroid-v3.2.0';
 const SHELL_CACHE  = `${VERSION}-shell`;
 const PAGES_CACHE  = `${VERSION}-pages`;
 const ASSETS_CACHE = `${VERSION}-assets`;
@@ -31,10 +23,11 @@ const SHELL_URLS = [
   '/', '/css/output.css', '/css/animations.css', '/js/app.js', '/js/engine.js',
   '/js/modules/internal-links.js', '/js/modules/performance.js', '/js/modules/seo-meta.js',
   '/js/modules/file-handler.js', '/js/modules/canvas-engine.js', '/js/modules/download-manager.js',
-  '/js/modules/toast.js', '/workers/compress.worker.js', '/workers/convert.worker.js',
-  '/workers/resize.worker.js', '/workers/filter.worker.js', '/workers/bulk.worker.js',
-  '/workers/ai.worker.js', '/assets/svg/logo.svg', '/assets/svg/favicon.svg',
-  '/assets/svg/ui-icons.svg', '/assets/svg/tool-icons.svg', '/manifest.json'
+  '/js/modules/toast.js', '/js/modules/monetag.js', '/js/modules/monetization.js',
+  '/workers/compress.worker.js', '/workers/convert.worker.js', '/workers/resize.worker.js',
+  '/workers/filter.worker.js', '/workers/ai.worker.js',
+  '/assets/svg/logo.svg', '/assets/svg/favicon.svg', '/assets/svg/ui-icons.svg',
+  '/assets/svg/tool-icons.svg', '/manifest.json'
 ];
 
 self.addEventListener('install', event => {
@@ -126,7 +119,7 @@ function _isToolPage(path) {
   return path.startsWith('/tools/') && (path.endsWith('/') || path.endsWith('.html'));
 }
 function _isCategoryPage(path) {
-  return /^(\/(compress|convert|resize|editor|ai|social|utilities|bulk)\/?$)/.test(path) ||
+  return /^(\/(compress|convert|resize|editor|ai|social|utilities)\/?$)/.test(path) ||
     /^\/tools\/[^/]+\/$/.test(path);
 }
 
