@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "AI-powered browser-based image tools SaaS",
   "scripts": {
-    "build": "node scripts/build-seo.cjs && node scripts/inject-quge5-all-pages.cjs && node scripts/inject-adsterra-index.cjs"
+    "build": "node -e \"console.log('Pixaroid static production build: no file generation or mutation required.')\""
   },
   "type": "module",
   "engines": {
