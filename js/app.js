@@ -8,6 +8,7 @@
  */
 import { init as initPerf } from '/js/modules/performance.js';
 import { loadMonetag } from '/js/modules/monetag.js';
+import { mountSponsoredUnit } from '/js/modules/monetization.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -21,9 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ── Performance module ───────────────────────────────── */
   initPerf();
 
-  /* ── Monetag ──────────────────────────────────────────── */
-  // Deliberately isolated from tool/content markup.
+  /* ── Monetag + clearly labelled sponsored unit ───────── */
   try { loadMonetag(); } catch (err) { console.warn('[Monetag] load failed:', err); }
+  try { mountSponsoredUnit(); } catch (err) { console.warn('[Sponsored] mount failed:', err); }
 
   /* ── Service Worker ───────────────────────────────────── */
   if ('serviceWorker' in navigator) {
