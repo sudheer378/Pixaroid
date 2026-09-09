@@ -2,77 +2,65 @@ name: One-time Pixaroid monetization migration
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 permissions:
   contents: write
 
 jobs:
   migrate:
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Inject monetization into committed HTML
-        shell: python
+      - name: Inject Monetag and sponsored links
         run: |
+          python3 <<'PY'
           from pathlib import Path
           import re
           import subprocess
 
           monetag = '<script src="https://quge5.com/88/tag.min.js" data-zone="277292" async data-cfasync="false"></script>'
           module = '<script type="module" src="/js/modules/monetization.js" data-pixaroid-monetization></script>'
+          smart1 = 'https://sordidcopper.com/ah4q89k44?key=b7b2b4355e9576b54f29b8445e7d6775'
+          smart2 = 'https://sordidcopper.com/a7buqkb8ii?key=717a52ca31ccb8da56a9ae0bee29d372'
+
+          sponsored = f'''<div data-pixaroid-static-sponsored="true" style="max-width:1200px;margin:1.25rem auto;padding:0 1.25rem;">
+          <aside aria-label="Sponsored content" style="border:1px solid rgba(255,255,255,.10);border-radius:14px;background:rgba(255,255,255,.025);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:system-ui,-apple-system,sans-serif;">
+          <div style="min-width:180px;flex:1;"><div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.55;margin-bottom:3px;">Sponsored</div><div style="font-size:13px;opacity:.78;">Support Pixaroid by exploring a sponsored offer.</div></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;"><a href="{smart1}" target="_blank" rel="nofollow sponsored noopener noreferrer" referrerpolicy="no-referrer-when-downgrade" style="display:inline-flex;align-items:center;padding:8px 12px;border-radius:9px;background:#7b6fff;color:#fff;font-size:12px;font-weight:700;text-decoration:none;">Sponsored offer</a><a href="{smart2}" target="_blank" rel="nofollow sponsored noopener noreferrer" referrerpolicy="no-referrer-when-downgrade" style="display:inline-flex;align-items:center;padding:8px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.14);color:inherit;font-size:12px;font-weight:700;text-decoration:none;">View offer</a></div>
+          </aside></div>'''
 
           files = [Path(p) for p in subprocess.check_output(['git', 'ls-files', '*.html'], text=True).splitlines()]
           changed = 0
-
           for path in files:
               text = path.read_text(encoding='utf-8')
               original = text
-
               if 'quge5.com/88/tag.min.js' not in text:
-                  text = re.sub(r'</head>', f'    {monetag}\\n</head>', text, count=1, flags=re.I)
-
+                  text = re.sub(r'</head>', '    ' + monetag + '\\n</head>', text, count=1, flags=re.I)
               if 'data-pixaroid-monetization' not in text:
-                  text = re.sub(r'</head>', f'    {module}\\n</head>', text, count=1, flags=re.I)
-
+                  text = re.sub(r'</head>', '    ' + module + '\\n</head>', text, count=1, flags=re.I)
               if 'data-pixaroid-static-sponsored' not in text:
-                  sponsored = '''
-<div data-pixaroid-static-sponsored="true" style="max-width:1200px;margin:1.25rem auto;padding:0 1.25rem;">
-  <aside aria-label="Sponsored content" style="border:1px solid rgba(255,255,255,.10);border-radius:14px;background:rgba(255,255,255,.025);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:system-ui,-apple-system,sans-serif;">
-    <div style="min-width:180px;flex:1;">
-      <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.55;margin-bottom:3px;">Sponsored</div>
-      <div style="font-size:13px;opacity:.78;">Support Pixaroid by exploring a sponsored offer.</div>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      <a href="https://sordidcopper.com/ah4q89k44?key=b7b2b4355e9576b54f29b8445e7d6775" target="_blank" rel="nofollow sponsored noopener noreferrer" referrerpolicy="no-referrer-when-downgrade" style="display:inline-flex;align-items:center;padding:8px 12px;border-radius:9px;background:#7b6fff;color:#fff;font-size:12px;font-weight:700;text-decoration:none;">Sponsored offer</a>
-      <a href="https://sordidcopper.com/a7buqkb8ii?key=717a52ca31ccb8da56a9ae0bee29d372" target="_blank" rel="nofollow sponsored noopener noreferrer" referrerpolicy="no-referrer-when-downgrade" style="display:inline-flex;align-items:center;padding:8px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.14);color:inherit;font-size:12px;font-weight:700;text-decoration:none;">View offer</a>
-    </div>
-  </aside>
-</div>
-'''
                   if re.search(r'</footer>', text, flags=re.I):
-                      text = re.sub(r'</footer>', sponsored + '</footer>', text, count=1, flags=re.I)
+                      text = re.sub(r'</footer>', sponsored + '\\n</footer>', text, count=1, flags=re.I)
                   elif re.search(r'</body>', text, flags=re.I):
-                      text = re.sub(r'</body>', sponsored + '</body>', text, count=1, flags=re.I)
-
+                      text = re.sub(r'</body>', sponsored + '\\n</body>', text, count=1, flags=re.I)
               if text != original:
                   path.write_text(text, encoding='utf-8')
                   changed += 1
+          print('Updated', changed, 'HTML files')
+          PY
 
-          print(f'Updated {changed} HTML files')
-
-      - name: Commit migrated pages and remove one-time workflow
-        shell: bash
+      - name: Commit migrated pages and remove migration workflow
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           rm -f .github/workflows/one-time-monetization-migration.yml
           git add -A
           if git diff --cached --quiet; then
-            echo "No migration changes required."
+            echo "No migration changes required"
             exit 0
           fi
           git commit -m "fix: activate Monetag and Adsterra site-wide"
