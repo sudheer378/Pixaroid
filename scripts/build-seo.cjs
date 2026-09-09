@@ -23,10 +23,7 @@ const steps = [
   'remove-stale-bulk-runner.cjs',
   'repair-tool-config.cjs',
   'validate-tool-config-repair.cjs',
-  'validate-tool-capabilities.cjs',
-  'generate-execution-migration-report.cjs',
-  'audit-execution-paths.cjs',
-  'audit-tool-functionality.cjs'
+  'validate-tool-capabilities.cjs'
 ];
 
 for (const script of steps) {
