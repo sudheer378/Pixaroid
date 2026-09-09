@@ -1,6 +1,6 @@
 /**
  * Pixaroid Monetag integration.
- * Keeps monetisation isolated from core tool logic and page content.
+ * Isolated from page content so ad loading cannot rewrite or replace core UI.
  */
 'use strict';
 
@@ -12,7 +12,7 @@ export function loadMonetag() {
   if (document.querySelector('script[data-pixaroid-monetag]')) return;
 
   const script = document.createElement('script');
-  script.src = `${MONETAG_SRC}`;
+  script.src = MONETAG_SRC;
   script.async = true;
   script.setAttribute('data-zone', MONETAG_ZONE);
   script.setAttribute('data-cfasync', 'false');
