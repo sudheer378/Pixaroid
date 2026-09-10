@@ -1,6 +1,6 @@
 /**
  * Pixaroid Monetag integration.
- * Isolated from page content so ad loading cannot rewrite or replace core UI.
+ * Idempotent loader: a static sitewide Monetag tag is treated as authoritative.
  */
 'use strict';
 
@@ -9,7 +9,10 @@ const MONETAG_ZONE = '277292';
 
 export function loadMonetag() {
   if (typeof document === 'undefined') return;
-  if (document.querySelector('script[data-pixaroid-monetag]')) return;
+  const existing = document.querySelector(
+    `script[data-pixaroid-monetag], script[src="${MONETAG_SRC}"], script[src^="${MONETAG_SRC}?"], script[data-zone="${MONETAG_ZONE}"]`
+  );
+  if (existing) return;
 
   const script = document.createElement('script');
   script.src = MONETAG_SRC;
