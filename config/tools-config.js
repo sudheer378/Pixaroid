@@ -1,9 +1,12 @@
 /**
- * Pixaroid — Master Tools Configuration
+ * Pixaroid — Runtime Tool Compatibility Configuration
  *
- * Canonical configuration for the static website. Kept as a single source
- * for tooling that still imports this module; deployment itself does not run
- * a page/data generator or mutate committed site files.
+ * This registry exists for legacy/runtime JS modules that still import
+ * `/config/tools-config.js`. The committed static HTML pages remain
+ * canonical, and deployment must not generate or mutate page data.
+ *
+ * Keep entries aligned with the active worker/interface contract used by
+ * `js/pages/tool-runner.js` and `js/modules/internal-links.js`.
  */
 
 const TOOLS_CONFIG = [
@@ -12,6 +15,13 @@ const TOOLS_CONFIG = [
     category: 'compression',
     title: 'Compress Image',
     interfaceType: 'compress',
+    workerFile: '/workers/compress.worker.js',
+  },
+  {
+    slug: 'compress-image-to-20kb',
+    category: 'compression',
+    title: 'Compress Image to 20KB',
+    interfaceType: 'compress-target',
     workerFile: '/workers/compress.worker.js',
   },
   {
@@ -29,9 +39,30 @@ const TOOLS_CONFIG = [
     workerFile: '/workers/convert.worker.js',
   },
   {
+    slug: 'webp-to-jpg',
+    category: 'conversion',
+    title: 'WebP to JPG',
+    interfaceType: 'convert',
+    workerFile: '/workers/convert.worker.js',
+  },
+  {
+    slug: 'heic-to-jpg',
+    category: 'conversion',
+    title: 'HEIC to JPG',
+    interfaceType: 'convert',
+    workerFile: '/workers/convert.worker.js',
+  },
+  {
     slug: 'resize-image',
     category: 'resize',
     title: 'Resize Image',
+    interfaceType: 'resize',
+    workerFile: '/workers/resize.worker.js',
+  },
+  {
+    slug: 'resize-passport-photo',
+    category: 'resize',
+    title: 'Passport Photo Resizer',
     interfaceType: 'resize',
     workerFile: '/workers/resize.worker.js',
   },
@@ -57,46 +88,25 @@ const TOOLS_CONFIG = [
     workerFile: '/workers/ai.worker.js',
   },
   {
-    slug: 'compress-pdf',
-    category: 'pdf-tools',
-    title: 'Compress PDF',
-    interfaceType: 'pdf',
-    workerFile: '/workers/pdf.worker.js',
-  },
-  {
-    slug: 'jpg-to-pdf',
-    category: 'pdf-tools',
-    title: 'JPG to PDF',
-    interfaceType: 'pdf',
-    workerFile: '/workers/pdf.worker.js',
-  },
-  {
-    slug: 'pdf-to-jpg',
-    category: 'pdf-tools',
-    title: 'PDF to JPG',
-    interfaceType: 'pdf',
-    workerFile: '/workers/pdf.worker.js',
-  },
-  {
     slug: 'crop-image',
     category: 'editor',
     title: 'Crop Image',
-    interfaceType: 'edit',
+    interfaceType: 'crop',
     workerFile: '/workers/filter.worker.js',
   },
   {
     slug: 'rotate-image',
     category: 'editor',
     title: 'Rotate Image',
-    interfaceType: 'edit',
+    interfaceType: 'rotate',
     workerFile: '/workers/filter.worker.js',
   },
   {
     slug: 'youtube-thumbnail-maker',
     category: 'social-tools',
     title: 'YouTube Thumbnail Maker',
-    interfaceType: 'social',
-    workerFile: '/workers/filter.worker.js',
+    interfaceType: 'social-canvas',
+    workerFile: '/workers/resize.worker.js',
   },
 ];
 
