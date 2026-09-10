@@ -1,0 +1,110 @@
+name: Pixaroid SEO Hardening
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  harden:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Harden committed HTML SEO metadata
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path('.')
+          files = list(root.rglob('*.html'))
+          changed = []
+
+          def canonical_path(text):
+              m = re.search(r'<link[^>]+rel=["\']canonical["\'][^>]+href=["\']([^"\']+)["\']', text, re.I)
+              return m.group(1) if m else None
+
+          for p in files:
+              if any(part in {'.git', 'node_modules'} for part in p.parts):
+                  continue
+              s = p.read_text(encoding='utf-8', errors='ignore')
+              original = s
+
+              # Remove obsolete keyword metadata; use visible content and canonical metadata instead.
+              s = re.sub(r'\s*<meta\s+name=["\']keywords["\'][^>]*>\s*', '\n', s, flags=re.I)
+
+              # Remove unsupported/fake rating claims from JSON-LD while leaving other structured data intact.
+              s = re.sub(r',?\s*"aggregateRating"\s*:\s*\{.*?\}\s*(?=,?\s*"|\})', '', s, flags=re.I | re.S)
+              s = re.sub(r',\s*([}\]])', r'\1', s)
+
+              # Normalize robots metadata for richer eligible snippets/previews.
+              robots = re.compile(r'<meta\s+name=["\']robots["\'][^>]*>', re.I)
+              robot_tag = '<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"/>'
+              if robots.search(s):
+                  s = robots.sub(robot_tag, s, count=1)
+
+              # Keep the current canonical host and prefer trailing-slash directory URLs.
+              c = canonical_path(s)
+              if c and c.startswith('https://pixaroid.vercel.app/'):
+                  normalized = c
+                  if not normalized.endswith(('/', '.html')):
+                      normalized += '/'
+                  s = re.sub(r'(<link[^>]+rel=["\']canonical["\'][^>]+href=["\'])[^"\']+(["\'][^>]*>)',
+                             lambda m: m.group(1) + normalized + m.group(2), s, count=1, flags=re.I)
+
+              # Keep social cards aligned with title/description and canonical URL.
+              title = re.search(r'<title>(.*?)</title>', s, re.I | re.S)
+              desc = re.search(r'<meta\s+name=["\']description["\']\s+content=["\']([^"\']*)["\']', s, re.I)
+              if title:
+                  t = re.sub(r'\s+', ' ', title.group(1)).strip()
+                  if t:
+                      s, _ = re.subn(r'<meta\s+name=["\']twitter:title["\'][^>]*>', f'<meta name="twitter:title" content="{t.replace(chr(34), chr(39))}"/>', s, count=1, flags=re.I)
+              if desc:
+                  d = re.sub(r'\s+', ' ', desc.group(1)).strip()
+                  s, _ = re.subn(r'<meta\s+name=["\']twitter:description["\'][^>]*>', f'<meta name="twitter:description" content="{d.replace(chr(34), chr(39))}"/>', s, count=1, flags=re.I)
+
+              # Fix homepage's stale tool-count messaging without touching unrelated pages.
+              if p.as_posix() == 'index.html':
+                  s = s.replace('95+ free image & PDF tools', '120 free image & PDF tools')
+                  s = s.replace('Pixaroid — 95+ Free Image & PDF Tools. No Upload.', 'Pixaroid — 120 Free Image & PDF Tools. No Upload.')
+                  s = s.replace('Pixaroid — 95+ Free Image & PDF Tools. No Upload Required.', 'Pixaroid — 120 Free Image & PDF Tools. No Upload Required.')
+                  s = s.replace('95+ free browser-based image and PDF tools', '120 free browser-based image and PDF tools')
+                  s = s.replace('95+ free image & PDF tools', '120 free image & PDF tools')
+
+              if s != original:
+                  p.write_text(s, encoding='utf-8')
+                  changed.append(p.as_posix())
+
+          print(f'Changed {len(changed)} HTML files')
+          for x in changed[:50]:
+              print(x)
+          PY
+
+      - name: Clean robots.txt crawl directive
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('robots.txt')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('\n# Crawl-delay (optional, polite crawling)\nCrawl-delay: 1\n', '\n')
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Commit SEO hardening
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No changes to commit.'
+            exit 0
+          fi
+          git commit -m 'seo: harden metadata, canonical signals and crawler rules'
+          git push origin main
