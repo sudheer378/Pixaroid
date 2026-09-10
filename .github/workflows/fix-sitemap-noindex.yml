@@ -1,0 +1,75 @@
+name: Fix sitemap URLs with noindex
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Remove noindex from sitemap-listed HTML pages
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const sitemap = fs.readFileSync('sitemap-tools.xml', 'utf8');
+          const urls = [...sitemap.matchAll(/<loc>\s*([^<]+)\s*<\/loc>/g)].map(m => m[1].trim());
+          const changed = [];
+          const missing = [];
+
+          for (const url of urls) {
+            const pathname = new URL(url).pathname;
+            const relative = pathname.endsWith('/') ? `${pathname.slice(1)}index.html` : pathname.slice(1);
+            const file = path.resolve(relative);
+            if (!fs.existsSync(file)) {
+              missing.push(relative);
+              continue;
+            }
+
+            let html = fs.readFileSync(file, 'utf8');
+            let next = html;
+            const metaPattern = /<meta\b[^>]*\bname\s*=\s*["']robots["'][^>]*>/gi;
+            const metas = html.match(metaPattern) || [];
+            let hasNoindex = false;
+
+            for (const tag of metas) {
+              if (/\bcontent\s*=\s*["'][^"']*\bnoindex\b/i.test(tag)) {
+                hasNoindex = true;
+                const replacement = tag.replace(/(\bcontent\s*=\s*["'][^"']*)\bnoindex\b/i, '$1index');
+                next = next.replace(tag, replacement);
+              }
+            }
+
+            if (hasNoindex && next !== html) {
+              fs.writeFileSync(file, next);
+              changed.push(relative);
+            }
+          }
+
+          console.log(`Sitemap URLs scanned: ${urls.length}`);
+          console.log(`noindex pages fixed: ${changed.length}`);
+          console.log(`Missing local files: ${missing.length}`);
+          for (const file of changed) console.log(`FIXED ${file}`);
+          NODE
+
+      - name: Commit fixes and remove one-time workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git rm -f .github/workflows/fix-sitemap-noindex.yml
+          if git diff --cached --quiet; then
+            echo "No sitemap-listed noindex pages needed changes."
+            exit 0
+          fi
+          git commit -m "fix: remove noindex from sitemap-listed tool pages"
+          git push
