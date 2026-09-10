@@ -1,7 +1,12 @@
 /**
  * Pixaroid — Performance Module
  * Lazy loading, resource hints, image optimisation, prefetching and
- * optional code-splitting helpers for legacy/current static pages.
+ * compatibility code-splitting helpers for legacy/current static pages.
+ *
+ * The old js/chunks/* files were duplicate re-export wrappers around
+ * /js/engine.js. Chunk loading is now virtual: callers keep the same
+ * loadToolChunk(interfaceType) API, but it resolves to the canonical engine
+ * module instead of downloading duplicate wrapper files.
  */
 'use strict';
 
@@ -47,47 +52,46 @@ export function applyLazyImages(root = document) {
   });
 }
 
-/* Optional code-splitting support retained for legacy consumers. */
-const TOOL_CHUNKS = {
-  compress: () => import('/js/chunks/tool-compress.js'),
-  'compress-target': () => import('/js/chunks/tool-compress.js'),
-  convert: () => import('/js/chunks/tool-convert.js'),
-  'convert-multi': () => import('/js/chunks/tool-convert.js'),
-  'convert-pdf': () => import('/js/chunks/tool-convert.js'),
-  resize: () => import('/js/chunks/tool-resize.js'),
-  'resize-social': () => import('/js/chunks/tool-resize.js'),
-  crop: () => import('/js/chunks/tool-editor.js'),
-  rotate: () => import('/js/chunks/tool-editor.js'),
-  flip: () => import('/js/chunks/tool-editor.js'),
-  watermark: () => import('/js/chunks/tool-editor.js'),
-  'text-overlay': () => import('/js/chunks/tool-editor.js'),
-  blur: () => import('/js/chunks/tool-editor.js'),
-  sharpen: () => import('/js/chunks/tool-editor.js'),
-  adjust: () => import('/js/chunks/tool-editor.js'),
-  'ai-bg-remove': () => import('/js/chunks/tool-ai.js'),
-  'ai-upscale': () => import('/js/chunks/tool-ai.js'),
-  'ai-enhance': () => import('/js/chunks/tool-ai.js'),
-  'ai-sharpen': () => import('/js/chunks/tool-ai.js'),
-  'ai-colorize': () => import('/js/chunks/tool-ai.js'),
-  'ai-ocr': () => import('/js/chunks/tool-ai.js'),
-  'social-canvas': () => import('/js/chunks/tool-social.js'),
-  bulk: () => import('/js/chunks/tool-bulk.js'),
-  palette: () => import('/js/chunks/tool-utility.js'),
-  info: () => import('/js/chunks/tool-utility.js'),
-  metadata: () => import('/js/chunks/tool-utility.js'),
-  calculator: () => import('/js/chunks/tool-utility.js'),
-};
+/*
+ * Compatibility code-splitting API.
+ *
+ * Historically this map imported seven tiny wrapper modules from /js/chunks/.
+ * Each wrapper re-exported the same functions from /js/engine.js, providing no
+ * actual code-splitting value. Keep interfaceType routing for legacy callers,
+ * but resolve everything to one canonical module instead.
+ */
+const TOOL_CHUNK_TYPES = new Set([
+  'compress', 'compress-target',
+  'convert', 'convert-multi', 'convert-pdf',
+  'resize', 'resize-social',
+  'crop', 'rotate', 'flip', 'watermark', 'text-overlay', 'blur', 'sharpen', 'adjust',
+  'ai-bg-remove', 'ai-upscale', 'ai-enhance', 'ai-sharpen', 'ai-colorize', 'ai-ocr',
+  'social-canvas',
+  'bulk',
+  'palette', 'info', 'metadata', 'calculator'
+]);
 
+let _enginePromise;
+function _loadCanonicalEngine() {
+  _enginePromise ||= import('/js/engine.js');
+  return _enginePromise;
+}
+
+/**
+ * Backwards-compatible replacement for the former chunk loader.
+ * Returns the canonical engine module for all known legacy interface types.
+ */
 export async function loadToolChunk(interfaceType) {
-  const loader = TOOL_CHUNKS[interfaceType];
-  if (!loader) {
-    console.warn(`[perf] No chunk mapped for interfaceType "${interfaceType}"`);
+  if (!TOOL_CHUNK_TYPES.has(interfaceType)) {
+    console.warn(`[perf] No canonical engine mapping for interfaceType "${interfaceType}"`);
     return null;
   }
+
   try {
-    return await loader();
+    return await _loadCanonicalEngine();
   } catch (err) {
-    console.error(`[perf] Failed to load chunk for "${interfaceType}":`, err);
+    _enginePromise = null;
+    console.error(`[perf] Failed to load canonical engine for "${interfaceType}":`, err);
     return null;
   }
 }
