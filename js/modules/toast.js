@@ -1,9 +1,11 @@
 /**
- * Pixaroid — Toast Notifications  v2.0
+ * Pixaroid — Toast Notifications v2.1
+ * Safe text rendering, dismiss controls and consistent lifecycle handling.
  */
 'use strict';
 
 let _container = null;
+
 function getContainer() {
   if (!_container) {
     _container = document.createElement('div');
@@ -25,19 +27,13 @@ const ICONS = {
 };
 const BG = { success:'#10B981', error:'#EF4444', warning:'#F59E0B', info:'#3B82F6', default:'#111827' };
 
-/**
- * Show a toast notification.
- * @param {string} message
- * @param {'success'|'error'|'warning'|'info'|'default'} type
- * @param {number} duration  milliseconds (0 = persistent)
- */
 export function showToast(message, type='default', duration=3500) {
   const c = getContainer();
   const t = document.createElement('div');
   Object.assign(t.style, {
     display:'flex', alignItems:'center', gap:'.625rem',
     padding:'.75rem 1.125rem', borderRadius:'.875rem',
-    background: BG[type]||BG.default, color:'#fff',
+    background: BG[type] || BG.default, color:'#fff',
     fontFamily:"'Inter',sans-serif", fontSize:'.875rem', fontWeight:'500',
     boxShadow:'0 8px 32px rgba(0,0,0,.25)',
     pointerEvents:'all', cursor:'pointer',
@@ -45,21 +41,29 @@ export function showToast(message, type='default', duration=3500) {
     transition:'opacity .25s, transform .25s',
     maxWidth:'340px', lineHeight:'1.5',
   });
-  t.innerHTML = `<span style="flex-shrink:0">${ICONS[type]||''}</span><span>${message}</span>`;
-  t.addEventListener('click', () => dismiss(t));
+
+  const icon = document.createElement('span');
+  icon.style.flexShrink = '0';
+  icon.innerHTML = ICONS[type] || '';
+  const text = document.createElement('span');
+  text.textContent = String(message ?? '');
+  t.append(icon, text);
+
+  const dismissHandle = () => dismiss(t);
+  t.addEventListener('click', dismissHandle);
   c.appendChild(t);
   requestAnimationFrame(() => { t.style.opacity='1'; t.style.transform='none'; });
 
-  if (duration > 0) {
-    const timer = setTimeout(() => dismiss(t), duration);
-    t._timer = timer;
-  }
-  return { dismiss: () => dismiss(t) };
+  if (duration > 0) t._timer = setTimeout(dismissHandle, duration);
+  return { dismiss: dismissHandle };
 }
 
 function dismiss(t) {
+  if (!t || t.dataset.dismissed === 'true') return;
+  t.dataset.dismissed = 'true';
   clearTimeout(t._timer);
-  t.style.opacity='0'; t.style.transform='translateY(8px)';
+  t.style.opacity='0';
+  t.style.transform='translateY(8px)';
   setTimeout(() => t.remove(), 300);
 }
 
