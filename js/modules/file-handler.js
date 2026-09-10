@@ -1,162 +1,158 @@
 /**
- * Pixaroid — File Handler  v2.0
- * Drag-drop, click-to-browse, clipboard paste, URL fetch,
- * multi-file support, type validation, preview thumbnails.
+ * Pixaroid — File Handler v2.1
+ * Unified browser file intake: click, drag/drop, paste, and CORS-permitted URL fetch.
+ * Processing/validation remains delegated to the canonical /js/engine.js module.
  */
 'use strict';
 
-import { validateFile, formatBytes, MAX_FILE_SIZE_BYTES } from '/js/engine.js';
+import { validateFile, MAX_FILE_SIZE_BYTES } from '/js/engine.js';
 
-const ACCEPTED_TYPES = [
+const DEFAULT_TYPES = Object.freeze([
   'image/jpeg','image/png','image/webp','image/heic','image/heif',
   'image/gif','image/bmp','image/tiff','image/avif',
-];
+]);
 
 export class FileHandler {
-  /**
-   * @param {object} opts
-   * @param {HTMLElement} opts.dropzone
-   * @param {HTMLInputElement} opts.input
-   * @param {function} opts.onFile   — called with File on single pick
-   * @param {function} opts.onFiles  — called with File[] on multi pick
-   * @param {function} opts.onError  — called with error string
-   * @param {boolean}  opts.multiple — allow multiple files
-   * @param {string[]} opts.accept   — MIME types to accept
-   */
-  constructor({ dropzone, input, onFile, onFiles, onError, multiple=false, accept=ACCEPTED_TYPES }) {
-    this.dropzone  = dropzone;
-    this.input     = input;
-    this.onFile    = onFile   || (() => {});
-    this.onFiles   = onFiles  || (() => {});
-    this.onError   = onError  || (msg => console.warn('[FileHandler]', msg));
-    this.multiple  = multiple;
-    this.accept    = accept;
+  constructor({ dropzone, input, onFile, onFiles, onError, multiple=false, accept=DEFAULT_TYPES } = {}) {
+    this.dropzone = dropzone;
+    this.input = input;
+    this.onFile = typeof onFile === 'function' ? onFile : () => {};
+    this.onFiles = typeof onFiles === 'function' ? onFiles : () => {};
+    this.onError = typeof onError === 'function' ? onError : (msg => console.warn('[FileHandler]', msg));
+    this.multiple = Boolean(multiple);
+    this.accept = Array.isArray(accept) && accept.length ? accept : [...DEFAULT_TYPES];
+    this._bound = [];
     this._init();
+  }
+
+  _listen(target, type, handler, options) {
+    if (!target) return;
+    target.addEventListener(type, handler, options);
+    this._bound.push([target, type, handler, options]);
   }
 
   _init() {
     const dz = this.dropzone;
     if (!dz) return;
 
-    // Drag events
-    dz.addEventListener('dragenter', e => { e.preventDefault(); dz.classList.add('drag-over'); });
-    dz.addEventListener('dragover',  e => { e.preventDefault(); e.dataTransfer.dropEffect='copy'; dz.classList.add('drag-over'); });
-    dz.addEventListener('dragleave', e => { if (!dz.contains(e.relatedTarget)) dz.classList.remove('drag-over'); });
-    dz.addEventListener('drop',      e => { e.preventDefault(); dz.classList.remove('drag-over'); this._handleDataTransfer(e.dataTransfer); });
+    const prevent = e => e.preventDefault();
+    const enter = e => { e.preventDefault(); dz.classList.add('drag-over'); };
+    const leave = e => { if (!dz.contains(e.relatedTarget)) dz.classList.remove('drag-over'); };
+    const drop = e => { e.preventDefault(); dz.classList.remove('drag-over'); this._handleDataTransfer(e.dataTransfer); };
+    const click = () => this.input?.click();
+    const keydown = e => { if ((e.key === 'Enter' || e.key === ' ') && this.input) { e.preventDefault(); this.input.click(); } };
 
-    // Click to browse
-    dz.addEventListener('click',  () => this.input?.click());
-    dz.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') this.input?.click(); });
-    dz.setAttribute('tabindex','0'); dz.setAttribute('role','button');
+    this._listen(dz, 'dragenter', enter);
+    this._listen(dz, 'dragover', prevent);
+    this._listen(dz, 'dragleave', leave);
+    this._listen(dz, 'drop', drop);
+    this._listen(dz, 'click', click);
+    this._listen(dz, 'keydown', keydown);
+    dz.setAttribute('tabindex', '0');
+    dz.setAttribute('role', 'button');
 
-    // Input change
     if (this.input) {
-      if (this.multiple) this.input.multiple = true;
+      this.input.multiple = this.multiple;
       this.input.accept = this.accept.join(',');
-      this.input.addEventListener('change', e => {
-        const files = Array.from(e.target.files||[]);
+      this._listen(this.input, 'change', e => {
+        const files = Array.from(e.target.files || []);
         if (files.length) this._processFiles(files);
         e.target.value = '';
       });
     }
 
-    // Clipboard paste
-    document.addEventListener('paste', e => {
-      const items = Array.from(e.clipboardData?.items||[]);
-      const imageItems = items.filter(it => it.type.startsWith('image/'));
-      if (imageItems.length) {
-        e.preventDefault();
-        const files = imageItems.map(it => it.getAsFile()).filter(Boolean);
-        if (files.length) this._processFiles(files);
-      }
-    });
+    const paste = e => {
+      const imageItems = Array.from(e.clipboardData?.items || []).filter(item => item.type.startsWith('image/'));
+      if (!imageItems.length) return;
+      e.preventDefault();
+      this._processFiles(imageItems.map(item => item.getAsFile()).filter(Boolean));
+    };
+    this._listen(document, 'paste', paste);
   }
 
-  _handleDataTransfer(dt) {
-    // Handle URL drops (e.g. dragging image from browser)
-    const url = dt.getData('text/uri-list') || dt.getData('text/plain');
-    if (url && !dt.files?.length && url.match(/^https?:\/\//)) {
-      this.fetchFromURL(url); return;
+  _handleDataTransfer(dataTransfer) {
+    if (!dataTransfer) return;
+    const url = dataTransfer.getData?.('text/uri-list') || dataTransfer.getData?.('text/plain');
+    if (url && !dataTransfer.files?.length && /^https?:\/\//i.test(url.trim())) {
+      this.fetchFromURL(url.trim());
+      return;
     }
-    const files = Array.from(dt.files||[]);
-    if (files.length) this._processFiles(files);
+    this._processFiles(Array.from(dataTransfer.files || []));
   }
 
   _processFiles(files) {
-    const valid = [], errors = [];
-    for (const f of files) {
-      const v = validateFile(f, { maxBytes: MAX_FILE_SIZE_BYTES });
-      if (v.ok) valid.push(f);
-      else errors.push(`${f.name}: ${v.error}`);
+    const valid = [];
+    const errors = [];
+    for (const file of files) {
+      const result = validateFile(file, { maxBytes: MAX_FILE_SIZE_BYTES });
+      if (result.ok) valid.push(file);
+      else errors.push(`${file?.name || 'Unnamed file'}: ${result.error}`);
     }
     if (errors.length) this.onError(errors.join('\n'));
     if (!valid.length) return;
-    if (this.multiple) {
-      this.onFiles(valid);
-    } else {
+
+    if (this.multiple) this.onFiles(valid);
+    else {
       this.onFile(valid[0]);
       if (valid.length > 1) this.onError('Only the first file was used. Use a bulk tool for multiple files.');
     }
   }
 
-  /** Fetch an image from a remote URL (CORS-permitting) */
   async fetchFromURL(url) {
     try {
-      const resp = await fetch(url);
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const blob = await resp.blob();
+      const response = await fetch(url, { mode: 'cors', credentials: 'omit' });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const blob = await response.blob();
       if (!blob.type.startsWith('image/')) throw new Error('URL does not point to an image.');
-      const filename = url.split('/').pop().split('?')[0] || 'image.jpg';
-      const file = new File([blob], filename, { type: blob.type });
-      this._processFiles([file]);
-    } catch(e) {
-      this.onError(`Could not fetch image from URL: ${e.message}`);
+      const cleanPath = new URL(url).pathname;
+      const filename = cleanPath.split('/').pop() || 'image';
+      this._processFiles([new File([blob], filename, { type: blob.type })]);
+    } catch (error) {
+      this.onError(`Could not fetch image from URL: ${error?.message || 'request failed'}`);
     }
   }
 
-  /** Read a file as base64 data URL */
   static readAsDataURL(file) {
     return new Promise((resolve, reject) => {
-      const r = new FileReader();
-      r.onload  = e => resolve(e.target.result);
-      r.onerror = () => reject(new Error('Failed to read file'));
-      r.readAsDataURL(file);
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsDataURL(file);
     });
   }
 
-  /** Read a file as ArrayBuffer */
   static readAsBuffer(file) {
     return new Promise((resolve, reject) => {
-      const r = new FileReader();
-      r.onload  = e => resolve(e.target.result);
-      r.onerror = () => reject(new Error('Failed to read file'));
-      r.readAsArrayBuffer(file);
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsArrayBuffer(file);
     });
   }
 
-  /** Generate a thumbnail data URL (max 120px) */
   static async thumbnail(file, maxSize=120) {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      const url = URL.createObjectURL(file);
-      img.onload = () => {
-        const { naturalWidth:w, naturalHeight:h } = img;
-        const scale = Math.min(1, maxSize/Math.max(w,h));
-        const c = document.createElement('canvas');
-        c.width  = Math.round(w*scale);
-        c.height = Math.round(h*scale);
-        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-        URL.revokeObjectURL(url);
-        resolve(c.toDataURL('image/jpeg', 0.7));
-      };
-      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Thumbnail failed')); };
-      img.src = url;
-    });
+    if (!(file instanceof Blob)) throw new Error('Invalid image file');
+    const url = URL.createObjectURL(file);
+    try {
+      const bitmap = await createImageBitmap(file);
+      const scale = Math.min(1, maxSize / Math.max(bitmap.width, bitmap.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+      canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Canvas unavailable');
+      ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      bitmap.close?.();
+      return canvas.toDataURL('image/jpeg', 0.7);
+    } finally {
+      URL.revokeObjectURL(url);
+    }
   }
 
-  /** Destroy all event listeners */
   destroy() {
-    const clone = this.dropzone?.cloneNode(true);
-    if (clone && this.dropzone?.parentNode) this.dropzone.parentNode.replaceChild(clone, this.dropzone);
+    for (const [target, type, handler, options] of this._bound) target.removeEventListener(type, handler, options);
+    this._bound = [];
   }
 }
+
+export { DEFAULT_TYPES as ACCEPTED_TYPES };
