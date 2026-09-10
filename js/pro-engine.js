@@ -1,12 +1,14 @@
 /**
- * Pixaroid Pro Engine v2.0
- * Industry-grade image processing logic (Sejda/iLovePDF equivalent)
- * Features: Batch processing, Smart compression, Web Workers, Memory optimization
+ * Pixaroid Pro Engine — legacy compatibility adapter
+ *
+ * Kept only for the remaining standalone Pro tool page. New static tools use
+ * /js/pages/tool-runner.js and /workers/*.worker.js.
  */
+'use strict';
 
 class PixaroidProEngine {
     constructor(options = {}) {
-        this.maxFileSize = options.maxFileSize || 100 * 1024 * 1024; // 100MB
+        this.maxFileSize = options.maxFileSize || 100 * 1024 * 1024;
         this.maxBatchSize = options.maxBatchSize || 50;
         this.workers = [];
         this.queue = [];
@@ -14,7 +16,6 @@ class PixaroidProEngine {
         this.onProgress = options.onProgress || (() => {});
         this.onComplete = options.onComplete || (() => {});
         this.onError = options.onError || (() => {});
-        
         this.initWorkers();
     }
 
@@ -23,150 +24,147 @@ class PixaroidProEngine {
         for (let i = 0; i < workerCount; i++) {
             try {
                 const worker = new Worker('/js/advanced-worker.js');
-                worker.onmessage = (e) => this.handleWorkerMessage(e);
-                worker.onerror = (e) => this.handleWorkerError(e);
-                this.workers.push({ instance: worker, busy: false, id: i });
+                const slot = { instance: worker, busy: false, id: i, taskId: null };
+                worker.onmessage = e => this.handleWorkerMessage(slot, e);
+                worker.onerror = e => this.handleWorkerError(slot, e);
+                this.workers.push(slot);
             } catch (err) {
-                console.warn('Worker initialization failed, falling back to main thread', err);
+                console.warn('[Pixaroid] Pro worker unavailable:', err);
             }
         }
     }
 
-    async processFiles(files, settings) {
-        if (files.length > this.maxBatchSize) {
-            throw new Error(`Maximum ${this.maxBatchSize} files allowed per batch.`);
+    async processFiles(files, settings = {}) {
+        const list = Array.from(files || []);
+        if (list.length > this.maxBatchSize) throw new Error(`Maximum ${this.maxBatchSize} files allowed per batch.`);
+        for (const file of list) {
+            if (file.size > this.maxFileSize) throw new Error(`${file.name} exceeds the maximum file size.`);
         }
 
-        const tasks = Array.from(files).map(file => ({
-            file,
-            settings,
-            status: 'pending',
-            progress: 0,
-            result: null,
-            error: null
-        }));
+        this.queue = list.map((file, index) => ({ file, settings, status:'pending', progress:0, result:null, error:null, taskId:index }));
+        if (!this.queue.length) return [];
 
-        return this.executeQueue(tasks);
-    }
+        if (!this.workers.length) {
+            throw new Error('No compatible Pro worker is available.');
+        }
 
-    async executeQueue(tasks) {
         this.processing = true;
-        const activeTasks = [];
-
-        while (tasks.some(t => t.status === 'pending') || activeTasks.length > 0) {
-            // Assign pending tasks to free workers
-            while (activeTasks.length < this.workers.length) {
-                const pendingIndex = tasks.findIndex(t => t.status === 'pending');
-                if (pendingIndex === -1) break;
-
-                const task = tasks[pendingIndex];
-                const worker = this.workers.find(w => !w.busy);
-                
-                if (worker) {
-                    task.status = 'processing';
-                    worker.busy = true;
-                    activeTasks.push({ task, worker });
-                    
-                    worker.instance.postMessage({
-                        type: 'process',
-                        file: task.file,
-                        settings: task.settings,
-                        taskId: pendingIndex
-                    });
-                } else {
-                    break; // No free workers
-                }
-            }
-
-            // Wait for a message or timeout
-            await new Promise(resolve => setTimeout(resolve, 100));
-        }
-
+        this._dispatch();
+        await new Promise(resolve => { this._resolveQueue = resolve; });
         this.processing = false;
-        return tasks;
+        return this.queue;
     }
 
-    handleWorkerMessage(e) {
-        const { type, taskId, progress, result, error, blobUrl } = e.data;
-
-        if (type === 'progress') {
-            this.queue[taskId].progress = progress;
-            this.onProgress(this.getOverallProgress());
-        } else if (type === 'complete') {
-            const task = this.queue[taskId];
-            task.status = 'completed';
-            task.result = blobUrl;
-            this.releaseWorker(taskId);
-            this.onProgress(this.getOverallProgress());
-            
-            if (this.isAllComplete()) {
-                this.onComplete(this.queue);
+    _dispatch() {
+        for (const worker of this.workers) {
+            if (worker.busy) continue;
+            const task = this.queue.find(t => t.status === 'pending');
+            if (!task) break;
+            task.status = 'processing';
+            worker.busy = true;
+            worker.taskId = task.taskId;
+            try {
+                worker.instance.postMessage({ type:'process', file:task.file, settings:task.settings, taskId:task.taskId });
+            } catch (error) {
+                task.status = 'failed';
+                task.error = error.message;
+                worker.busy = false;
+                worker.taskId = null;
+                this.onError(error.message, task.file);
             }
-        } else if (type === 'error') {
-            const task = this.queue[taskId];
-            task.status = 'failed';
-            task.error = error;
-            this.releaseWorker(taskId);
-            this.onError(error, task.file);
         }
+        this._finishIfDone();
     }
 
-    releaseWorker(taskId) {
-        const activeIndex = this.workers.findIndex((w, idx) => {
-            // Logic to map active task back to worker would go here
-            // Simplified for brevity: just mark first busy worker as free
-            return w.busy; 
-        });
-        if (activeIndex !== -1) this.workers[activeIndex].busy = false;
+    handleWorkerMessage(worker, e) {
+        const data = e.data || {};
+        const task = this.queue.find(t => t.taskId === data.taskId);
+        if (!task) return;
+
+        if (data.type === 'progress') {
+            task.progress = Math.max(0, Math.min(100, Number(data.progress) || 0));
+            this.onProgress(this.getOverallProgress());
+            return;
+        }
+
+        worker.busy = false;
+        worker.taskId = null;
+
+        if (data.type === 'complete') {
+            task.status = 'completed';
+            task.result = data.blobUrl || data.blob || null;
+            task.resultSize = data.size || null;
+            task.progress = 100;
+        } else if (data.type === 'error') {
+            task.status = 'failed';
+            task.error = data.error || 'Processing failed.';
+            this.onError(task.error, task.file);
+        }
+
+        this.onProgress(this.getOverallProgress());
+        this._dispatch();
+    }
+
+    handleWorkerError(worker, e) {
+        const task = this.queue.find(t => t.taskId === worker.taskId);
+        worker.busy = false;
+        worker.taskId = null;
+        if (task) {
+            task.status = 'failed';
+            task.error = e?.message || 'Processing worker failed.';
+            this.onError(task.error, task.file);
+        }
+        this._dispatch();
     }
 
     getOverallProgress() {
-        const total = this.queue.length;
-        const completed = this.queue.filter(t => t.status === 'completed').length;
-        const failed = this.queue.filter(t => t.status === 'failed').length;
-        const avgProgress = this.queue.reduce((acc, t) => acc + t.progress, 0) / total;
-        
-        return Math.round(((completed + (avgProgress / 100)) / total) * 100);
+        if (!this.queue.length) return 0;
+        const total = this.queue.reduce((sum, t) => sum + (t.status === 'completed' || t.status === 'failed' ? 100 : t.progress), 0);
+        return Math.round(total / this.queue.length);
     }
 
     isAllComplete() {
-        return this.queue.every(t => t.status === 'completed' || t.status === 'failed');
+        return this.queue.length > 0 && this.queue.every(t => t.status === 'completed' || t.status === 'failed');
     }
 
-    handleWorkerError(e) {
-        console.error('Worker error:', e);
-        this.onError('Processing failed due to system error.');
+    _finishIfDone() {
+        if (!this.isAllComplete()) return;
+        this.onComplete(this.queue);
+        this._resolveQueue?.();
+        this._resolveQueue = null;
+    }
+
+    destroy() {
+        this.workers.forEach(w => w.instance.terminate());
+        this.workers = [];
+        this.queue = [];
+        this.processing = false;
+        this._resolveQueue?.();
+        this._resolveQueue = null;
     }
 }
 
-// Smart Compression Algorithm (Sejda-style)
 async function smartCompress(imageBlob, targetSizeKB) {
+    const target = Number(targetSizeKB) * 1024;
+    if (!Number.isFinite(target) || target <= 0) throw new Error('Target size must be positive.');
     const bitmap = await createImageBitmap(imageBlob);
     const canvas = document.createElement('canvas');
     canvas.width = bitmap.width;
     canvas.height = bitmap.height;
     const ctx = canvas.getContext('2d');
+    if (!ctx) { bitmap.close(); throw new Error('Canvas 2D context unavailable.'); }
     ctx.drawImage(bitmap, 0, 0);
-    
-    let quality = 0.9;
-    let compressedBlob = null;
-    
-    // Binary search for optimal quality
-    let minQ = 0.1, maxQ = 0.95;
-    while (minQ <= maxQ) {
-        quality = (minQ + maxQ) / 2;
-        compressedBlob = await new Promise(resolve => {
-            canvas.toBlob(resolve, 'image/jpeg', quality);
-        });
-        
-        if (compressedBlob.size / 1024 > targetSizeKB) {
-            maxQ = quality - 0.05;
-        } else {
-            minQ = quality + 0.05;
-        }
+    bitmap.close();
+
+    let low = 0.1, high = 0.95, best = null;
+    for (let i = 0; i < 8; i++) {
+        const quality = (low + high) / 2;
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
+        if (!blob) break;
+        if (blob.size <= target) { best = blob; low = quality; } else high = quality;
     }
-    
-    return compressedBlob;
+    if (best) return best;
+    return new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.1));
 }
 
 window.PixaroidProEngine = PixaroidProEngine;
