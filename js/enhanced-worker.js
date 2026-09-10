@@ -1,229 +1,102 @@
 /**
- * Pixaroid Enhanced Web Worker
- * Background processing for image operations
+ * Pixaroid Enhanced Worker — legacy compatibility
+ * Uses worker-safe image APIs and preserves the legacy message protocol.
  */
 'use strict';
 
-self.onmessage = function(e) {
-  const { type, data } = e.data;
-  
-  switch (type) {
-    case 'compress':
-      compressImage(data);
-      break;
-    case 'convert':
-      convertImage(data);
-      break;
-    case 'resize':
-      resizeImage(data);
-      break;
-    case 'batch':
-      processBatch(data);
-      break;
-    default:
-      self.postMessage({ type: 'error', error: 'Unknown operation' });
-  }
+self.onmessage = async function (e) {
+    const data = e.data || {};
+    const jobId = data.jobId;
+    try {
+        const input = data.file || (data.buffer ? new Blob([data.buffer], { type:data.mime || 'application/octet-stream' }) : null);
+        if (!(input instanceof Blob) || input.size === 0) throw new Error('Invalid or empty input file.');
+
+        if (data.type === 'batch') {
+            await processBatch(data, jobId);
+            return;
+        }
+
+        const bitmap = await createImageBitmap(input);
+        try {
+            const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+            const ctx = canvas.getContext('2d');
+            if (!ctx) throw new Error('OffscreenCanvas 2D context unavailable.');
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(bitmap, 0, 0);
+            self.postMessage({ type:'progress', jobId, current:0, total:1, percent:25, message:'Processing...' });
+
+            const operation = data.type || data.op || 'compress';
+            const format = normalizeFormat(data.format || data.targetFormat || 'jpeg');
+            const quality = clampQuality(data.quality, 0.9);
+            let output = canvas;
+
+            if (operation === 'resize') {
+                const dims = getDimensions(bitmap.width, bitmap.height, data.width, data.height, data.maintainAspectRatio !== false);
+                output = new OffscreenCanvas(dims.width, dims.height);
+                const outCtx = output.getContext('2d');
+                outCtx.imageSmoothingEnabled = true;
+                outCtx.imageSmoothingQuality = 'high';
+                outCtx.drawImage(canvas, 0, 0, dims.width, dims.height);
+            }
+
+            const blob = await output.convertToBlob({ type:format, quality });
+            if (!blob) throw new Error('Processing failed.');
+            self.postMessage({ type:'progress', jobId, current:1, total:1, percent:100, message:'Complete' });
+            self.postMessage({ type:'complete', jobId, blob, originalSize:input.size, compressedSize:blob.size, size:blob.size, width:output.width, height:output.height, format:format.replace('image/',''), mime:format });
+        } finally {
+            bitmap.close();
+        }
+    } catch (error) {
+        self.postMessage({ type:'error', jobId, error:error?.message || 'Worker processing failed.' });
+    }
 };
 
-function compressImage(data) {
-  const { file, quality, format } = data;
-  
-  const img = new Image();
-  img.onload = function() {
-    try {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-      ctx.drawImage(img, 0, 0);
-      
-      const mimeType = getMimeType(format || 'jpeg');
-      
-      canvas.toBlob(
-        function(blob) {
-          if (!blob) {
-            self.postMessage({ 
-              type: 'error', 
-              error: 'Compression failed' 
-            });
-            return;
-          }
-          
-          self.postMessage({
-            type: 'complete',
-            blob: blob,
-            originalSize: file.size,
-            compressedSize: blob.size,
-            width: canvas.width,
-            height: canvas.height
-          });
-        },
-        mimeType,
-        quality
-      );
-    } catch (error) {
-      self.postMessage({ type: 'error', error: error.message });
-    }
-  };
-  
-  img.onerror = function() {
-    self.postMessage({ type: 'error', error: 'Failed to load image' });
-  };
-  
-  img.src = URL.createObjectURL(file);
-}
-
-function convertImage(data) {
-  const { file, targetFormat } = data;
-  
-  const img = new Image();
-  img.onload = function() {
-    try {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      
-      ctx.drawImage(img, 0, 0);
-      
-      const mimeType = getMimeType(targetFormat);
-      
-      canvas.toBlob(function(blob) {
-        if (!blob) {
-          self.postMessage({ type: 'error', error: 'Conversion failed' });
-          return;
+async function processBatch(data, jobId) {
+    const files = Array.from(data.files || []);
+    const results = [];
+    const errors = [];
+    for (let i = 0; i < files.length; i++) {
+        try {
+            const file = files[i];
+            const bitmap = await createImageBitmap(file);
+            const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(bitmap, 0, 0);
+            const blob = await canvas.convertToBlob({ type:normalizeFormat(data.options?.format || 'jpeg'), quality:clampQuality(data.options?.quality, 0.9) });
+            bitmap.close();
+            results.push({ filename:file.name, blob });
+            self.postMessage({ type:'progress', jobId, current:i + 1, total:files.length, percent:Math.round(((i + 1) / Math.max(1, files.length)) * 100) });
+        } catch (error) {
+            errors.push({ filename:files[i]?.name || `file-${i + 1}`, error:error?.message || 'Processing failed.' });
         }
-        
-        self.postMessage({
-          type: 'complete',
-          blob: blob,
-          format: targetFormat,
-          width: canvas.width,
-          height: canvas.height
-        });
-      }, mimeType, 0.92);
-    } catch (error) {
-      self.postMessage({ type: 'error', error: error.message });
     }
-  };
-  
-  img.onerror = function() {
-    self.postMessage({ type: 'error', error: 'Failed to load image' });
-  };
-  
-  img.src = URL.createObjectURL(file);
+    self.postMessage({ type:'batch-complete', jobId, results, errors });
 }
 
-function resizeImage(data) {
-  const { file, width, height, maintainAspectRatio } = data;
-  
-  const img = new Image();
-  img.onload = function() {
-    try {
-      let newWidth = width || img.naturalWidth;
-      let newHeight = height || img.naturalHeight;
-      
-      if (maintainAspectRatio !== false) {
-        const ratio = Math.min(
-          width ? width / img.naturalWidth : Infinity,
-          height ? height / img.naturalHeight : Infinity
-        );
-        
-        if (ratio < 1) {
-          newWidth = Math.floor(img.naturalWidth * ratio);
-          newHeight = Math.floor(img.naturalHeight * ratio);
-        }
-      }
-      
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      
-      canvas.width = newWidth;
-      canvas.height = newHeight;
-      
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-      ctx.drawImage(img, 0, 0, newWidth, newHeight);
-      
-      canvas.toBlob(function(blob) {
-        if (!blob) {
-          self.postMessage({ type: 'error', error: 'Resize failed' });
-          return;
-        }
-        
-        self.postMessage({
-          type: 'complete',
-          blob: blob,
-          width: newWidth,
-          height: newHeight,
-          originalWidth: img.naturalWidth,
-          originalHeight: img.naturalHeight
-        });
-      }, file.type || 'image/jpeg', 0.95);
-    } catch (error) {
-      self.postMessage({ type: 'error', error: error.message });
-    }
-  };
-  
-  img.onerror = function() {
-    self.postMessage({ type: 'error', error: 'Failed to load image' });
-  };
-  
-  img.src = URL.createObjectURL(file);
+function normalizeFormat(value) {
+    const v = String(value).toLowerCase();
+    if (v === 'jpg' || v === 'jpeg' || v === 'image/jpg') return 'image/jpeg';
+    if (v === 'png' || v === 'image/png') return 'image/png';
+    if (v === 'webp' || v === 'image/webp') return 'image/webp';
+    if (v === 'avif' || v === 'image/avif') return 'image/avif';
+    return v.startsWith('image/') ? v : 'image/jpeg';
 }
 
-async function processBatch(data) {
-  const { files, operation, options } = data;
-  const results = [];
-  const errors = [];
-  
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    
-    try {
-      // Simulate worker processing (in real scenario, would call appropriate function)
-      await new Promise(resolve => setTimeout(resolve, 10));
-      
-      self.postMessage({
-        type: 'progress',
-        current: i + 1,
-        total: files.length,
-        filename: file.name
-      });
-      
-      results.push({
-        filename: file.name,
-        success: true
-      });
-    } catch (error) {
-      errors.push({
-        filename: file.name,
-        error: error.message
-      });
-    }
-  }
-  
-  self.postMessage({
-    type: 'batch-complete',
-    results: results,
-    errors: errors
-  });
+function clampQuality(value, fallback) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return fallback;
+    const q = n > 1 ? n / 100 : n;
+    return Math.min(1, Math.max(0.05, q));
 }
 
-function getMimeType(format) {
-  const formats = {
-    jpeg: 'image/jpeg',
-    jpg: 'image/jpeg',
-    png: 'image/png',
-    webp: 'image/webp',
-    avif: 'image/avif',
-    gif: 'image/gif'
-  };
-  
-  return formats[format.toLowerCase()] || 'image/jpeg';
+function getDimensions(ow, oh, width, height, maintain) {
+    let w = Number(width), h = Number(height);
+    if (!Number.isFinite(w) || w <= 0) w = ow;
+    if (!Number.isFinite(h) || h <= 0) h = oh;
+    if (maintain) {
+        const ratio = Math.min(w / ow, h / oh);
+        if (ratio > 0 && ratio !== 1) { w = Math.round(ow * ratio); h = Math.round(oh * ratio); }
+    }
+    return { width:Math.max(1, w), height:Math.max(1, h) };
 }
