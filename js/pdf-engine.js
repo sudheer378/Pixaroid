@@ -1,5 +1,30 @@
-// Pixaroid PDF Engine v2.0 - Sejda Compatible
-import { PDFDocument, rgb, degrees } from './vendor/pdf-lib.min.js';
+// Pixaroid PDF Engine v2.1 - browser-safe vendor loading
+let pdfLibPromise;
+
+async function getPDFLib() {
+  if (globalThis.PDFLib?.PDFDocument) return globalThis.PDFLib;
+  if (!pdfLibPromise) {
+    pdfLibPromise = new Promise((resolve, reject) => {
+      const existing = document.querySelector('script[data-pixaroid-pdf-lib]');
+      if (existing) {
+        existing.addEventListener('load', () => resolve(globalThis.PDFLib), { once: true });
+        existing.addEventListener('error', () => reject(new Error('Unable to load local PDF library')), { once: true });
+        if (globalThis.PDFLib?.PDFDocument) resolve(globalThis.PDFLib);
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = '/js/vendor/pdf-lib.min.js';
+      script.async = true;
+      script.dataset.pixaroidPdfLib = 'true';
+      script.onload = () => globalThis.PDFLib?.PDFDocument
+        ? resolve(globalThis.PDFLib)
+        : reject(new Error('Local PDF library loaded without PDFLib'));
+      script.onerror = () => reject(new Error('Unable to load local PDF library'));
+      document.head.appendChild(script);
+    });
+  }
+  return pdfLibPromise;
+}
 
 export class PDFEngine {
   constructor() {
@@ -8,40 +33,42 @@ export class PDFEngine {
   }
 
   async loadFiles(files) {
+    const { PDFDocument } = await getPDFLib();
     this.docs = [];
     for (const file of files) {
-      const arrayBuffer = await file.arrayBuffer();
-      const doc = await PDFDocument.load(arrayBuffer);
-      this.docs.push(doc);
+      if (!file?.arrayBuffer) throw new TypeError('Invalid PDF file');
+      this.docs.push(await PDFDocument.load(await file.arrayBuffer()));
     }
     return this.docs.length;
   }
 
   async merge() {
-    if (this.docs.length === 0) throw new Error('No files loaded');
+    const { PDFDocument } = await getPDFLib();
+    if (!this.docs.length) throw new Error('No files loaded');
     this.outputDoc = await PDFDocument.create();
     for (const doc of this.docs) {
-      const copiedPages = await this.outputDoc.copyPages(doc, doc.getPageIndices());
-      copiedPages.forEach((page) => this.outputDoc.addPage(page));
+      const pages = await this.outputDoc.copyPages(doc, doc.getPageIndices());
+      pages.forEach(page => this.outputDoc.addPage(page));
     }
     return this.save('merged.pdf');
   }
 
   async split() {
-    if (this.docs.length === 0) throw new Error('No files loaded');
+    const { PDFDocument } = await getPDFLib();
+    if (!this.docs.length) throw new Error('No files loaded');
     const results = [];
-    for (let i = 0; i < this.docs.length; i++) {
-      const doc = this.docs[i];
+    for (const doc of this.docs) {
       const newDoc = await PDFDocument.create();
       const pages = await newDoc.copyPages(doc, doc.getPageIndices());
-      pages.forEach(p => newDoc.addPage(p));
+      pages.forEach(page => newDoc.addPage(page));
       results.push(await newDoc.save());
     }
     return results;
   }
 
   async rotate(degreesAngle) {
-    if (this.docs.length === 0) throw new Error('No files loaded');
+    const { PDFDocument, degrees } = await getPDFLib();
+    if (!this.docs.length) throw new Error('No files loaded');
     this.outputDoc = await PDFDocument.create();
     for (const doc of this.docs) {
       const pages = await this.outputDoc.copyPages(doc, doc.getPageIndices());
@@ -52,8 +79,8 @@ export class PDFEngine {
   }
 
   async compress() {
-    // Basic compression by removing metadata and re-saving
-    if (this.docs.length === 0) throw new Error('No files loaded');
+    const { PDFDocument } = await getPDFLib();
+    if (!this.docs.length) throw new Error('No files loaded');
     this.outputDoc = await PDFDocument.create();
     for (const doc of this.docs) {
       const pages = await this.outputDoc.copyPages(doc, doc.getPageIndices());
@@ -70,8 +97,11 @@ export class PDFEngine {
     const a = document.createElement('a');
     a.href = url;
     a.download = filename;
+    a.rel = 'noopener';
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
     return blob;
   }
 }
