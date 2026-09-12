@@ -1,134 +1,59 @@
 /**
- * Pixaroid Enhanced Worker Wrapper — legacy compatibility.
- * Uses the shared enhanced worker with explicit job IDs and bounded retries.
+ * Pixaroid Enhanced Worker compatibility adapter.
+ * Legacy callers remain functional while image processing is delegated to
+ * the canonical /js/engine.js worker pipeline.
  */
 (function () {
-'use strict';
+  'use strict';
 
-function makeJobId() {
-    return globalThis.crypto?.randomUUID?.() || `px_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-}
+  const enginePromise = import('/js/engine.js');
 
-function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
-
-window.pxRunWorkerEnhanced = async function (workerPath, payload = {}, options = {}) {
-    const retries = Math.max(0, Number(options.retries ?? 2));
-    const timeout = Math.max(1000, Number(options.timeout ?? 60000));
-    let lastError;
-    for (let attempt = 0; attempt <= retries; attempt++) {
-        try {
-            return await runOnce(workerPath, payload, timeout, options.onProgress, options.jobId || makeJobId());
-        } catch (error) {
-            lastError = error;
-            if (attempt < retries) await sleep(Math.min(1000 * 2 ** attempt, 5000));
-        }
+  window.pxRunWorkerEnhanced = async function (_workerPath, payload = {}, options = {}) {
+    const { compressImage, compressToTargetSize, resizeImage, convertImage, editImage } = await enginePromise;
+    const buffer = payload.buffer;
+    if (!(buffer instanceof ArrayBuffer)) throw new Error('Enhanced worker payload requires an ArrayBuffer.');
+    const file = new File([buffer], payload.filename || 'pixaroid-input', { type: payload.mime || 'image/jpeg' });
+    const op = payload.operation || payload.op || payload.type || 'compress';
+    const format = payload.format || 'auto';
+    let result;
+    const quality = Number(payload.quality ?? 85);
+    if (op === 'compress-target') {
+      result = await compressToTargetSize(file, { targetKB: Number(payload.targetKB || payload.targetSizeKB), format, minQuality: Number(payload.minQuality || 10) });
+    } else if (op === 'resize') {
+      result = await resizeImage(file, { width:Number(payload.width || 0), height:Number(payload.height || 0), percent:Number(payload.percent || 0), preset:payload.preset, lockAspect:payload.lockAspect !== false, fit:payload.fit || 'contain', format, quality });
+    } else if (op === 'convert') {
+      result = await convertImage(file, { targetFormat:payload.targetFormat || format || 'jpeg', quality, background:payload.background, lossless:payload.lossless });
+    } else if (op === 'edit' || ['rotate','flip','watermark','crop','blur','sharpen','adjust'].includes(op)) {
+      const operations = payload.operations || [{ type:op, ...payload }];
+      result = await editImage(file, operations, { format, quality });
+    } else {
+      result = await compressImage(file, { quality, format, maxWidth:Number(payload.maxWidth || 0) });
     }
-    throw new Error(`Worker failed after ${retries + 1} attempt(s): ${lastError?.message || 'Unknown error'}`);
-};
+    options.onProgress?.({ current:1, total:1, percent:100, message:'Complete' });
+    return { jobId: payload.jobId, type:'complete', blob:result.blob, buffer:await result.blob.arrayBuffer(), mime:result.blob.type, width:result.width, height:result.height, format:result.format, originalSize:result.originalSize, resultSize:result.resultSize };
+  };
 
-function runOnce(workerPath, payload, timeout, onProgress, jobId) {
-    return new Promise((resolve, reject) => {
-        let worker;
-        try { worker = new Worker(workerPath); }
-        catch (error) { reject(new Error(`Failed to load worker: ${workerPath}`)); return; }
-
-        let settled = false;
-        const finish = (fn, value) => {
-            if (settled) return;
-            settled = true;
-            clearTimeout(timer);
-            worker.terminate();
-            fn(value);
-        };
-        const timer = setTimeout(() => finish(reject, new Error(`Processing timed out after ${Math.ceil(timeout / 1000)} seconds`)), timeout);
-
-        worker.onmessage = e => {
-            const data = e.data || {};
-            if (data.jobId !== jobId) return;
-            if (data.type === 'progress') {
-                onProgress?.({ current:data.current, total:data.total, percent:data.percent, message:data.message });
-                return;
-            }
-            if (data.type === 'error') { finish(reject, new Error(data.error || 'Worker failed.')); return; }
-            if (data.type === 'batch-complete') { finish(resolve, data); return; }
-            if (data.type !== 'complete') return;
-            const blob = data.blob instanceof Blob
-                ? data.blob
-                : data.buffer instanceof ArrayBuffer ? new Blob([data.buffer], { type:data.mime || 'application/octet-stream' }) : null;
-            if (!blob) { finish(reject, new Error('Worker returned no result data.')); return; }
-            finish(resolve, {
-                blob,
-                width:data.width || null,
-                height:data.height || null,
-                format:data.format || null,
-                mimeType:data.mime || blob.type,
-                durationMs:0,
-                originalSize:data.originalSize || null,
-                resultSize:blob.size
-            });
-        };
-        worker.onerror = e => finish(reject, new Error(e.message || 'Worker error.'));
-
-        try {
-            worker.postMessage({ jobId, ...payload });
-        } catch (error) {
-            finish(reject, new Error(`Failed to send data to worker: ${error.message}`));
-        }
-    });
-}
-
-window.pxProcessBatch = async function (files, workerPath, operation, settings = {}, options = {}) {
+  window.pxProcessBatch = async function (files, workerPath, operation, settings = {}, options = {}) {
     const list = Array.from(files || []);
-    const concurrency = Math.max(1, Math.min(8, Number(options.concurrency) || 3));
-    const results = [];
-    const errors = [];
-    let next = 0;
-    let completed = 0;
-
-    async function lane() {
-        while (true) {
-            const index = next++;
-            if (index >= list.length) return;
-            const file = list[index];
-            options.onBatchProgress?.({ current:index, total:list.length, filename:file.name, status:'processing' });
-            try {
-                const buffer = await file.arrayBuffer();
-                const result = await window.pxRunWorkerEnhanced(workerPath, {
-                    type:operation || 'compress', op:operation || 'compress', buffer, mime:file.type, ...settings
-                }, { timeout:options.timeout, retries:options.retries, onProgress:options.onFileProgress });
-                results.push({ filename:file.name, originalSize:file.size, result });
-                completed++;
-                options.onBatchProgress?.({ current:completed, total:list.length, filename:file.name, status:'completed', result });
-            } catch (error) {
-                errors.push({ filename:file.name, error:error.message });
-                completed++;
-                options.onBatchProgress?.({ current:completed, total:list.length, filename:file.name, status:'failed', error:error.message });
-            }
-        }
+    const results = [], errors = [];
+    for (let i = 0; i < list.length; i++) {
+      try {
+        const buffer = await list[i].arrayBuffer();
+        const result = await window.pxRunWorkerEnhanced(workerPath, { ...settings, operation:operation || 'compress', buffer, mime:list[i].type, filename:list[i].name }, options);
+        results.push({ filename:list[i].name, originalSize:list[i].size, result });
+        options.onBatchProgress?.({ current:i + 1, total:list.length, filename:list[i].name, status:'completed', result });
+      } catch (error) {
+        errors.push({ filename:list[i].name, error:error.message });
+        options.onBatchProgress?.({ current:i + 1, total:list.length, filename:list[i].name, status:'failed', error:error.message });
+      }
     }
-    await Promise.all(Array.from({ length:Math.min(concurrency, list.length || 1) }, lane));
     return { successCount:results.length, errorCount:errors.length, total:list.length, results, errors };
-};
+  };
 
-window.pxFindOptimalQuality = async function (file, targetSizeKB, workerPath, options = {}) {
-    const targetBytes = Number(targetSizeKB) * 1024;
-    if (!Number.isFinite(targetBytes) || targetBytes <= 0) throw new Error('Target size must be positive.');
-    const minQuality = Math.max(5, Number(options.minQuality ?? 10));
-    const maxQuality = Math.min(100, Number(options.maxQuality ?? 95));
-    const format = options.format || 'jpeg';
+  window.pxFindOptimalQuality = async function (file, targetSizeKB, workerPath, options = {}) {
+    const target = Number(targetSizeKB);
+    if (!Number.isFinite(target) || target <= 0) throw new Error('Target size must be positive.');
     const buffer = await file.arrayBuffer();
-    let low = minQuality, high = maxQuality, best = null;
-    while (low <= high) {
-        const mid = Math.round((low + high) / 2);
-        const result = await window.pxRunWorkerEnhanced(workerPath, {
-            type:'compress', op:'compress', buffer, mime:file.type || 'image/jpeg', quality:mid, format
-        }, options);
-        if (result.blob.size <= targetBytes) { best = result; low = mid + 1; }
-        else high = mid - 1;
-    }
-    if (best) return best;
-    return window.pxRunWorkerEnhanced(workerPath, { type:'compress', op:'compress', buffer, mime:file.type || 'image/jpeg', quality:minQuality, format }, options);
-};
-
-console.log('[Pixaroid] Enhanced Workers compatibility module loaded');
+    return window.pxRunWorkerEnhanced(workerPath, { buffer, mime:file.type || 'image/jpeg', operation:'compress-target', targetKB:target, format:options.format || 'jpeg', minQuality:options.minQuality || 10 }, options);
+  };
 })();
