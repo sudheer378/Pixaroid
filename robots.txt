@@ -1,46 +1,10 @@
-# Robots.txt for Pixaroid - https://pixaroid.vercel.app/
-# Allow all search engines to crawl the site
+# Robots.txt for Pixaroid
 User-agent: *
 Allow: /
-Allow: /tools/
-Allow: /assets/
-Allow: /js/
-Allow: /css/
-
-# Sitemap location
-Sitemap: https://pixaroid.vercel.app/sitemap.xml
-Sitemap: https://pixaroid.vercel.app/sitemap-tools.xml
-
-# Crawl-delay (optional, polite crawling)
-Crawl-delay: 1
-
-# Disallow admin or private areas if any
 Disallow: /admin/
 Disallow: /private/
 Disallow: /scripts/
 Disallow: /.git/
 
-# AI Bot specific rules
-User-agent: GPTBot
-Allow: /tools/
-Allow: /
-Disallow: /admin/
-Disallow: /scripts/
-
-User-agent: ChatGPT-User
-Allow: /tools/
-Allow: /
-Disallow: /admin/
-Disallow: /scripts/
-
-User-agent: Googlebot
-Allow: /
-Allow: /tools/
-
-User-agent: Bingbot
-Allow: /
-Allow: /tools/
-
-User-agent: Slurp
-Allow: /
-Allow: /tools/
+Sitemap: https://pixaroid.vercel.app/sitemap.xml
+Sitemap: https://pixaroid.vercel.app/sitemap-tools.xml
