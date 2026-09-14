@@ -7,7 +7,6 @@ self.onmessage=async e=>{
  const d=e.data||{};
  try{
   if(d.op==='convert'||d.op==='convert-advanced') self.postMessage({jobId:d.jobId,...await convert(d)},[]);
-  else if(d.op==='convert-batch') await batch(d);
   else throw Error('Unknown conversion operation: '+d.op);
  }catch(err){self.postMessage({jobId:d.jobId,error:err.message||String(err)});}
 };
@@ -34,13 +33,3 @@ async function convert(d){
  }finally{bitmap.close();}
 }
 
-async function batch(d){
- const files=Array.isArray(d.files)?d.files:[],o=d.options||{},results=[];
- for(let i=0;i<files.length;i++){
-  const f=files[i];try{const b=f.arrayBuffer?await f.arrayBuffer():await read(f);results.push({name:f.name,success:true,...await convert({buffer:b,mime:f.type,origSize:f.size,targetFormat:o.targetFormat||'jpeg',quality:o.quality,background:o.background,lossless:o.lossless})});}
-  catch(err){results.push({name:f?.name||('file-'+i),success:false,error:err.message});}
-  self.postMessage({jobId:d.jobId,type:'progress',percent:Math.round((i+1)/Math.max(1,files.length)*100),current:f?.name||'',total:files.length});
- }
- self.postMessage({jobId:d.jobId,type:'batch-complete',results,stats:{total:results.length,successful:results.filter(x=>x.success).length,failed:results.filter(x=>!x.success).length}});
-}
-function read(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(Error('Failed to read file'));r.readAsArrayBuffer(f);});}

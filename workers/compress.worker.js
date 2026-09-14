@@ -23,8 +23,6 @@ self.onmessage = async function (event) {
     } else if (data.op === 'compress-target') {
       const result = await compressToTargetSize(data);
       postResult(jobId, result);
-    } else if (data.op === 'compress-batch') {
-      await compressBatch(data);
     } else {
       throw new Error('Unknown operation: ' + data.op);
     }
@@ -213,51 +211,3 @@ function targetResult(encoded, width, height, data, mime, targetBytes, minQualit
   };
 }
 
-async function compressBatch(data) {
-  const files = Array.isArray(data.files) ? data.files : [];
-  const options = data.options || {};
-  const results = [];
-
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    try {
-      const buffer = await readFileAsArrayBuffer(file);
-      const result = await compressImage({
-        buffer,
-        mime: file.type,
-        origSize: file.size,
-        quality: options.quality || 80,
-        format: options.format || 'auto',
-        maxWidth: options.maxWidth || 0,
-        maxHeight: options.maxHeight || 0
-      });
-      results.push({ name: file.name, ...result });
-    } catch (error) {
-      results.push({ name: file.name, error: error && error.message ? error.message : String(error) });
-    }
-
-    self.postMessage({
-      jobId: data.jobId,
-      type: 'progress',
-      percent: Math.round(((i + 1) / Math.max(1, files.length)) * 100),
-      current: file.name
-    });
-  }
-
-  self.postMessage({
-    jobId: data.jobId,
-    type: 'batch-complete',
-    results,
-    successCount: results.filter(r => !r.error).length,
-    errorCount: results.filter(r => r.error).length
-  });
-}
-
-function readFileAsArrayBuffer(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = () => reject(new Error('Failed to read file'));
-    reader.readAsArrayBuffer(file);
-  });
-}

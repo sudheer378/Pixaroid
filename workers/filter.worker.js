@@ -1,12 +1,10 @@
 /** Pixaroid Editor/Filter Worker v6 — browser Worker safe */
 'use strict';
 
-const MAX_CONCURRENT = 4;
 self.onmessage = async (e) => {
   const d = e.data || {};
   try {
     if (d.op === 'edit') return await edit(d);
-    if (d.op === 'edit-batch') return await batch(d);
     throw new Error('Unknown operation: ' + d.op);
   } catch (err) {
     self.postMessage({ jobId: d.jobId, error: err?.message || String(err) });
@@ -192,44 +190,3 @@ async function edit(data) {
   }
 }
 
-async function batch(data) {
-  const items = Array.isArray(data.items) ? data.items : [];
-  const results = [];
-  let completed = 0;
-  for (let i = 0; i < items.length; i += MAX_CONCURRENT) {
-    const chunk = items.slice(i, i + MAX_CONCURRENT);
-    const chunkResults = await Promise.all(chunk.map(async item => {
-      try {
-        const result = await renderBatchItem(item, Array.isArray(item.operations) ? item.operations : [], data.format || item.format || 'jpeg', data.quality ?? item.quality);
-        completed++;
-        self.postMessage({ jobId: data.jobId, type: 'progress', progress: Math.round(completed / Math.max(1, items.length) * 100) });
-        return { success: true, id: item.id, ...result };
-      } catch (err) {
-        completed++;
-        return { success: false, id: item.id, error: err?.message || String(err) };
-      }
-    }));
-    results.push(...chunkResults);
-  }
-  self.postMessage({ jobId: data.jobId, type: 'complete', results });
-}
-
-async function renderBatchItem(item, operations, format, quality) {
-  const image = await decode(item.buffer, item.mime);
-  try {
-    const { width, height } = dimensionsFor(operations, image);
-    const type = mimeOf(format || 'jpeg');
-    const canvas = new OffscreenCanvas(width, height);
-    const ctx = canvas.getContext('2d', { alpha: type !== 'image/jpeg' });
-    if (!ctx) throw new Error('Could not create editor canvas.');
-    if (type === 'image/jpeg') { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, width, height); }
-    const crop = operations.find(op => op.type === 'crop' && Number(op.width) > 0 && Number(op.height) > 0);
-    drawImageWithOperations(ctx, image, width, height, operations, crop);
-    for (const op of operations) if (op.type === 'round-corners') rounded(ctx, width, height, (Number(op.radius) || 30) / 100 * Math.min(width, height));
-    applyOverlays(ctx, canvas, operations);
-    const [blob] = await encode(canvas, format || 'jpeg', quality);
-    return { blob, buffer: await blob.arrayBuffer(), mime: blob.type, width, height, size: blob.size };
-  } finally {
-    image.close?.();
-  }
-}

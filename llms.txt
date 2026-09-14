@@ -11,14 +11,13 @@
 - AI-assisted image tools
 - PDF tools
 - Social-media image sizing
-- Bulk image processing
 - International and utility tools
 
 ## Tool discovery
 
 The main tool directory is available at:
 
-https://pixaroid.vercel.app/tools/
+https://pixaroid.vercel.app/
 
 The site provides individual landing pages for specific tasks. Prefer the most specific tool page that matches the user's requested operation.
 

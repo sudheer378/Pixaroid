@@ -91,30 +91,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pixaroid.vercel.app/tools/bulk-tools/bulk-image-flip/</loc>
-    <lastmod>2026-09-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pixaroid.vercel.app/tools/bulk-tools/bulk-image-resize/</loc>
-    <lastmod>2026-09-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pixaroid.vercel.app/tools/bulk-tools/</loc>
-    <lastmod>2026-09-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pixaroid.vercel.app/tools/compression/batch-compress-images/</loc>
-    <lastmod>2026-09-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://pixaroid.vercel.app/tools/compression/best-image-compressor/</loc>
     <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>

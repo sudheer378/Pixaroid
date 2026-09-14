@@ -1,7 +1,6 @@
 /** Pixaroid Resize Worker v4 — browser Worker safe */
 'use strict';
 
-const MAX_CONCURRENT = 4;
 
 self.onmessage = async function(e) {
   const d = e.data || {}, jobId = d.jobId;
@@ -9,7 +8,6 @@ self.onmessage = async function(e) {
     if (d.op === 'resize') return await resizeImage(d);
     if (d.op === 'crop') return await cropImage(d);
     if (d.op === 'get-dimensions') return await getDimensions(d);
-    if (d.op === 'resize-batch') return await resizeBatch(d);
     throw new Error('Unknown operation: ' + d.op);
   } catch (err) {
     self.postMessage({jobId, error: err && err.message ? err.message : String(err)});
@@ -111,25 +109,3 @@ async function getDimensions(d) {
   finally { img.close && img.close(); }
 }
 
-async function resizeBatch(d) {
-  const files=Array.isArray(d.files)?d.files:[], options=d.options||{};
-  const results=[];
-  for(let i=0;i<files.length;i+=MAX_CONCURRENT){
-    const chunk=files.slice(i,i+MAX_CONCURRENT);
-    const rs=await Promise.all(chunk.map(async (file,j)=>{
-      try {
-        const buffer=file.buffer || file.data;
-        const temp={jobId:d.jobId+'_'+(i+j),buffer,mime:file.type||file.mime,origSize:file.size||0,...options};
-        const img=await decode(temp.buffer,temp.mime);
-        const [w,h]=dimensions(temp,img.width,img.height); img.close&&img.close();
-        const canvas=new OffscreenCanvas(w,h),ctx=canvas.getContext('2d',{alpha:outputMime(temp.format)!=='image/jpeg'});
-        if(outputMime(temp.format)==='image/jpeg') fillJpeg(ctx,w,h);
-        ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(await decode(temp.buffer,temp.mime),0,0,w,h);
-        const out=await encode(canvas,temp.format||'jpeg',temp.quality); results.push({name:file.name,buffer:await blobBuffer(out.blob),mime:out.type,width:w,height:h,size:out.blob.size});
-        return true;
-      } catch(e){results.push({name:file.name,error:e.message});return false;}
-    }));
-    self.postMessage({jobId:d.jobId,type:'progress',percent:Math.round(Math.min(i+chunk.length,files.length)/Math.max(1,files.length)*100),processed:Math.min(i+chunk.length,files.length),total:files.length});
-  }
-  self.postMessage({jobId:d.jobId,type:'batch-complete',results,successCount:results.filter(r=>!r.error).length,errorCount:results.filter(r=>r.error).length});
-}

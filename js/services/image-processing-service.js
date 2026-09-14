@@ -226,61 +226,6 @@
         }
     }
 
-    class BatchProcessor {
-        constructor(concurrency = 4) {
-            this.concurrency = Math.max(1, Math.floor(Number(concurrency) || 1));
-            this.processor = null;
-            this.queue = [];
-            this.results = [];
-        }
-
-        async processBatch(files, options = {}, progressCallback = null) {
-            const list = Array.from(files || []);
-            if (list.length > CONFIG.MAX_BATCH_SIZE) {
-                throw new Error(`Maximum ${CONFIG.MAX_BATCH_SIZE} files allowed`);
-            }
-
-            this.cleanup();
-            this.processor = new ImageProcessor(options);
-            this.results = new Array(list.length);
-            this.queue = list.map((file, index) => ({ file, index }));
-            let completedFiles = 0;
-
-            const worker = async () => {
-                while (true) {
-                    const item = this.queue.shift();
-                    if (!item) return;
-                    try {
-                        const result = await this.processor.process(item.file, progress => {
-                            progressCallback?.({
-                                ...progress,
-                                file: item.file.name,
-                                overallProgress: list.length ? ((completedFiles + progress.progress / 100) / list.length) * 100 : 100,
-                                completed: completedFiles,
-                                total: list.length
-                            });
-                        });
-                        this.results[item.index] = { file: item.file.name, result };
-                    } catch (error) {
-                        this.results[item.index] = { file: item.file.name, error: error?.message || String(error) };
-                    } finally {
-                        completedFiles += 1;
-                    }
-                }
-            };
-
-            await Promise.all(Array.from({ length: Math.min(this.concurrency, Math.max(1, list.length)) }, worker));
-            return this.results;
-        }
-
-        cleanup() {
-            this.processor?.cleanup();
-            this.processor = null;
-            this.queue = [];
-            this.results = [];
-        }
-    }
-
     class FormatConverter {
         static async convert(file, targetFormat, options = {}) {
             const normalized = String(targetFormat || '').trim().toLowerCase();
@@ -304,33 +249,6 @@
             }
         }
 
-        static async convertBatch(files, targetFormat, options = {}) {
-            const results = [];
-            for (const file of Array.from(files || [])) {
-                try {
-                    results.push(await this.convert(file, targetFormat, options));
-                } catch (error) {
-                    results.push({ fileName: file.name, error: error?.message || String(error) });
-                }
-            }
-            return results;
-        }
-    }
-
-    class SmartCompressor {
-        static getPresets() { return CONFIG.COMPRESSION_PRESETS; }
-
-        static async compressWithPreset(file, presetName) {
-            const preset = CONFIG.COMPRESSION_PRESETS[presetName];
-            if (!preset) throw new Error(`Unknown preset: ${presetName}`);
-            const processor = new ImageProcessor({ quality: preset.quality });
-            try {
-                return { ...await processor.process(file), preset: presetName, presetLabel: preset.label };
-            } finally {
-                processor.cleanup();
-            }
-        }
-
         static async compressToTargetSize(file, targetSizeKB) {
             const processor = new ImageProcessor();
             try { return await processor.optimizeQuality(file, targetSizeKB); }
@@ -341,11 +259,9 @@
     const ImageProcessingService = {
         version: '2.3.0',
         ImageProcessor,
-        BatchProcessor,
         FormatConverter,
         SmartCompressor,
         createProcessor(options = {}) { return new ImageProcessor(options); },
-        createBatchProcessor(concurrency = 4) { return new BatchProcessor(concurrency); },
         async compress(file, quality = 0.85) {
             const processor = new ImageProcessor({ quality });
             try { return await processor.process(file); }

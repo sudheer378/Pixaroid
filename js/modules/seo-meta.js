@@ -21,7 +21,6 @@ const CATEGORY_LABELS = Object.freeze({
   'ai-tools': 'AI Tools',
   'social-tools': 'Social Media',
   utilities: 'Utilities',
-  'bulk-tools': 'Bulk Tools',
   'pdf-tools': 'PDF Tools',
 });
 

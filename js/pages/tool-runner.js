@@ -126,7 +126,6 @@ async function processFile(tool, file, controls) {
     }, buffer, originalSize);
   }
 
-  if (itype === 'bulk') return runBulk(slug, file, controls);
 
   if (['ai-bg-remove','ai-upscale','ai-enhance','ai-sharpen','ai-colorize','ai-ocr'].includes(itype)) {
     return runAI(itype, buffer, mime, controls, originalSize);
@@ -296,77 +295,6 @@ function runAI(itype, buffer, mime, controls, originalSize = 0) {
   });
 }
 
-async function runBulk(currentSlug, file, controls) {
-  const task = inferBulkTask(currentSlug);
-  const input = document.getElementById('file-input');
-  const files = input?.files?.length > 1 ? Array.from(input.files) : [file];
-  const tasks = await Promise.all(files.map(async f => ({
-    filename: f.name,
-    mime: f.type || guessMime(f.name),
-    buffer: await readBuffer(f),
-  })));
-
-  return new Promise((resolve, reject) => {
-    let worker;
-    try { worker = new Worker('/workers/bulk.worker.js'); }
-    catch { reject(new Error('Bulk worker failed to load')); return; }
-
-    const jobId = (globalThis.crypto?.randomUUID?.() || `${Date.now()}_${Math.random().toString(36).slice(2)}`);
-    const timer = setTimeout(() => { worker.terminate(); reject(new Error('Bulk processing timed out.')); }, 300000);
-
-    worker.onmessage = async e => {
-      if (e.data?.jobId !== jobId) return;
-      if (e.data.type === 'progress') {
-        const { current, total, filename } = e.data;
-        document.dispatchEvent(new CustomEvent('pxn:bulk-progress', { detail: { current, total, filename } }));
-        return;
-      }
-      if (e.data.type !== 'done') return;
-
-      clearTimeout(timer);
-      worker.terminate();
-      const allResults = e.data.results || [];
-      if (!allResults.length) { reject(new Error('No files processed')); return; }
-
-      if (allResults.length === 1) {
-        const r = allResults[0];
-        resolve({ blob:r.blob, format:(r.blob?.type?.split('/')[1] || 'jpg').replace('jpeg','jpg'), savings:0 });
-        return;
-      }
-
-      try {
-        if (!window.JSZip) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
-        const zip = new window.JSZip();
-        const EXT = {'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif'};
-        allResults.forEach(r => {
-          if (!r.blob) return;
-          const ext = EXT[r.blob.type] || 'jpg';
-          const base = (r.filename || 'image').replace(/\.[^.]+$/, '');
-          zip.file(`${base}.${ext}`, r.blob);
-        });
-        const zipBlob = await zip.generateAsync({ type:'blob', compression:'DEFLATE' });
-        resolve({ blob:zipBlob, format:'zip', isZip:true, savings:0 });
-      } catch {
-        const r = allResults[0];
-        resolve({ blob:r.blob, format:'jpg', savings:0 });
-      }
-    };
-
-    worker.onerror = e => {
-      clearTimeout(timer);
-      worker.terminate();
-      reject(new Error(e.message || 'Bulk worker error'));
-    };
-
-    worker.postMessage({
-      jobId,
-      tasks,
-      taskType:task,
-      options:controls,
-    }, tasks.map(t => t.buffer).filter(b => b instanceof ArrayBuffer));
-  });
-}
-
 function readBuffer(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -422,13 +350,6 @@ function buildOps(type, controls) {
     case 'sharpen': return [{ type:'sharpen', amount:controls.amount }];
     default: return [{ type, ...controls }];
   }
-}
-
-function inferBulkTask(currentSlug) {
-  const s = String(currentSlug || '').toLowerCase();
-  if (s.includes('resize')) return 'resize';
-  if (s.includes('convert') || /-to-/.test(s)) return 'convert';
-  return 'compress';
 }
 
 function loadScript(src) {

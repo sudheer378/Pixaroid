@@ -10,7 +10,6 @@
 
     const CONFIG = Object.freeze({
         MAX_FILE_SIZE: 100 * 1024 * 1024,
-        MAX_BATCH_SIZE: 100,
         TIMEOUT: 120000,
         RETRY_ATTEMPTS: 3,
         RETRY_DELAY: 1000,
@@ -126,22 +125,6 @@
             }
             if (file.size === 0) errors.push({ type: 'EMPTY_FILE', message: `File "${file.name || 'file'}" is empty`, file: file.name });
             return { valid: errors.length === 0, errors, warnings: [] };
-        }
-        static validateBatch(files, options = {}) {
-            const list = Array.from(files || []);
-            const results = { valid: [], invalid: [], errors: [], warnings: [] };
-            const maxBatch = Number.isFinite(options.maxBatchSize) ? options.maxBatchSize : CONFIG.MAX_BATCH_SIZE;
-            if (list.length > maxBatch) {
-                results.errors.push({ type: 'BATCH_SIZE_EXCEEDED', message: `Maximum ${maxBatch} files allowed` });
-                return results;
-            }
-            list.forEach(file => {
-                const validation = this.validate(file, options);
-                if (validation.valid) results.valid.push(file);
-                else { results.invalid.push(file); results.errors.push(...validation.errors); }
-                results.warnings.push(...validation.warnings);
-            });
-            return results;
         }
         static getFileExtension(filename = '') {
             const clean = String(filename).split(/[?#]/, 1)[0];

@@ -9,7 +9,6 @@
 class PixaroidProEngine {
     constructor(options = {}) {
         this.maxFileSize = options.maxFileSize || 100 * 1024 * 1024;
-        this.maxBatchSize = options.maxBatchSize || 50;
         this.workers = [];
         this.queue = [];
         this.processing = false;
@@ -36,7 +35,6 @@ class PixaroidProEngine {
 
     async processFiles(files, settings = {}) {
         const list = Array.from(files || []);
-        if (list.length > this.maxBatchSize) throw new Error(`Maximum ${this.maxBatchSize} files allowed per batch.`);
         for (const file of list) {
             if (file.size > this.maxFileSize) throw new Error(`${file.name} exceeds the maximum file size.`);
         }

@@ -123,7 +123,7 @@
         "upvoteCount": 66
       }
     }
-  ,{"@type":"Question","name":"Can I resize without distortion?","acceptedAnswer":{"@type":"Answer","text":"Yes — use the aspect ratio lock to maintain proportions, or Cover mode to fill a frame by cropping."}},{"@type": "Question", "name": "Does resizing reduce image quality?", "acceptedAnswer": {"@type": "Answer", "text": "Downscaling reduces file size with minimal quality impact. Upscaling beyond the original dimensions can cause blurriness \u2014 use the AI Upscaler for enlarging images with best results."}},{"@type": "Question", "name": "What is the maximum output resolution?", "acceptedAnswer": {"@type": "Answer", "text": "Up to 8000\u00d78000 pixels. Output is limited by your browser memory for very large images."}},{"@type": "Question", "name": "Can I resize multiple images at once?", "acceptedAnswer": {"@type": "Answer", "text": "Yes \u2014 use the Bulk Resize tool to resize up to 100 images to the same dimensions, downloading results as a ZIP."}}]
+  ,{"@type":"Question","name":"Can I resize without distortion?","acceptedAnswer":{"@type":"Answer","text":"Yes — use the aspect ratio lock to maintain proportions, or Cover mode to fill a frame by cropping."}},{"@type": "Question", "name": "Does resizing reduce image quality?", "acceptedAnswer": {"@type": "Answer", "text": "Downscaling reduces file size with minimal quality impact. Upscaling beyond the original dimensions can cause blurriness \u2014 use the AI Upscaler for enlarging images with best results."}},{"@type": "Question", "name": "What is the maximum output resolution?", "acceptedAnswer": {"@type": "Answer", "text": "Up to 8000\u00d78000 pixels. Output is limited by your browser memory for very large images."}},{"@type": "Question", "name": "Can I resize multiple images at once?", "acceptedAnswer": {"@type": "Answer", "text": "Resize one image at a time — repeat for each image you need."}}]
 }
 </script>
 <script type="application/ld+json">
@@ -1092,7 +1092,6 @@ function guessItype(s){
   if(/enhanc/.test(s))return'ai-enhance';
   if(/coloriz/.test(s))return'ai-colorize';
   if(/ocr|text-ext/.test(s))return'ai-ocr';
-  if(/bulk/.test(s))return'bulk';
   return'compress';
 }
 function getControls(){
@@ -1444,7 +1443,6 @@ async function process(file,itype,ctrl){
      itype==='ai-sharpen'||itype==='ai-colorize'||itype==='ai-ocr'){
     return runAI(itype,buf,mime,file.size,ctrl);
   }
-  if(itype==='bulk')return runBulk(file,ctrl);
   if(itype==='info'||itype==='metadata'||itype==='palette')return runUtil(file,buf);
   if(itype==='color-picker')return runColorPicker(file,buf);
   if(itype==='base64-encode')return runBase64(file,controls);
@@ -1531,23 +1529,6 @@ function runAI(itype,buf,mime,origSize,ctrl){
   });
 }
 
-/* ── BULK ── */
-async function runBulk(file,ctrl){
-  var input=$$('fi'),files=input&&input.files&&input.files.length>1?Array.from(input.files):[file];
-  var task=SLUG.includes('resize')?'resize':SLUG.includes('convert')?'convert':SLUG.includes('watermark')?'watermark':'compress';
-  var results=[],total=files.length;
-  for(var i=0;i<total;i++){
-    var f=files[i];
-    pl.textContent=(i+1)+'/'+total+': '+f.name;pd.textContent=Math.round((i/total)*100)+'%';
-    try{
-      var buf=await readBuf(f);
-      var r=await runWorker('/workers/compress.worker.js',{
-        op:'compress',buffer:buf,mime:f.type||'image/jpeg',origSize:f.size,
-        quality:parseInt(ctrl.quality)||80,format:'jpeg',
-      });
-      results.push({name:f.name,blob:r.blob});
-    }catch(e2){}
-  }
   if(!results.length)throw new Error('No files processed');
   if(results.length===1)return{blob:results[0].blob,fmt:'jpeg'};
   if(!window.JSZip)await new Promise(function(res,rej){var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';s.onload=res;s.onerror=rej;document.head.appendChild(s);});
@@ -1696,13 +1677,13 @@ if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch
 <script>
 (function(){
 'use strict';
-var TOOL_TYPE=(function(){var p=window.location.pathname;if(p.indexOf('/compress')>=0||p.indexOf('/optimize')>=0)return'compress';if(p.indexOf('/resize')>=0||p.indexOf('/scale')>=0)return'resize';if(p.indexOf('/convert')>=0||p.indexOf('/change-format')>=0)return'convert';if(p.indexOf('/bulk')>=0)return'bulk';return'compress';})();
+var TOOL_TYPE=(function(){var p=window.location.pathname;if(p.indexOf('/compress')>=0||p.indexOf('/optimize')>=0)return'compress';if(p.indexOf('/resize')>=0||p.indexOf('/scale')>=0)return'resize';if(p.indexOf('/convert')>=0||p.indexOf('/change-format')>=0)return'convert';return'compress';})();
 var MAX_SIZE=20*1024*1024;
 var dz=document.getElementById('dz'),fi=document.getElementById('fi'),bp=document.getElementById('bp'),bd=document.getElementById('bd'),br=document.getElementById('br');
 function pxToast(m,t,d){t=t||'info';d=d||3500;var c=document.getElementById('tc2')||document.querySelector('.tcc');if(!c){c=document.createElement('div');c.id='tc2';c.className='tcc';document.body.appendChild(c);}var el=document.createElement('div');el.className='tst t'+(t==='error'?'er':t==='success'?'ok':'in');el.textContent=m;c.appendChild(el);requestAnimationFrame(function(){el.classList.add('V');});setTimeout(function(){el.classList.remove('V');setTimeout(function(){el.remove();},300);},d);}
 function fmtBytes(n){if(!n&&n!==0)return'—';if(n<1024)return n+' B';if(n<1048576)return(n/1024).toFixed(1)+' KB';return(n/1048576).toFixed(2)+' MB';}
-function getWorkerPath(t){return t==='resize'?'resize':t==='convert'?'convert':t==='bulk'?'bulk':'compress';}
-function getOp(t){return t==='resize'?'resize':t==='convert'?'convert':t==='bulk'?'bulk':'compress';}
+function getWorkerPath(t){return t==='resize'?'resize':t==='convert'?'convert':'compress';}
+function getOp(t){return t==='resize'?'resize':t==='convert'?'convert':'compress';}
 function getSettings(){var s={};var q=document.querySelector('input[type="range"][data-control="quality"]');if(q)s.quality=parseInt(q.value)||80;var f=document.querySelector('select[data-control="format"]');if(f)s.format=f.value||'auto';return s;}
 function handleFile(file){if(!file)return;if(file.size>MAX_SIZE){pxToast('File too large — max 20MB','error',4000);return;}if(!file.type.startsWith('image/')){pxToast('Please select an image file','error',4000);return;}window.currentFile=file;var fn=document.getElementById('fn');if(fn)fn.textContent=file.name;var pob=document.getElementById('pob');if(pob){pob.innerHTML='';var img=document.createElement('img');img.src=URL.createObjectURL(file);img.alt='Original';pob.appendChild(img);}var ab=document.getElementById('ab'),sp=document.getElementById('sp'),prs=document.getElementById('prs');if(ab)ab.classList.add('V');if(sp)sp.classList.add('V');if(prs)prs.classList.add('V');if(dz)dz.style.display='none';if(bp)bp.disabled=false;pxToast('Image loaded','info',2000);}
 if(fi){fi.addEventListener('change',function(){var f=this.files&&this.files[0];if(f)handleFile(f);setTimeout(function(){fi.value='';},1000);});}

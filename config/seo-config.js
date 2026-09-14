@@ -27,7 +27,7 @@ const SEO_CONFIG = {
 
   icons: {
     favicon: '/assets/svg/favicon.svg',
-    appleTouchIcon: '/assets/images/apple-touch-icon.png',
+    appleTouchIcon: '/assets/images/icon-192.png',
     manifest: '/manifest.json',
   },
 
@@ -83,11 +83,6 @@ const SEO_CONFIG = {
       title: 'Image Utilities — Metadata, Dimensions, File Size & More | Pixaroid',
       description: 'Inspect image properties and perform useful image calculations and utility tasks directly in the browser.',
       priority: '0.74',
-    },
-    'bulk-tools': {
-      title: 'Bulk Image Tools — Compress, Resize, Convert & More | Pixaroid',
-      description: 'Process multiple images with supported bulk compression, resizing, conversion and related tools.',
-      priority: '0.77',
     },
   },
 

@@ -69,7 +69,6 @@ function guessItype(s){
   if(/enhanc/.test(s))return'ai-enhance';
   if(/coloriz/.test(s))return'ai-colorize';
   if(/ocr|text-ext/.test(s))return'ai-ocr';
-  if(/bulk/.test(s))return'bulk';
   return'compress';
 }
 function getControls(){
@@ -327,7 +326,6 @@ async function process(file,itype,ctrl){
      itype==='ai-sharpen'||itype==='ai-colorize'||itype==='ai-ocr'){
     return runAI(itype,buf,mime,file.size,ctrl);
   }
-  if(itype==='bulk')return runBulk(file,ctrl);
   if(itype==='info'||itype==='metadata'||itype==='palette')return runUtil(file,buf);
 
   // Editor ops
@@ -401,31 +399,6 @@ function runAI(itype,buf,mime,origSize,ctrl){
   });
 }
 
-/* ── BULK ── */
-async function runBulk(file,ctrl){
-  var input=$$('fi'),files=input&&input.files&&input.files.length>1?Array.from(input.files):[file];
-  var task=SLUG.includes('resize')?'resize':SLUG.includes('convert')?'convert':SLUG.includes('watermark')?'watermark':'compress';
-  var results=[],total=files.length;
-  for(var i=0;i<total;i++){
-    var f=files[i];
-    pl.textContent=(i+1)+'/'+total+': '+f.name;pd.textContent=Math.round((i/total)*100)+'%';
-    try{
-      var buf=await readBuf(f);
-      var r=await runWorker('/workers/compress.worker.js',{
-        op:'compress',buffer:buf,mime:f.type||'image/jpeg',origSize:f.size,
-        quality:parseInt(ctrl.quality)||80,format:'jpeg',
-      });
-      results.push({name:f.name,blob:r.blob});
-    }catch(e2){}
-  }
-  if(!results.length)throw new Error('No files processed');
-  if(results.length===1)return{blob:results[0].blob,fmt:'jpeg'};
-  if(!window.JSZip)await new Promise(function(res,rej){var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';s.onload=res;s.onerror=rej;document.head.appendChild(s);});
-  var zip=new window.JSZip();
-  results.forEach(function(r){zip.file(r.name.replace(/\.[^.]+$/,'')+'.jpg',r.blob);});
-  var zb=await zip.generateAsync({type:'blob',compression:'DEFLATE'});
-  return{blob:zb,fmt:'zip',isZip:true};
-}
 
 /* ── UTILITY ── */
 async function runUtil(file,buf){

@@ -1,7 +1,7 @@
 {
   "name": "Pixaroid \u2014 Free Image & PDF Tools",
   "short_name": "Pixaroid",
-  "description": "85+ free browser-based image tools. Compress, convert, resize, edit, AI enhance. Zero uploads.",
+  "description": "Free browser-based image and PDF tools. Compress, convert, resize, edit, AI enhance. Zero uploads.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0F0B1E",

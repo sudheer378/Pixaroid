@@ -42,26 +42,6 @@
     cleanup() {}
   }
 
-  class BatchProcessor {
-    constructor(processor) { this.processor = processor; this.files = []; }
-    addFiles(files) { this.files.push(...Array.from(files || [])); return this.files.length; }
-    async process(onProgress, onComplete, onError) {
-      const results = [];
-      for (let i = 0; i < this.files.length; i++) {
-        try {
-          const result = await this.processor.process(this.files[i], p => onProgress?.({ ...p, current: i + 1, total: this.files.length, currentFile: this.files[i].name }));
-          results.push(result);
-        } catch (error) {
-          onError?.({ file: this.files[i].name, error: error.message });
-        }
-      }
-      const summary = { results, errors: [], totalFiles: this.files.length, successfulFiles: results.length, failedFiles: this.files.length - results.length };
-      onComplete?.(summary);
-      return summary;
-    }
-    clear() { this.files = []; }
-  }
-
   class UIController {
     constructor() {}
     updateProgress(current, total, filename) {
@@ -100,7 +80,6 @@
   window.PIXAROID.ENHANCED_ENGINE = {
     ...window.PIXAROID.ENHANCED_ENGINE,
     ImageProcessor,
-    BatchProcessor,
     PreviewManager,
     DownloadManager,
     UIController,

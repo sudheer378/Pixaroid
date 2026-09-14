@@ -1,0 +1,91 @@
+/* Pixaroid — shared layout styles for international tools.
+   Referenced by tools/international/*.html as ../../css/style.css. */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: #12121f;
+  color: #f0f0f5;
+  line-height: 1.6;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header / navigation */
+.site-header {
+  background: #1e1e2f;
+  border-bottom: 1px solid #2a2a3e;
+}
+
+.navbar {
+  width: 100%;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.logo {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #00d4ff;
+  letter-spacing: -0.02em;
+}
+
+.nav-menu {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-menu li a {
+  color: #c6c6dd;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+
+.nav-menu li a:hover {
+  color: #00d4ff;
+}
+
+/* Footer */
+.site-footer {
+  margin-top: 60px;
+  background: #1e1e2f;
+  border-top: 1px solid #2a2a3e;
+  padding: 24px 0;
+}
+
+.site-footer p {
+  color: #8a8aa8;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: #8a8aa8;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: #00d4ff;
+}

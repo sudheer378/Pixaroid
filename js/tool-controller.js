@@ -4,7 +4,7 @@
  * Uses the canonical /js/engine.js processing API while preserving
  * the existing PremiumUI component contract.
  */
-import { compressImage, compressToTargetSize, resizeImage, convertImage, editImage, processBulkImages } from '/js/engine.js';
+import { compressImage, compressToTargetSize, resizeImage, convertImage, editImage } from '/js/engine.js';
 
 const ToolController = (() => {
     'use strict';

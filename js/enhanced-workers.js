@@ -33,23 +33,6 @@
     return { jobId: payload.jobId, type:'complete', blob:result.blob, buffer:await result.blob.arrayBuffer(), mime:result.blob.type, width:result.width, height:result.height, format:result.format, originalSize:result.originalSize, resultSize:result.resultSize };
   };
 
-  window.pxProcessBatch = async function (files, workerPath, operation, settings = {}, options = {}) {
-    const list = Array.from(files || []);
-    const results = [], errors = [];
-    for (let i = 0; i < list.length; i++) {
-      try {
-        const buffer = await list[i].arrayBuffer();
-        const result = await window.pxRunWorkerEnhanced(workerPath, { ...settings, operation:operation || 'compress', buffer, mime:list[i].type, filename:list[i].name }, options);
-        results.push({ filename:list[i].name, originalSize:list[i].size, result });
-        options.onBatchProgress?.({ current:i + 1, total:list.length, filename:list[i].name, status:'completed', result });
-      } catch (error) {
-        errors.push({ filename:list[i].name, error:error.message });
-        options.onBatchProgress?.({ current:i + 1, total:list.length, filename:list[i].name, status:'failed', error:error.message });
-      }
-    }
-    return { successCount:results.length, errorCount:errors.length, total:list.length, results, errors };
-  };
-
   window.pxFindOptimalQuality = async function (file, targetSizeKB, workerPath, options = {}) {
     const target = Number(targetSizeKB);
     if (!Number.isFinite(target) || target <= 0) throw new Error('Target size must be positive.');
