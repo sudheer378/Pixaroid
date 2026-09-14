@@ -6,7 +6,7 @@
 const SITE_CONFIG = {
   name:        'Pixaroid',
   tagline:     'Next Generation AI Image Tools',
-  description: 'Pixaroid offers 70+ free browser-based image tools: compress, convert, resize, edit, AI enhance, bulk process, and social-media optimise — no upload, no server.',
+  description: 'Pixaroid offers free browser-based image and PDF tools: compress, convert, resize, edit, AI enhance, and social-media optimise — no upload, no server.',
   url:         'https://pixaroid.vercel.app',
   canonicalDomain: 'https://pixaroid.vercel.app',
 
@@ -29,14 +29,13 @@ const SITE_CONFIG = {
   ogImage:       '/assets/images/og-default.png',
   twitterHandle: '@pixaroidapp',
 
-  categories: ['compress', 'convert', 'resize', 'editor', 'ai', 'bulk', 'social'],
+  categories: ['compress', 'convert', 'resize', 'editor', 'ai', 'social'],
 
   features: {
     webWorkers:     true,
     canvasAPI:      true,
     pwa:            true,
     darkMode:       true,
-    bulkProcessing: true,
     aiTools:        true,
   },
 
@@ -54,7 +53,7 @@ const SITE_CONFIG = {
   },
 
   ads: { adsense: 'pub-XXXXXXXXXXXXXXXX', enabled: false },
-  deployment: { provider: 'vercel', outputDir: 'dist' },
+  deployment: { provider: 'vercel', outputDir: '.' },
 };
 
 export default SITE_CONFIG;

@@ -24,7 +24,6 @@ export const WORKER_PATHS = {
   convert:  '/workers/convert.worker.js',
   resize:   '/workers/resize.worker.js',
   edit:     '/workers/filter.worker.js',
-  bulk:     '/workers/bulk.worker.js',
   ai:       '/workers/ai.worker.js',
 };
 
@@ -213,43 +212,6 @@ export async function editImage(file, operations=[], opts={}) {
     quality:    Math.max(1,Math.min(100,quality)),
   }, [buffer]);
   return _buildResult(result, file.size, t0);
-}
-
-/**
- * processBulkImages — async generator for batch processing
- * @param {File[]} files
- * @param {string} task — 'compress'|'resize'|'convert'|'watermark'|'rotate'|'flip'
- * @param {object} opts — task options
- * @yields {{ type:'progress'|'error'|'done', current, total, filename, result?, error?, results?, errors? }}
- */
-export async function* processBulkImages(files, task, opts={}) {
-  const total=files.length, results=[], errors=[];
-  const FN = {
-    compress:  (f,o) => compressImage(f,o),
-    target:    (f,o) => compressToTargetSize(f,o),
-    resize:    (f,o) => resizeImage(f,o),
-    convert:   (f,o) => convertImage(f,o),
-    edit:      (f,o) => editImage(f,o.operations||[],o),
-    watermark: (f,o) => editImage(f,[{type:'watermark',...o}],o),
-    rotate:    (f,o) => editImage(f,[{type:'rotate',...o}],o),
-    flip:      (f,o) => editImage(f,[{type:'flip',...o}],o),
-  };
-  const fn = FN[task];
-  if (!fn) throw new Error(`processBulkImages: unknown task "${task}".`);
-
-  for (let i=0; i<total; i++) {
-    const file = files[i];
-    try {
-      const result = await fn(file, opts);
-      results.push({ filename:file.name, result });
-      yield { type:'progress', current:i+1, total, filename:file.name, result };
-    } catch(err) {
-      const error = err.message || String(err);
-      errors.push({ filename:file.name, error });
-      yield { type:'error', current:i+1, total, filename:file.name, error };
-    }
-  }
-  yield { type:'done', total, results, errors };
 }
 
 /* ── Utility exports ──────────────────────────────────────────── */

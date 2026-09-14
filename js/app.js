@@ -19,7 +19,6 @@ const HEADER_ROUTES = new Map([
   ['/editor/', '/tools/editor/'],
   ['/social/', '/tools/social-tools/'],
   ['/utilities/', '/tools/utilities/'],
-  ['/bulk/', '/tools/bulk-tools/'],
 ]);
 
 function normalizeHeaderNavigation() {

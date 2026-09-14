@@ -8,7 +8,7 @@
 <link rel="canonical" href="https://pixaroid.vercel.app/tools/conversion/png-to-bmp/"/>
 <meta property="og:type" content="website"/><meta property="og:site_name" content="Pixaroid"/>
 <meta property="og:title" content="PNG to BMP Converter — Free Online | Pixaroid"/>
-<meta property="og:description" content="Convert PNG images to BMP format online for free. Browser-based, no upload, instant conversion. Supports batch input."/>
+<meta property="og:description" content="Convert PNG images to BMP format online for free. Browser-based, no upload, instant conversion."/>
 <meta property="og:url" content="https://pixaroid.vercel.app/tools/conversion/png-to-bmp/"/>
 <meta property="og:image" content="https://pixaroid.vercel.app/assets/images/og-default.png"/>
 <meta name="twitter:card" content="summary_large_image"/><meta name="twitter:site" content="@pixaroidapp"/>
@@ -577,7 +577,7 @@ select:focus,input[type=number]:focus,input[type=text]:focus{
     <div>
       <div class="hero-cat">Conversion</div>
       <h1>Convert PNG to BMP Online — Free</h1>
-      <p class="hero-desc">Convert PNG images to BMP format online for free. Browser-based, no upload, instant conversion. Supports batch input.</p>
+      <p class="hero-desc">Convert PNG images to BMP format online for free. Browser-based, no upload, instant conversion.</p>
       <div class="badges"><span class="badge b-free">✓ Free</span><span class="badge b-fast">⚡ Instant</span><span class="badge b-priv">🔒 No Upload</span></div>
     </div>
   </div>
@@ -635,7 +635,7 @@ select:focus,input[type=number]:focus,input[type=text]:focus{
     <div class="sb-card"><div class="sb-sec"><div class="sb-t">Related Tools</div><nav class="related-list" id="rl"><a href="/tools/conversion/bmp-to-png/" class="related-item"><span class="related-item-dot"></span>BMP to PNG<svg class="related-item-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a><a href="/tools/compression/compress-image/" class="related-item"><span class="related-item-dot"></span>Compress After Converting<svg class="related-item-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a></nav><a href="/tools/conversion/" style="display:block;margin-top:.75rem;text-align:center;font-size:.8125rem;color:var(--accent2);font-weight:600;padding:.5rem;border-radius:8px;background:rgba(108,99,255,.06);border:1px solid rgba(108,99,255,.12)">All Conversion tools →</a></div></div>
   </aside>
 </div>
-<section class="faq-sec"><div class="aeo-box" id="aeo-answer"><div class="aeo-label">Quick Answer</div><p class="aeo-answer"><strong>PNG to BMP Converter:</strong> Convert PNG images to BMP format online for free. Browser-based, no upload, instant conversion. Supports batch input. Free, instant, no upload required.</p></div>
+<section class="faq-sec"><div class="aeo-box" id="aeo-answer"><div class="aeo-label">Quick Answer</div><p class="aeo-answer"><strong>PNG to BMP Converter:</strong> Convert PNG images to BMP format online for free. Browser-based, no upload, instant conversion. Free, instant, no upload required.</p></div>
 <h2>Frequently Asked Questions</h2><div class="faq-list">
     <div class="faq-item open">
       <button class="faq-q">How do I convert PNG to BMP?<span class="faq-q-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
@@ -740,7 +740,6 @@ function guessItype(s){
   if(/enhanc/.test(s))return'ai-enhance';
   if(/coloriz/.test(s))return'ai-colorize';
   if(/ocr|text-ext/.test(s))return'ai-ocr';
-  if(/bulk/.test(s))return'bulk';
   return'compress';
 }
 function getControls(){
@@ -1018,7 +1017,6 @@ async function process(file,itype,ctrl){
      itype==='ai-sharpen'||itype==='ai-colorize'||itype==='ai-ocr'){
     return runAI(itype,buf,mime,file.size,ctrl);
   }
-  if(itype==='bulk')return runBulk(file,ctrl);
   if(itype==='info'||itype==='metadata'||itype==='palette')return runUtil(file,buf);
 
   // Editor ops
@@ -1092,23 +1090,6 @@ function runAI(itype,buf,mime,origSize,ctrl){
   });
 }
 
-/* ── BULK ── */
-async function runBulk(file,ctrl){
-  var input=$$('fi'),files=input&&input.files&&input.files.length>1?Array.from(input.files):[file];
-  var task=SLUG.includes('resize')?'resize':SLUG.includes('convert')?'convert':SLUG.includes('watermark')?'watermark':'compress';
-  var results=[],total=files.length;
-  for(var i=0;i<total;i++){
-    var f=files[i];
-    pl.textContent=(i+1)+'/'+total+': '+f.name;pd.textContent=Math.round((i/total)*100)+'%';
-    try{
-      var buf=await readBuf(f);
-      var r=await runWorker('/workers/compress.worker.js',{
-        op:'compress',buffer:buf,mime:f.type||'image/jpeg',origSize:f.size,
-        quality:parseInt(ctrl.quality)||80,format:'jpeg',
-      });
-      results.push({name:f.name,blob:r.blob});
-    }catch(e2){}
-  }
   if(!results.length)throw new Error('No files processed');
   if(results.length===1)return{blob:results[0].blob,fmt:'jpeg'};
   if(!window.JSZip)await new Promise(function(res,rej){var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';s.onload=res;s.onerror=rej;document.head.appendChild(s);});
@@ -1148,13 +1129,13 @@ if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch
 <script>
 (function(){
 'use strict';
-var TOOL_TYPE=(function(){var p=window.location.pathname;if(p.indexOf('/compress')>=0||p.indexOf('/optimize')>=0)return'compress';if(p.indexOf('/resize')>=0||p.indexOf('/scale')>=0)return'resize';if(p.indexOf('/convert')>=0||p.indexOf('/change-format')>=0)return'convert';if(p.indexOf('/bulk')>=0)return'bulk';return'compress';})();
+var TOOL_TYPE=(function(){var p=window.location.pathname;if(p.indexOf('/compress')>=0||p.indexOf('/optimize')>=0)return'compress';if(p.indexOf('/resize')>=0||p.indexOf('/scale')>=0)return'resize';if(p.indexOf('/convert')>=0||p.indexOf('/change-format')>=0)return'convert';return'compress';})();
 var MAX_SIZE=20*1024*1024;
 var dz=document.getElementById('dz'),fi=document.getElementById('fi'),bp=document.getElementById('bp'),bd=document.getElementById('bd'),br=document.getElementById('br');
 function pxToast(m,t,d){t=t||'info';d=d||3500;var c=document.getElementById('tc2')||document.querySelector('.tcc');if(!c){c=document.createElement('div');c.id='tc2';c.className='tcc';document.body.appendChild(c);}var el=document.createElement('div');el.className='tst t'+(t==='error'?'er':t==='success'?'ok':'in');el.textContent=m;c.appendChild(el);requestAnimationFrame(function(){el.classList.add('V');});setTimeout(function(){el.classList.remove('V');setTimeout(function(){el.remove();},300);},d);}
 function fmtBytes(n){if(!n&&n!==0)return'—';if(n<1024)return n+' B';if(n<1048576)return(n/1024).toFixed(1)+' KB';return(n/1048576).toFixed(2)+' MB';}
-function getWorkerPath(t){return t==='resize'?'resize':t==='convert'?'convert':t==='bulk'?'bulk':'compress';}
-function getOp(t){return t==='resize'?'resize':t==='convert'?'convert':t==='bulk'?'bulk':'compress';}
+function getWorkerPath(t){return t==='resize'?'resize':t==='convert'?'convert':'compress';}
+function getOp(t){return t==='resize'?'resize':t==='convert'?'convert':'compress';}
 function getSettings(){var s={};var q=document.querySelector('input[type="range"][data-control="quality"]');if(q)s.quality=parseInt(q.value)||80;var f=document.querySelector('select[data-control="format"]');if(f)s.format=f.value||'auto';return s;}
 function handleFile(file){if(!file)return;if(file.size>MAX_SIZE){pxToast('File too large — max 20MB','error',4000);return;}if(!file.type.startsWith('image/')){pxToast('Please select an image file','error',4000);return;}window.currentFile=file;var fn=document.getElementById('fn');if(fn)fn.textContent=file.name;var pob=document.getElementById('pob');if(pob){pob.innerHTML='';var img=document.createElement('img');img.src=URL.createObjectURL(file);img.alt='Original';pob.appendChild(img);}var ab=document.getElementById('ab'),sp=document.getElementById('sp'),prs=document.getElementById('prs');if(ab)ab.classList.add('V');if(sp)sp.classList.add('V');if(prs)prs.classList.add('V');if(dz)dz.style.display='none';if(bp)bp.disabled=false;pxToast('Image loaded','info',2000);}
 if(fi){fi.addEventListener('change',function(){var f=this.files&&this.files[0];if(f)handleFile(f);setTimeout(function(){fi.value='';},1000);});}

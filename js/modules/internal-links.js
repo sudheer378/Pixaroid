@@ -86,7 +86,6 @@ const CAT_COLORS = Object.freeze({
   'ai-tools':{ bg:'rgba(244,63,94,.1)', text:'#F43F5E' },
   'social-tools':{ bg:'rgba(14,165,233,.1)', text:'#0EA5E9' },
   utilities:{ bg:'rgba(6,182,212,.1)', text:'#06B6D4' },
-  'bulk-tools':{ bg:'rgba(20,184,166,.1)', text:'#14B8A6' },
   'pdf-tools':{ bg:'rgba(124,58,237,.1)', text:'#7C3AED' },
 });
 
@@ -98,7 +97,7 @@ const BADGE_STYLES = Object.freeze({
 
 function _colorFor(category) { return CAT_COLORS[category] ?? CAT_COLORS.compression; }
 function _catLabel(cat) {
-  return ({compression:'Compression', conversion:'Conversion', resize:'Resize', editor:'Editor', 'ai-tools':'AI', 'social-tools':'Social', utilities:'Utility', 'bulk-tools':'Bulk', 'pdf-tools':'PDF'})[cat] ?? String(cat ?? '');
+  return ({compression:'Compression', conversion:'Conversion', resize:'Resize', editor:'Editor', 'ai-tools':'AI', 'social-tools':'Social', utilities:'Utility', 'pdf-tools':'PDF'})[cat] ?? String(cat ?? '');
 }
 function _safeText(value) { return String(value ?? ''); }
 function _safeHref(category, slug) { return `/tools/${encodeURIComponent(String(category ?? ''))}/${encodeURIComponent(String(slug ?? ''))}/`; }

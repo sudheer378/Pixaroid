@@ -94,7 +94,7 @@ export class FileHandler {
     if (this.multiple) this.onFiles(valid);
     else {
       this.onFile(valid[0]);
-      if (valid.length > 1) this.onError('Only the first file was used. Use a bulk tool for multiple files.');
+      if (valid.length > 1) this.onError('Only the first file was used. Please select a single file.');
     }
   }
 

@@ -249,8 +249,6 @@ window.pxGuessOperation = function(slug) {
   if (/enhanc/.test(slug)) return 'ai-enhance';
   if (/coloriz/.test(slug)) return 'ai-colorize';
   if (/ocr|text-ext/.test(slug)) return 'ai-ocr';
-  if (/bulk/.test(slug)) return 'bulk';
-  
   return 'compress';
 };
 

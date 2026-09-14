@@ -11,11 +11,6 @@ self.onmessage = async function (e) {
         const input = data.file || (data.buffer ? new Blob([data.buffer], { type:data.mime || 'application/octet-stream' }) : null);
         if (!(input instanceof Blob) || input.size === 0) throw new Error('Invalid or empty input file.');
 
-        if (data.type === 'batch') {
-            await processBatch(data, jobId);
-            return;
-        }
-
         const bitmap = await createImageBitmap(input);
         try {
             const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
@@ -51,28 +46,6 @@ self.onmessage = async function (e) {
         self.postMessage({ type:'error', jobId, error:error?.message || 'Worker processing failed.' });
     }
 };
-
-async function processBatch(data, jobId) {
-    const files = Array.from(data.files || []);
-    const results = [];
-    const errors = [];
-    for (let i = 0; i < files.length; i++) {
-        try {
-            const file = files[i];
-            const bitmap = await createImageBitmap(file);
-            const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(bitmap, 0, 0);
-            const blob = await canvas.convertToBlob({ type:normalizeFormat(data.options?.format || 'jpeg'), quality:clampQuality(data.options?.quality, 0.9) });
-            bitmap.close();
-            results.push({ filename:file.name, blob });
-            self.postMessage({ type:'progress', jobId, current:i + 1, total:files.length, percent:Math.round(((i + 1) / Math.max(1, files.length)) * 100) });
-        } catch (error) {
-            errors.push({ filename:files[i]?.name || `file-${i + 1}`, error:error?.message || 'Processing failed.' });
-        }
-    }
-    self.postMessage({ type:'batch-complete', jobId, results, errors });
-}
 
 function normalizeFormat(value) {
     const v = String(value).toLowerCase();

@@ -67,7 +67,6 @@ const TOOL_CHUNK_TYPES = new Set([
   'crop', 'rotate', 'flip', 'watermark', 'text-overlay', 'blur', 'sharpen', 'adjust',
   'ai-bg-remove', 'ai-upscale', 'ai-enhance', 'ai-sharpen', 'ai-colorize', 'ai-ocr',
   'social-canvas',
-  'bulk',
   'palette', 'info', 'metadata', 'calculator'
 ]);
 
