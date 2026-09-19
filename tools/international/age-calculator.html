@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Age Calculator - Calculate Your Exact Age | Pixaroid</title>
+<meta name="description" content="Calculate your exact age in years, months, weeks, and days. Free browser-based age calculator with detailed breakdown.">
+<link rel="canonical" href="https://pixaroid.vercel.app/tools/international/age-calculator.html">
+<meta name="robots" content="index, follow">
+<style>
+    body {
+        margin: 0;
+        font-family: system-ui, -apple-system, sans-serif;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: #f8fafc;
+        min-height: 100vh;
+        padding: 20px;
+    }
+    .container {
+        max-width: 800px;
+        margin: auto;
+    }
+    .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #a5b4fc;
+        text-decoration: none;
+    }
+    .back:hover {
+        text-decoration: underline;
+    }
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+    .tool-desc {
+        color: #94a3b8;
+        margin-bottom: 30px;
+    }
+    .calculator-card {
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid #334155;
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+    .input-group {
+        margin-bottom: 20px;
+    }
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #e2e8f0;
+    }
+    input[type="date"] {
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 8px;
+        border: 1px solid #475569;
+        background: #1e293b;
+        color: #f8fafc;
+        font-size: 1.1rem;
+        box-sizing: border-box;
+    }
+    button {
+        width: 100%;
+        padding: 14px 20px;
+        border-radius: 8px;
+        border: none;
+        background: #6366f1;
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+    button:hover {
+        background: #4f46e5;
+    }
+    .result-section {
+        display: none;
+        margin-top: 30px;
+    }
+    .result-section.active {
+        display: block;
+    }
+    .main-result {
+        text-align: center;
+        padding: 25px;
+        background: rgba(99, 102, 241, 0.1);
+        border: 2px solid #6366f1;
+        border-radius: 12px;
+        margin-bottom: 25px;
+    }
+    .main-result .years {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: #818cf8;
+        line-height: 1.2;
+    }
+    .main-result .label {
+        color: #94a3b8;
+        font-size: 1.1rem;
+        margin-top: 5px;
+    }
+    .details-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+    .detail-card {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid #334155;
+        border-radius: 12px;
+        padding: 18px;
+        text-align: center;
+    }
+    .detail-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #34d399;
+        margin-bottom: 5px;
+    }
+    .detail-label {
+        color: #94a3b8;
+        font-size: 0.9rem;
+    }
+    .milestone-section {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid #334155;
+        border-radius: 12px;
+        padding: 20px;
+    }
+    .milestone-section h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        color: #e2e8f0;
+    }
+    .milestone-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #334155;
+    }
+    .milestone-item:last-child {
+        border-bottom: none;
+    }
+    .milestone-name {
+        color: #94a3b8;
+    }
+    .milestone-date {
+        color: #fbbf24;
+        font-weight: 600;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="/tools/international/">← Back to International Tools</a>
+    
+    <header>
+        <h1>🎂 Age Calculator</h1>
+        <p class="tool-desc">Calculate your exact age in years, months, weeks, and days. See upcoming milestones too!</p>
+    </header>
+
+    <div class="calculator-card">
+        <div class="input-group">
+            <label for="birthDate">Enter your birth date:</label>
+            <input type="date" id="birthDate">
+        </div>
+        <button onclick="calculateAge()">Calculate Age</button>
+
+        <div class="result-section" id="resultSection">
+            <div class="main-result">
+                <div class="years" id="yearsResult">0</div>
+                <div class="label">Years Old</div>
+            </div>
+
+            <div class="details-grid">
+                <div class="detail-card">
+                    <div class="detail-value" id="monthsResult">0</div>
+                    <div class="detail-label">Total Months</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-value" id="weeksResult">0</div>
+                    <div class="detail-label">Total Weeks</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-value" id="daysResult">0</div>
+                    <div class="detail-label">Total Days</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-value" id="hoursResult">0</div>
+                    <div class="detail-label">Total Hours</div>
+                </div>
+            </div>
+
+            <div class="milestone-section">
+                <h3>🎯 Upcoming Milestones</h3>
+                <div id="milestonesList"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function calculateAge() {
+        const birthInput = document.getElementById('birthDate').value;
+        if (!birthInput) {
+            alert('Please select your birth date!');
+            return;
+        }
+
+        const birthDate = new Date(birthInput);
+        const today = new Date();
+
+        if (birthDate > today) {
+            alert('Birth date cannot be in the future!');
+            return;
+        }
+
+        // Calculate years, months, days
+        let years = today.getFullYear() - birthDate.getFullYear();
+        let months = today.getMonth() - birthDate.getMonth();
+        let days = today.getDate() - birthDate.getDate();
+
+        if (days < 0) {
+            months--;
+            const lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+            days += lastMonth.getDate();
+        }
+
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
+
+        // Total calculations
+        const totalDays = Math.floor((today - birthDate) / (1000 * 60 * 60 * 24));
+        const totalWeeks = Math.floor(totalDays / 7);
+        const totalMonths = years * 12 + months;
+        const totalHours = totalDays * 24;
+
+        // Display results
+        document.getElementById('yearsResult').textContent = years;
+        document.getElementById('monthsResult').textContent = totalMonths.toLocaleString();
+        document.getElementById('weeksResult').textContent = totalWeeks.toLocaleString();
+        document.getElementById('daysResult').textContent = totalDays.toLocaleString();
+        document.getElementById('hoursResult').textContent = totalHours.toLocaleString();
+
+        // Calculate milestones
+        calculateMilestones(birthDate, years);
+
+        document.getElementById('resultSection').classList.add('active');
+    }
+
+    function calculateMilestones(birthDate, currentAge) {
+        const milestones = [
+            { age: currentAge + 1, name: 'Next Birthday' },
+            { age: Math.ceil(currentAge / 5) * 5, name: '5-Year Milestone' },
+            { age: 25, name: 'Quarter Century' },
+            { age: 30, name: 'Three Decades' },
+            { age: 40, name: 'Four Decades' },
+            { age: 50, name: 'Half Century' },
+            { age: 60, name: 'Six Decades' },
+            { age: 75, name: 'Three Quarters' },
+            { age: 100, name: 'Century Club' }
+        ];
+
+        const milestonesList = document.getElementById('milestonesList');
+        milestonesList.innerHTML = '';
+
+        const uniqueMilestones = [];
+        const seenAges = new Set();
+
+        milestones.forEach(m => {
+            if (m.age > currentAge && !seenAges.has(m.age)) {
+                seenAges.add(m.age);
+                uniqueMilestones.push(m);
+            }
+        });
+
+        uniqueMilestones.sort((a, b) => a.age - b.age).slice(0, 5).forEach(milestone => {
+            const milestoneDate = new Date(birthDate);
+            milestoneDate.setFullYear(birthDate.getFullYear() + milestone.age);
+            
+            const formattedDate = milestoneDate.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            const item = document.createElement('div');
+            item.className = 'milestone-item';
+            item.innerHTML = `
+                <span class="milestone-name">${milestone.name} (${milestone.age} years)</span>
+                <span class="milestone-date">${formattedDate}</span>
+            `;
+            milestonesList.appendChild(item);
+        });
+    }
+</script>
+
+<script type="module" src="/js/modules/monetization.js" data-pixaroid-monetization></script>
+</body>
+</html>

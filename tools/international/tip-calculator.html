@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tip Calculator - Split Bills Easily | Pixaroid</title>
+<meta name="description" content="Calculate tips and split bills among friends. Free browser-based tip calculator with customizable percentages.">
+<link rel="canonical" href="https://pixaroid.vercel.app/tools/international/tip-calculator.html">
+<meta name="robots" content="index, follow">
+<style>
+    body {
+        margin: 0;
+        font-family: system-ui, -apple-system, sans-serif;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: #f8fafc;
+        min-height: 100vh;
+        padding: 20px;
+    }
+    .container {
+        max-width: 700px;
+        margin: auto;
+    }
+    .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #a5b4fc;
+        text-decoration: none;
+    }
+    .back:hover {
+        text-decoration: underline;
+    }
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+    .tool-desc {
+        color: #94a3b8;
+        margin-bottom: 30px;
+    }
+    .calculator-card {
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid #334155;
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+    .input-group {
+        margin-bottom: 20px;
+    }
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #e2e8f0;
+    }
+    input[type="number"] {
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 8px;
+        border: 1px solid #475569;
+        background: #1e293b;
+        color: #f8fafc;
+        font-size: 1.1rem;
+        box-sizing: border-box;
+    }
+    .tip-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+    .tip-btn {
+        flex: 1;
+        min-width: 70px;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #475569;
+        background: rgba(15, 23, 42, 0.6);
+        color: #94a3b8;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    .tip-btn.active {
+        background: #6366f1;
+        border-color: #6366f1;
+        color: #fff;
+    }
+    .tip-btn:hover:not(.active) {
+        border-color: #6366f1;
+        color: #e2e8f0;
+    }
+    .custom-tip {
+        margin-top: 15px;
+    }
+    .results-section {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid #334155;
+        border-radius: 12px;
+        padding: 25px;
+        margin-top: 25px;
+    }
+    .result-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #334155;
+    }
+    .result-row:last-child {
+        border-bottom: none;
+    }
+    .result-label {
+        color: #94a3b8;
+    }
+    .result-value {
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: #e2e8f0;
+    }
+    .result-value.highlight {
+        color: #34d399;
+        font-size: 1.4rem;
+    }
+    .total-section {
+        background: rgba(99, 102, 241, 0.1);
+        border: 2px solid #6366f1;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 20px;
+        text-align: center;
+    }
+    .total-label {
+        color: #94a3b8;
+        font-size: 1rem;
+        margin-bottom: 8px;
+    }
+    .total-amount {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #818cf8;
+    }
+    .per-person {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #334155;
+    }
+    .per-person .result-value {
+        color: #fbbf24;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="/tools/international/">← Back to International Tools</a>
+    
+    <header>
+        <h1>💵 Tip Calculator</h1>
+        <p class="tool-desc">Calculate tips and split bills easily among friends or colleagues.</p>
+    </header>
+
+    <div class="calculator-card">
+        <div class="input-group">
+            <label for="billAmount">Bill Amount ($)</label>
+            <input type="number" id="billAmount" placeholder="0.00" step="0.01" min="0" oninput="calculateTip()">
+        </div>
+
+        <div class="input-group">
+            <label>Tip Percentage</label>
+            <div class="tip-buttons">
+                <button class="tip-btn" onclick="setTip(5)">5%</button>
+                <button class="tip-btn" onclick="setTip(10)">10%</button>
+                <button class="tip-btn active" onclick="setTip(15)">15%</button>
+                <button class="tip-btn" onclick="setTip(20)">20%</button>
+                <button class="tip-btn" onclick="setTip(25)">25%</button>
+            </div>
+            <div class="custom-tip">
+                <input type="number" id="customTip" placeholder="Custom %" min="0" max="100" oninput="setCustomTip()">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="peopleCount">Number of People</label>
+            <input type="number" id="peopleCount" placeholder="1" min="1" value="1" oninput="calculateTip()">
+        </div>
+
+        <div class="results-section" id="resultsSection">
+            <div class="result-row">
+                <span class="result-label">Bill Amount</span>
+                <span class="result-value" id="billDisplay">$0.00</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Tip Percentage</span>
+                <span class="result-value" id="tipPercentDisplay">15%</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Tip Amount</span>
+                <span class="result-value highlight" id="tipAmountDisplay">$0.00</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Tax (Optional)</span>
+                <span class="result-value" id="taxDisplay">$0.00</span>
+            </div>
+
+            <div class="total-section">
+                <div class="total-label">Total Amount</div>
+                <div class="total-amount" id="totalAmount">$0.00</div>
+                
+                <div class="per-person">
+                    <div class="result-label">Per Person</div>
+                    <div class="result-value" id="perPerson">$0.00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentTipPercent = 15;
+    const taxRate = 0; // Can be adjusted for local tax rate
+
+    function setTip(percent) {
+        currentTipPercent = percent;
+        document.getElementById('customTip').value = '';
+        
+        document.querySelectorAll('.tip-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.textContent.includes(percent + '%')) {
+                btn.classList.add('active');
+            }
+        });
+        
+        calculateTip();
+    }
+
+    function setCustomTip() {
+        const customValue = parseFloat(document.getElementById('customTip').value);
+        if (!isNaN(customValue) && customValue >= 0 && customValue <= 100) {
+            currentTipPercent = customValue;
+            
+            document.querySelectorAll('.tip-btn').forEach(btn => btn.classList.remove('active'));
+            
+            calculateTip();
+        }
+    }
+
+    function calculateTip() {
+        const billAmount = parseFloat(document.getElementById('billAmount').value) || 0;
+        const peopleCount = parseInt(document.getElementById('peopleCount').value) || 1;
+        
+        const tipAmount = billAmount * (currentTipPercent / 100);
+        const taxAmount = billAmount * taxRate;
+        const totalAmount = billAmount + tipAmount + taxAmount;
+        const perPerson = totalAmount / peopleCount;
+
+        document.getElementById('billDisplay').textContent = formatCurrency(billAmount);
+        document.getElementById('tipPercentDisplay').textContent = currentTipPercent.toFixed(1) + '%';
+        document.getElementById('tipAmountDisplay').textContent = formatCurrency(tipAmount);
+        document.getElementById('taxDisplay').textContent = formatCurrency(taxAmount);
+        document.getElementById('totalAmount').textContent = formatCurrency(totalAmount);
+        document.getElementById('perPerson').textContent = formatCurrency(perPerson);
+    }
+
+    function formatCurrency(amount) {
+        return '$' + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+
+    // Initialize
+    calculateTip();
+</script>
+
+<script type="module" src="/js/modules/monetization.js" data-pixaroid-monetization></script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>World Clock - Multiple Timezone Display | Pixaroid</title>
+<meta name="description" content="Display current time in multiple cities worldwide. Free browser-based world clock for tracking time zones.">
+<link rel="canonical" href="https://pixaroid.vercel.app/tools/international/world-clock.html">
+<meta name="robots" content="index, follow">
+<style>
+    body {
+        margin: 0;
+        font-family: system-ui, -apple-system, sans-serif;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: #f8fafc;
+        min-height: 100vh;
+        padding: 20px;
+    }
+    .container {
+        max-width: 1000px;
+        margin: auto;
+    }
+    .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #a5b4fc;
+        text-decoration: none;
+    }
+    .back:hover {
+        text-decoration: underline;
+    }
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+    .tool-desc {
+        color: #94a3b8;
+        margin-bottom: 30px;
+    }
+    .clock-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    .clock-card {
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid #334155;
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    .clock-card:hover {
+        border-color: #6366f1;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+    }
+    .city-name {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #e2e8f0;
+    }
+    .time-display {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #818cf8;
+        margin: 10px 0;
+        font-variant-numeric: tabular-nums;
+    }
+    .date-display {
+        color: #94a3b8;
+        font-size: 0.95rem;
+    }
+    .timezone-label {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 4px 12px;
+        background: #0f172a;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        color: #a5b4fc;
+    }
+    .add-clock-section {
+        background: rgba(30, 41, 59, 0.6);
+        border: 1px solid #334155;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 30px;
+    }
+    .add-clock-section h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+    .input-group {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+    }
+    select, button {
+        padding: 12px 16px;
+        border-radius: 8px;
+        border: 1px solid #475569;
+        background: #1e293b;
+        color: #f8fafc;
+        font-size: 1rem;
+    }
+    select {
+        flex: 1;
+        min-width: 200px;
+    }
+    button {
+        background: #6366f1;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.3s ease;
+    }
+    button:hover {
+        background: #4f46e5;
+    }
+    .remove-btn {
+        background: #ef4444;
+        padding: 6px 12px;
+        font-size: 0.85rem;
+        margin-top: 10px;
+    }
+    .remove-btn:hover {
+        background: #dc2626;
+    }
+    .refresh-info {
+        text-align: center;
+        color: #64748b;
+        font-size: 0.9rem;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="/tools/international/">← Back to International Tools</a>
+    
+    <header>
+        <h1>🌍 World Clock</h1>
+        <p class="tool-desc">Track current time in multiple cities worldwide. Add your favorite locations and monitor them simultaneously.</p>
+    </header>
+
+    <div class="add-clock-section">
+        <h3>Add a City</h3>
+        <div class="input-group">
+            <select id="citySelect">
+                <option value="">Select a city...</option>
+                <option value="America/New_York">New York (USA)</option>
+                <option value="America/Los_Angeles">Los Angeles (USA)</option>
+                <option value="America/Chicago">Chicago (USA)</option>
+                <option value="America/Toronto">Toronto (Canada)</option>
+                <option value="America/Mexico_City">Mexico City (Mexico)</option>
+                <option value="America/Sao_Paulo">São Paulo (Brazil)</option>
+                <option value="Europe/London">London (UK)</option>
+                <option value="Europe/Paris">Paris (France)</option>
+                <option value="Europe/Berlin">Berlin (Germany)</option>
+                <option value="Europe/Madrid">Madrid (Spain)</option>
+                <option value="Europe/Rome">Rome (Italy)</option>
+                <option value="Europe/Moscow">Moscow (Russia)</option>
+                <option value="Asia/Dubai">Dubai (UAE)</option>
+                <option value="Asia/Kolkata">Mumbai (India)</option>
+                <option value="Asia/Shanghai">Shanghai (China)</option>
+                <option value="Asia/Tokyo">Tokyo (Japan)</option>
+                <option value="Asia/Seoul">Seoul (South Korea)</option>
+                <option value="Asia/Singapore">Singapore</option>
+                <option value="Asia/Bangkok">Bangkok (Thailand)</option>
+                <option value="Asia/Hong_Kong">Hong Kong</option>
+                <option value="Australia/Sydney">Sydney (Australia)</option>
+                <option value="Australia/Melbourne">Melbourne (Australia)</option>
+                <option value="Pacific/Auckland">Auckland (New Zealand)</option>
+                <option value="Africa/Cairo">Cairo (Egypt)</option>
+                <option value="Africa/Johannesburg">Johannesburg (South Africa)</option>
+                <option value="Africa/Lagos">Lagos (Nigeria)</option>
+            </select>
+            <button onclick="addClock()">+ Add Clock</button>
+        </div>
+    </div>
+
+    <div class="clock-grid" id="clockGrid"></div>
+    
+    <p class="refresh-info">Times update automatically every second</p>
+</div>
+
+<script>
+    let clocks = [];
+    const defaultCities = ['America/New_York', 'Europe/London', 'Asia/Tokyo', 'Asia/Kolkata'];
+    
+    function getCityName(timezone) {
+        const cityNames = {
+            'America/New_York': 'New York',
+            'America/Los_Angeles': 'Los Angeles',
+            'America/Chicago': 'Chicago',
+            'America/Toronto': 'Toronto',
+            'America/Mexico_City': 'Mexico City',
+            'America/Sao_Paulo': 'São Paulo',
+            'Europe/London': 'London',
+            'Europe/Paris': 'Paris',
+            'Europe/Berlin': 'Berlin',
+            'Europe/Madrid': 'Madrid',
+            'Europe/Rome': 'Rome',
+            'Europe/Moscow': 'Moscow',
+            'Asia/Dubai': 'Dubai',
+            'Asia/Kolkata': 'Mumbai',
+            'Asia/Shanghai': 'Shanghai',
+            'Asia/Tokyo': 'Tokyo',
+            'Asia/Seoul': 'Seoul',
+            'Asia/Singapore': 'Singapore',
+            'Asia/Bangkok': 'Bangkok',
+            'Asia/Hong_Kong': 'Hong Kong',
+            'Australia/Sydney': 'Sydney',
+            'Australia/Melbourne': 'Melbourne',
+            'Pacific/Auckland': 'Auckland',
+            'Africa/Cairo': 'Cairo',
+            'Africa/Johannesburg': 'Johannesburg',
+            'Africa/Lagos': 'Lagos'
+        };
+        return cityNames[timezone] || timezone;
+    }
+
+    function addClock() {
+        const select = document.getElementById('citySelect');
+        const timezone = select.value;
+        
+        if (!timezone) return;
+        if (clocks.includes(timezone)) {
+            alert('This city is already added!');
+            return;
+        }
+        
+        clocks.push(timezone);
+        saveClocks();
+        renderClocks();
+        select.value = '';
+    }
+
+    function removeClock(timezone) {
+        clocks = clocks.filter(tz => tz !== timezone);
+        saveClocks();
+        renderClocks();
+    }
+
+    function saveClocks() {
+        localStorage.setItem('worldClocks', JSON.stringify(clocks));
+    }
+
+    function loadClocks() {
+        const saved = localStorage.getItem('worldClocks');
+        if (saved) {
+            clocks = JSON.parse(saved);
+        } else {
+            clocks = [...defaultCities];
+        }
+    }
+
+    function updateTime(timezone) {
+        const now = new Date();
+        const options = { 
+            timeZone: timezone, 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit',
+            hour12: true 
+        };
+        const dateOptions = {
+            timeZone: timezone,
+            weekday: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        };
+        
+        const timeStr = now.toLocaleTimeString('en-US', options);
+        const dateStr = now.toLocaleDateString('en-US', dateOptions);
+        
+        return { time: timeStr, date: dateStr };
+    }
+
+    function renderClocks() {
+        const grid = document.getElementById('clockGrid');
+        grid.innerHTML = '';
+        
+        clocks.forEach(timezone => {
+            const card = document.createElement('div');
+            card.className = 'clock-card';
+            card.innerHTML = `
+                <div class="city-name">${getCityName(timezone)}</div>
+                <div class="time-display" id="time-${timezone.replace(/\//g, '-')}">--:--:--</div>
+                <div class="date-display" id="date-${timezone.replace(/\//g, '-')}">--</div>
+                <div class="timezone-label">${timezone}</div>
+                <button class="remove-btn" onclick="removeClock('${timezone}')">Remove</button>
+            `;
+            grid.appendChild(card);
+        });
+        
+        updateAllTimes();
+    }
+
+    function updateAllTimes() {
+        clocks.forEach(timezone => {
+            const id = timezone.replace(/\//g, '-');
+            const { time, date } = updateTime(timezone);
+            const timeEl = document.getElementById(`time-${id}`);
+            const dateEl = document.getElementById(`date-${id}`);
+            
+            if (timeEl) timeEl.textContent = time;
+            if (dateEl) dateEl.textContent = date;
+        });
+    }
+
+    // Initialize
+    loadClocks();
+    renderClocks();
+    
+    // Update every second
+    setInterval(updateAllTimes, 1000);
+</script>
+
+<script type="module" src="/js/modules/monetization.js" data-pixaroid-monetization></script>
+</body>
+</html>
