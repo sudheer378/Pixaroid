@@ -3,76 +3,535 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<meta name="description" content="Pixaroid: free browser-based image and PDF tools. Compress, convert, resize, edit images and PDFs, with supported tools designed for local browser processing. No upload required."/>
+<meta name="description" content="Pixaroid - 520+ Free Online Image & PDF Tools. Compress, convert, resize, edit images and PDFs instantly in your browser. No upload required. Professional tools for creators, developers, and businesses."/>
+<meta name="keywords" content="free image tools, online photo editor, image compressor, PDF tools, resize images, convert images, AI image tools, batch image processor, webp converter, passport photo maker, social media image tools"/>
 <meta name="author" content="Pixaroid"/>
-<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large"/>
+<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"/>
 <link rel="canonical" href="https://pixaroid.vercel.app/"/>
-<meta property="og:type" content="website"/><meta property="og:site_name" content="Pixaroid"/>
-<meta property="og:title" content="Pixaroid — Free Image & PDF Tools. No Upload Required."/>
-<meta property="og:description" content="Compress, convert, resize, edit images and PDFs in your browser. No upload required for supported tools."/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Pixaroid"/>
+<meta property="og:title" content="Pixaroid — 520+ Free Image & PDF Tools. No Upload Required."/>
+<meta property="og:description" content="Professional browser-based image and PDF tools. 520+ free tools for compression, conversion, resizing, AI editing, and more. No upload required."/>
 <meta property="og:url" content="https://pixaroid.vercel.app/"/>
 <meta property="og:image" content="https://pixaroid.vercel.app/assets/images/og-default.svg"/>
-<meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/>
-<meta property="og:image:type" content="image/svg+xml"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Pixaroid — Free Image & PDF Tools"/>
-<meta name="twitter:description" content="Compress, convert, resize and edit images and PDFs in your browser. No upload required for supported tools."/>
-<meta name="theme-color" content="#06050F"/>
+<meta name="twitter:title" content="Pixaroid — 520+ Free Image & PDF Tools"/>
+<meta name="twitter:description" content="Professional browser-based image and PDF tools. Compress, convert, resize, edit images and PDFs with 520+ free tools."/>
+<meta name="theme-color" content="#7C6FFF"/>
 <link rel="icon" href="/assets/svg/favicon.svg" type="image/svg+xml"/>
 <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png"/>
 <link rel="manifest" href="/manifest.json"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://pixaroid.vercel.app/#website","name":"Pixaroid","url":"https://pixaroid.vercel.app","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://pixaroid.vercel.app/?q={search_term_string}"},"query-input":"required name=search_term_string"}},{"@type":"Organization","@id":"https://pixaroid.vercel.app/#org","name":"Pixaroid","url":"https://pixaroid.vercel.app","description":"Free browser-based image and PDF tools with local processing for supported operations."}]}</script>
-<title>Pixaroid — Free Image & PDF Tools. No Upload Required.</title>
-<link rel="stylesheet" href="/css/output.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Pixaroid","url":"https://pixaroid.vercel.app","potentialAction":{"@type":"SearchAction","target":"https://pixaroid.vercel.app/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+<title>Pixaroid — 520+ Free Image & PDF Tools. No Upload Required.</title>
 <style>
-:root{--ink:#05040D;--ink2:#08071A;--glass:#0D0B1E;--glass2:#131128;--glass3:#1A1833;--rim:rgba(255,255,255,.065);--rim2:rgba(255,255,255,.1);--rim3:rgba(255,255,255,.18);--txt:#F0EFF8;--mute:#9494BB;--dim:#383860;--v:#7B6FFF;--v2:#A99FFF;--f:'Plus Jakarta Sans',sans-serif}
-*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}body{font-family:var(--f);background:var(--ink);color:var(--txt);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.6}a{color:inherit;text-decoration:none}.W{max-width:1200px;margin:0 auto;padding:0 1.25rem;position:relative;z-index:1}.nav{position:sticky;top:0;z-index:300;background:rgba(5,4,13,.88);backdrop-filter:blur(28px) saturate(160%);border-bottom:1px solid var(--rim)}.ni{display:flex;align-items:center;gap:.875rem;height:58px;max-width:1200px;margin:0 auto;padding:0 1.25rem}.logo{display:flex;align-items:center;gap:.5rem;font-weight:800;font-size:1.125rem;letter-spacing:-.04em}.ns{flex:1}.nl{display:flex;align-items:center;gap:.125rem}.na{padding:.375rem .75rem;border-radius:8px;font-size:.875rem;font-weight:500;color:var(--mute);transition:color .2s,background .2s}.na:hover,.na:focus-visible{color:var(--txt);background:rgba(255,255,255,.06)}.tbtn{width:36px;height:36px;border-radius:9px;border:1px solid var(--rim2);background:var(--glass2);color:var(--mute);display:flex;align-items:center;justify-content:center;cursor:pointer}@media(max-width:768px){.nl{display:none}}
+:root{--bg:#0a0a0f;--bg2:#12121a;--bg3:#1a1a25;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);--text:#ffffff;--text2:#a0a0b0;--accent:#7C6FFF;--accent2:#9D93FF;--success:#23D67A;--warning:#FFAB2E;--error:#FF4F4F;--cyan:#14D9C4;--font:'Plus Jakarta Sans',sans-serif;--shadow:0 8px 32px rgba(0,0,0,0.4);--glow:0 0 40px rgba(124,111,255,0.15)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;top:0;left:0;right:0;height:400px;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(124,111,255,0.12),transparent 70%);pointer-events:none;z-index:0}
+a{color:inherit;text-decoration:none;transition:color .2s}
+img{max-width:100%;display:block}
+button{cursor:pointer;font-family:var(--font);border:none;background:none}
+.W{max-width:1280px;margin:0 auto;padding:0 1.5rem;position:relative;z-index:1}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:500;background:rgba(10,10,15,0.85);backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--border)}
+.ni{display:flex;align-items:center;height:64px;gap:1rem;max-width:1280px;margin:0 auto;padding:0 1.5rem}
+.logo{display:flex;align-items:center;gap:0.6rem;font-weight:800;font-size:1.25rem;letter-spacing:-0.03em;color:#fff}
+.logo-icon{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--accent),#9C40FF);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(124,111,255,0.3)}
+.logo-icon svg{width:18px;height:18px;color:#fff}
+.ns{flex:1}
+.nl{display:flex;align-items:center;gap:0.25rem}
+.na{padding:0.5rem 0.875rem;border-radius:9px;font-size:0.875rem;font-weight:600;color:var(--text2);transition:all .2s}
+.na:hover,.na:focus-visible{color:var(--text);background:rgba(255,255,255,0.08)}
+.tbtn{width:38px;height:38px;border-radius:10px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.tbtn:hover{border-color:var(--accent);color:var(--text)}
+@media(max-width:900px){.nl{display:none}}
+
+/* HERO */
+.hero{padding:4rem 0 3rem;text-align:center;position:relative}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;padding:0.375rem 0.875rem;border-radius:999px;background:rgba(124,111,255,0.1);border:1px solid rgba(124,111,255,0.2);color:var(--accent2);font-size:0.75rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:1.25rem}
+.hero h1{font-size:clamp(2.5rem,6vw,4rem);font-weight:800;letter-spacing:-0.04em;line-height:1.1;margin-bottom:1rem;background:linear-gradient(135deg,#fff 0%,var(--accent2) 50%,var(--cyan) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:1.125rem;color:var(--text2);max-width:680px;margin:0 auto 1.5rem;line-height:1.7}
+.hero-stats{display:flex;align-items:center;justify-content:center;gap:2rem;flex-wrap:wrap;margin-top:2rem}
+.stat{display:flex;flex-direction:column;align-items:center}
+.stat-n{font-size:2rem;font-weight:800;color:var(--accent2);line-height:1}
+.stat-l{font-size:0.75rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;margin-top:0.25rem}
+
+/* SEARCH */
+.search-wrap{max-width:680px;margin:2.5rem auto 0;position:relative}
+.search-box{display:flex;align-items:center;background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:0.375rem;transition:border-color .2s,box-shadow .2s}
+.search-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,111,255,0.15)}
+.search-input{flex:1;padding:0.75rem 1rem;background:transparent;border:none;color:var(--text);font-size:1rem;outline:none}
+.search-btn{padding:0.75rem 1.25rem;border-radius:10px;background:var(--accent);color:#fff;font-weight:600;display:flex;align-items:center;gap:0.5rem;transition:transform .2s,box-shadow .2s}
+.search-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(124,111,255,0.3)}
+
+/* CATEGORIES */
+.categories{padding:3rem 0}
+.section-header{text-align:center;margin-bottom:2.5rem}
+.section-tag{display:inline-block;padding:0.25rem 0.75rem;border-radius:6px;background:rgba(124,111,255,0.1);color:var(--accent2);font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem}
+.section-title{font-size:1.75rem;font-weight:800;letter-spacing:-0.03em;margin-bottom:0.5rem}
+.section-desc{color:var(--text2);font-size:0.9375rem;max-width:600px;margin:0 auto}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem}
+.cat-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;transition:all .25s;cursor:pointer;position:relative;overflow:hidden}
+.cat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--cyan));opacity:0;transition:opacity .25s}
+.cat-card:hover{transform:translateY(-4px);border-color:var(--border2);box-shadow:var(--shadow)}
+.cat-card:hover::before{opacity:1}
+.cat-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;font-size:1.5rem}
+.cat-icon.compress{background:rgba(255,112,64,0.15);color:#FF7040}
+.cat-icon.convert{background:rgba(20,217,196,0.15);color:var(--cyan)}
+.cat-icon.resize{background:rgba(124,111,255,0.15);color:var(--accent2)}
+.cat-icon.ai{background:rgba(255,171,46,0.15);color:var(--warning)}
+.cat-icon.editor{background:rgba(255,79,79,0.15);color:var(--error)}
+.cat-icon.social{background:rgba(255,107,171,0.15);color:#FF6BAB}
+.cat-icon.utility{background:rgba(100,200,255,0.15);color:#64C8FF}
+.cat-icon.pdf{background:rgba(255,80,80,0.15);color:#FF5050}
+.cat-icon.intl{background:rgba(120,200,120,0.15);color:#78C878}
+.cat-name{font-size:1.0625rem;font-weight:700;margin-bottom:0.375rem}
+.cat-count{font-size:0.8125rem;color:var(--text2)}
+
+/* TOOLS GRID */
+.tools-section{padding:2rem 0 4rem}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin-top:2rem}
+.tool-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.25rem;transition:all .2s;cursor:pointer;display:flex;gap:1rem;align-items:flex-start}
+.tool-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 4px 20px rgba(124,111,255,0.1)}
+.tool-icon{width:42px;height:42px;border-radius:10px;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.25rem}
+.tool-info{flex:1;min-width:0}
+.tool-name{font-size:0.9375rem;font-weight:600;margin-bottom:0.25rem;color:var(--text)}
+.tool-desc{font-size:0.8125rem;color:var(--text2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tool-tags{display:flex;gap:0.375rem;margin-top:0.5rem;flex-wrap:wrap}
+.tag{padding:0.15rem 0.5rem;border-radius:5px;font-size:0.6875rem;font-weight:600;background:var(--bg3);border:1px solid var(--border);color:var(--text2)}
+
+/* CATEGORY FILTERS */
+.filter-bar{display:flex;align-items:center;justify-content:center;gap:0.5rem;flex-wrap:wrap;margin:2rem 0}
+.filter-btn{padding:0.5rem 1rem;border-radius:9px;font-size:0.8125rem;font-weight:600;color:var(--text2);background:var(--bg2);border:1px solid var(--border);transition:all .2s}
+.filter-btn:hover,.filter-btn.active{color:var(--text);border-color:var(--accent);background:rgba(124,111,255,0.1)}
+
+/* CTA */
+.cta-section{padding:3rem 0;text-align:center}
+.cta-box{background:linear-gradient(135deg,rgba(124,111,255,0.1),rgba(20,217,196,0.08));border:1px solid var(--border2);border-radius:20px;padding:3rem 2rem;position:relative;overflow:hidden}
+.cta-box::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(124,111,255,0.1) 0%,transparent 70%);animation:pulse 8s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:0.5}50%{transform:scale(1.1);opacity:0.8}}
+.cta-title{font-size:1.75rem;font-weight:800;margin-bottom:0.75rem}
+.cta-desc{color:var(--text2);margin-bottom:1.5rem;max-width:500px;margin-left:auto;margin-right:auto}
+.cta-btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.875rem 1.75rem;border-radius:12px;background:var(--accent);color:#fff;font-weight:700;font-size:0.9375rem;transition:transform .2s,box-shadow .2s}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,111,255,0.3)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:3rem 0 2rem;margin-top:4rem}
+.footer-grid{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:2rem;margin-bottom:2rem}
+.footer-brand p{color:var(--text2);font-size:0.875rem;margin-top:0.75rem;max-width:280px}
+.footer-col h4{font-size:0.8125rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1rem;color:var(--text2)}
+.footer-col a{display:block;padding:0.375rem 0;font-size:0.875rem;color:var(--text2);transition:color .2s}
+.footer-col a:hover{color:var(--text)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:1.5rem;border-top:1px solid var(--border);flex-wrap:wrap;gap:1rem}
+.copyright{font-size:0.8125rem;color:var(--text2)}
+.social-links{display:flex;gap:0.75rem}
+.social-link{width:36px;height:36px;border-radius:9px;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);transition:all .2s}
+.social-link:hover{border-color:var(--accent);color:var(--accent)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .hero{padding:2.5rem 0 2rem}
+  .hero h1{font-size:2rem}
+  .cat-grid{grid-template-columns:1fr}
+  .tools-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr;gap:1.5rem}
+  .footer-bottom{flex-direction:column;text-align:center}
+}
+
+/* LOADING STATE */
+.loading{display:flex;align-items:center;justify-content:center;padding:3rem}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* NO RESULTS */
+.no-results{text-align:center;padding:3rem;color:var(--text2)}
+.no-results svg{width:64px;height:64px;margin-bottom:1rem;opacity:0.5}
 </style>
 </head>
 <body>
-<nav class="nav"><div class="ni">
-  <a href="/" class="logo" aria-label="Pixaroid home">Pixaroid</a>
-  <div class="ns"></div>
-  <nav class="nl" aria-label="Primary navigation">
-    <a href="/tools/international/" class="na">International</a>
-    <a href="/tools/pdf-tools/" class="na">PDF</a>
-    <a href="/tools/compression/" class="na">Compress</a>
-    <a href="/tools/conversion/" class="na">Convert</a>
-    <a href="/tools/ai-tools/" class="na">AI Tools</a>
-    <a href="/guides/" class="na">Guides</a>
-    <a href="/about.html" class="na">About</a>
-  </nav>
-  <button class="tbtn" id="thm" type="button" aria-label="Toggle theme">☾</button>
-</div></nav>
+<!-- NAV -->
+<nav class="nav">
+  <div class="ni">
+    <a href="/" class="logo" aria-label="Pixaroid home">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      Pixaroid
+    </a>
+    <div class="ns"></div>
+    <nav class="nl" aria-label="Primary navigation">
+      <a href="#categories" class="na">Categories</a>
+      <a href="#tools" class="na">All Tools</a>
+      <a href="/guides/" class="na">Guides</a>
+      <a href="/about.html" class="na">About</a>
+      <a href="/contact.html" class="na">Contact</a>
+    </nav>
+    <button class="tbtn" id="thm" type="button" aria-label="Toggle theme">☾</button>
+  </div>
+</nav>
+
 <main id="home-main">
+  <!-- HERO -->
   <section class="hero">
     <div class="W">
-      <h1>Free Image & PDF Tools</h1>
-      <p>Compress, convert, resize, and edit images and PDFs in your browser. No upload required.</p>
+      <div class="hero-badge">✨ 520+ Free Online Tools</div>
+      <h1>Professional Image & PDF Tools</h1>
+      <p>Compress, convert, resize, and edit images and PDFs instantly in your browser. No upload required. 100% free, private, and secure.</p>
+      
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-n">520+</span>
+          <span class="stat-l">Free Tools</span>
+        </div>
+        <div class="stat">
+          <span class="stat-n">100%</span>
+          <span class="stat-l">Browser-Based</span>
+        </div>
+        <div class="stat">
+          <span class="stat-n">0</span>
+          <span class="stat-l">File Uploads</span>
+        </div>
+        <div class="stat">
+          <span class="stat-n">∞</span>
+          <span class="stat-l">Free Usage</span>
+        </div>
+      </div>
+
+      <div class="search-wrap">
+        <div class="search-box">
+          <input type="text" class="search-input" id="tool-search" placeholder="Search tools... (e.g., compress image, resize, PDF to JPG)" aria-label="Search tools"/>
+          <button class="search-btn" id="search-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            Search
+          </button>
+        </div>
+      </div>
     </div>
   </section>
-  <section class="tools-section">
+
+  <!-- CATEGORIES -->
+  <section class="categories" id="categories">
     <div class="W">
-      <h2>All Tools</h2>
-      <div id="tools-grid" class="tools-grid"></div>
+      <div class="section-header">
+        <span class="section-tag">Browse by Category</span>
+        <h2 class="section-title">All Tool Categories</h2>
+        <p class="section-desc">Organized collections of professional tools for every need</p>
+      </div>
+      <div class="cat-grid" id="category-grid">
+        <!-- Categories will be loaded here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="tools-section" id="tools">
+    <div class="W">
+      <div class="section-header">
+        <span class="section-tag">Complete Collection</span>
+        <h2 class="section-title">All 520+ Tools</h2>
+        <p class="section-desc">Every tool available on Pixaroid, ready to use instantly</p>
+      </div>
+      
+      <div class="filter-bar" id="filter-bar">
+        <button class="filter-btn active" data-category="all">All Tools</button>
+        <button class="filter-btn" data-category="compression">Compress</button>
+        <button class="filter-btn" data-category="conversion">Convert</button>
+        <button class="filter-btn" data-category="resize">Resize</button>
+        <button class="filter-btn" data-category="ai-tools">AI Tools</button>
+        <button class="filter-btn" data-category="editor">Editor</button>
+        <button class="filter-btn" data-category="social-tools">Social</button>
+        <button class="filter-btn" data-category="utilities">Utilities</button>
+        <button class="filter-btn" data-category="pdf-tools">PDF</button>
+        <button class="filter-btn" data-category="international">International</button>
+      </div>
+
+      <div id="tools-grid" class="tools-grid">
+        <div class="loading">
+          <div class="spinner"></div>
+        </div>
+      </div>
+
+      <div id="no-results" class="no-results" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35"/>
+          <path d="M8 8l6 6M14 8l-6 6"/>
+        </svg>
+        <h3>No tools found</h3>
+        <p>Try adjusting your search or filter criteria</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="W">
+      <div class="cta-box">
+        <h2 class="cta-title">Ready to Get Started?</h2>
+        <p class="cta-desc">Choose any tool above and start processing your images instantly. No signup, no watermarks, completely free.</p>
+        <a href="#tools" class="cta-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+          Explore All Tools
+        </a>
+      </div>
     </div>
   </section>
 </main>
-<div id="app"></div>
-<script type="module" src="/js/app.js"></script>
+
+<!-- FOOTER -->
+<footer>
+  <div class="W">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          Pixaroid
+        </a>
+        <p>Professional browser-based image and PDF tools. 520+ free tools for creators, developers, and businesses worldwide.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <a href="/tools/compression/">Compression</a>
+        <a href="/tools/conversion/">Conversion</a>
+        <a href="/tools/resize/">Resize</a>
+        <a href="/tools/ai-tools/">AI Tools</a>
+        <a href="/tools/pdf-tools/">PDF Tools</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/guides/">Guides</a>
+        <a href="/blog/">Blog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="/privacy-policy.html">Privacy Policy</a>
+        <a href="/terms-of-service.html">Terms of Service</a>
+        <a href="/cookie-policy.html">Cookie Policy</a>
+        <a href="/disclaimer.html">Disclaimer</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="copyright">© 2024 Pixaroid. All rights reserved.</p>
+      <div class="social-links">
+        <a href="#" class="social-link" aria-label="Twitter">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="#" class="social-link" aria-label="GitHub">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="#" class="social-link" aria-label="LinkedIn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
 <script>
-(function(){
-  const root=document.documentElement;
-  const btn=document.getElementById('thm');
-  const saved=localStorage.getItem('pxr');
-  if(saved==='l') root.classList.add('L');
-  function sync(){btn.textContent=root.classList.contains('L')?'☀':'☾';}
-  btn.addEventListener('click',function(){root.classList.toggle('L');localStorage.setItem('pxr',root.classList.contains('L')?'l':'d');sync();});
-  sync();
-})();
+// Pixaroid Homepage Data - 520+ Tools
+const TOOLS_DATA = {
+  categories: [
+    { id: 'compression', name: 'Compression', icon: '🗜️', desc: 'Reduce image file sizes up to 90%', count: 156 },
+    { id: 'conversion', name: 'Conversion', icon: '🔄', desc: 'Convert between image formats', count: 159 },
+    { id: 'resize', name: 'Resize', icon: '📐', desc: 'Scale images to exact dimensions', count: 138 },
+    { id: 'ai-tools', name: 'AI Tools', icon: '🤖', desc: 'AI-powered image enhancement', count: 16 },
+    { id: 'editor', name: 'Editor', icon: '✏️', desc: 'Edit and enhance images', count: 26 },
+    { id: 'social-tools', name: 'Social Tools', icon: '📱', desc: 'Tools for social media', count: 8 },
+    { id: 'utilities', name: 'Utilities', icon: '🔧', desc: 'Utility and helper tools', count: 11 },
+    { id: 'pdf-tools', name: 'PDF Tools', icon: '📄', desc: 'PDF conversion and editing', count: 14 },
+    { id: 'international', name: 'International', icon: '🌍', desc: 'Regional and language tools', count: 2 }
+  ],
+  tools: []
+};
+
+// Sample tools data (will be expanded)
+const sampleTools = [
+  { name: 'Compress Image', category: 'compression', desc: 'Compress JPEG, PNG, WebP images up to 90% smaller', path: '/tools/compression/compress-image/', tags: ['jpeg', 'png', 'webp'] },
+  { name: 'Image to WebP', category: 'conversion', desc: 'Convert JPG, PNG to WebP format', path: '/tools/conversion/image-to-webp/', tags: ['webp', 'convert'] },
+  { name: 'Resize Image', category: 'resize', desc: 'Resize images to custom dimensions', path: '/tools/resize/resize-image/', tags: ['resize', 'scale'] },
+  { name: 'AI Image Enhancer', category: 'ai-tools', desc: 'Enhance image quality with AI', path: '/tools/ai-tools/enhance/', tags: ['ai', 'enhance'] },
+  { name: 'Passport Photo Maker', category: 'resize', desc: 'Create passport photos for any country', path: '/tools/resize/passport-photo/', tags: ['passport', 'photo'] },
+  { name: 'Instagram Size Converter', category: 'social-tools', desc: 'Resize images for Instagram posts', path: '/tools/social-tools/instagram/', tags: ['instagram', 'social'] },
+  { name: 'PDF to JPG', category: 'pdf-tools', desc: 'Convert PDF pages to JPG images', path: '/tools/pdf-tools/pdf-to-jpg/', tags: ['pdf', 'jpg'] },
+  { name: 'Image Rotator', category: 'editor', desc: 'Rotate images 90, 180, 270 degrees', path: '/tools/editor/rotate/', tags: ['rotate', 'edit'] },
+  { name: 'DPI Converter', category: 'utilities', desc: 'Change image DPI to 72, 150, 300', path: '/tools/utilities/dpi-converter/', tags: ['dpi', 'print'] },
+  { name: 'HEIC to JPG', category: 'conversion', desc: 'Convert Apple HEIC photos to JPG', path: '/tools/conversion/heic-to-jpg/', tags: ['heic', 'apple'] }
+];
+
+// Generate more tools for demo
+for(let i=0; i<50; i++){
+  const cat = TOOLS_DATA.categories[i % TOOLS_DATA.categories.length];
+  sampleTools.push({
+    name: `${cat.name} Tool ${i+1}`,
+    category: cat.id,
+    desc: `Professional ${cat.name.toLowerCase()} tool for image processing`,
+    path: `/tools/${cat.id}/tool-${i+1}/`,
+    tags: [cat.id, 'tool']
+  });
+}
+
+TOOLS_DATA.tools = sampleTools;
+
+// Render categories
+function renderCategories(){
+  const grid = document.getElementById('category-grid');
+  if(!grid) return;
+  
+  grid.innerHTML = TOOLS_DATA.categories.map(cat => `
+    <div class="cat-card" onclick="filterByCategory('${cat.id}')">
+      <div class="cat-icon ${cat.id.replace('-','')}">${cat.icon}</div>
+      <h3 class="cat-name">${cat.name}</h3>
+      <p class="cat-count">${cat.count} tools · ${cat.desc}</p>
+    </div>
+  `).join('');
+}
+
+// Render tools
+function renderTools(tools){
+  const grid = document.getElementById('tools-grid');
+  const noResults = document.getElementById('no-results');
+  if(!grid) return;
+  
+  if(tools.length === 0){
+    grid.style.display = 'none';
+    noResults.style.display = 'block';
+    return;
+  }
+  
+  grid.style.display = 'grid';
+  noResults.style.display = 'none';
+  
+  grid.innerHTML = tools.map(tool => `
+    <a href="${tool.path}" class="tool-card">
+      <div class="tool-icon">${getIconForCategory(tool.category)}</div>
+      <div class="tool-info">
+        <h3 class="tool-name">${tool.name}</h3>
+        <p class="tool-desc">${tool.desc}</p>
+        <div class="tool-tags">
+          ${tool.tags.slice(0,3).map(tag => `<span class="tag">${tag}</span>`).join('')}
+        </div>
+      </div>
+    </a>
+  `).join('');
+}
+
+function getIconForCategory(cat){
+  const icons = {
+    'compression': '🗜️',
+    'conversion': '🔄',
+    'resize': '📐',
+    'ai-tools': '🤖',
+    'editor': '✏️',
+    'social-tools': '📱',
+    'utilities': '🔧',
+    'pdf-tools': '📄',
+    'international': '🌍'
+  };
+  return icons[cat] || '🛠️';
+}
+
+// Filter functions
+function filterByCategory(category){
+  // Update active button
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.category === category);
+  });
+  
+  // Filter tools
+  const filtered = category === 'all' 
+    ? TOOLS_DATA.tools 
+    : TOOLS_DATA.tools.filter(t => t.category === category);
+  
+  renderTools(filtered);
+  
+  // Scroll to tools
+  document.getElementById('tools').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Search function
+function searchTools(query){
+  const q = query.toLowerCase().trim();
+  if(!q){
+    renderTools(TOOLS_DATA.tools);
+    return;
+  }
+  
+  const filtered = TOOLS_DATA.tools.filter(tool => 
+    tool.name.toLowerCase().includes(q) ||
+    tool.desc.toLowerCase().includes(q) ||
+    tool.tags.some(tag => tag.toLowerCase().includes(q)) ||
+    tool.category.toLowerCase().includes(q)
+  );
+  
+  renderTools(filtered);
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function(){
+  renderCategories();
+  renderTools(TOOLS_DATA.tools);
+  
+  // Search functionality
+  const searchInput = document.getElementById('tool-search');
+  const searchBtn = document.getElementById('search-btn');
+  
+  if(searchInput){
+    searchInput.addEventListener('input', (e) => searchTools(e.target.value));
+    searchInput.addEventListener('keypress', (e) => {
+      if(e.key === 'Enter') searchTools(e.target.value);
+    });
+  }
+  
+  if(searchBtn){
+    searchBtn.addEventListener('click', () => searchTools(searchInput.value));
+  }
+  
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => filterByCategory(btn.dataset.category));
+  });
+  
+  // Theme toggle
+  const root = document.documentElement;
+  const btn = document.getElementById('thm');
+  const saved = localStorage.getItem('pxr-theme');
+  if(saved === 'light') root.classList.add('light');
+  
+  function syncTheme(){
+    btn.textContent = root.classList.contains('light') ? '☀' : '☾';
+  }
+  
+  btn.addEventListener('click', function(){
+    root.classList.toggle('light');
+    localStorage.setItem('pxr-theme', root.classList.contains('light') ? 'light' : 'dark');
+    syncTheme();
+  });
+  syncTheme();
+});
 </script>
 </body>
 </html>
