@@ -182,6 +182,22 @@ nav.topnav {
   border-bottom: 1px solid var(--bd);
 }
 
+.hero h1 {
+  font-family: var(--fd);
+  font-size: clamp(1.4rem, 3vw, 2.125rem);
+  font-weight: 800;
+  letter-spacing: -.04em;
+  margin-bottom: 0.375rem;
+  color: var(--tx);
+}
+
+.hero p {
+  font-size: 0.9375rem;
+  color: var(--mu);
+  max-width: 560px;
+  line-height: 1.7;
+}
+
 .hi {
   display: flex;
   align-items: flex-start;
@@ -904,3 +920,95 @@ footer p {
 .inline-flex { display: inline-flex !important; }
 .text-center { text-align: center; }
 .font-bold { font-weight: 700; }
+
+/* Tools Grid - Homepage */
+.tools-section {
+  padding: 3rem 0 4rem;
+}
+
+.tools-section h2 {
+  font-family: var(--fd);
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--tx);
+}
+
+#tools-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.tools-category {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.category-header h3 {
+  font-family: var(--fd);
+  font-size: 1.125rem;
+  color: var(--mu);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.category-icon {
+  font-size: 1.25rem;
+}
+
+.category-tools {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.tool-card {
+  background: var(--s1);
+  border: 1px solid var(--bd2);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.tool-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--ac);
+  box-shadow: 0 4px 20px rgba(124,111,255,0.15);
+}
+
+.tool-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tool-title {
+  font-family: var(--fd);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--tx);
+  margin: 0;
+}
+
+.tool-description {
+  font-size: 0.875rem;
+  color: var(--mu);
+  line-height: 1.5;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .category-tools {
+    grid-template-columns: 1fr;
+  }
+  
+  .tools-section {
+    padding: 2rem 0 3rem;
+  }
+}

@@ -9,6 +9,7 @@
 import { init as initPerf } from '/js/modules/performance.js';
 import { loadMonetag } from '/js/modules/monetag.js';
 import { mountSponsoredUnit } from '/js/modules/monetization.js';
+import { initToolsGrid } from '/js/modules/tools-grid.js';
 
 const HEADER_ROUTES = new Map([
   ['/pdf/', '/tools/pdf-tools/'],
@@ -48,6 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (s === 'dark' || (!s && matchMedia('(prefers-color-scheme:dark)').matches)) {
     root.classList.add('dark');
   }
+
+  /* ── Tools Grid (Homepage) ────────────────────────────── */
+  initToolsGrid();
 
   /* ── Performance module ───────────────────────────────── */
   initPerf();
