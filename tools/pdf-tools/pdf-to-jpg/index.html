@@ -21,6 +21,23 @@
     </style>
     <script src="https://quge5.com/88/tag.min.js" data-zone="277292" async data-cfasync="false"></script>
     <script type="module" src="/js/modules/monetization.js" data-pixaroid-monetization></script>
+
+<!-- Performance Monitoring -->
+<script>
+if('PerformanceObserver' in window){
+  try{
+    var po=new PerformanceObserver(function(list){
+      list.getEntries().forEach(function(entry){
+        if(entry.entryType==='largest-contentful-paint'){
+          console.log('[Perf] LCP:',entry.startTime.toFixed(2),'ms');
+        }
+      });
+    });
+    po.observe({entryTypes:['largest-contentful-paint','first-input','layout-shift']});
+  }catch(e){}
+}
+</script>
+
 </head>
 <body class="bg-gray-50 text-gray-900 dark:bg-slate-900 dark:text-gray-100 min-h-screen flex flex-col">
     <nav class="w-full py-4 px-6 glass-panel sticky top-0 z-50">
@@ -310,5 +327,98 @@
 <div style="min-width:180px;flex:1;"><div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.55;margin-bottom:3px;">Sponsored</div><div style="font-size:13px;opacity:.78;">Support Pixaroid by exploring a sponsored offer.</div></div>
 <div style="display:flex;gap:8px;flex-wrap:wrap;"><a href="https://sordidcopper.com/ah4q89k44?key=b7b2b4355e9576b54f29b8445e7d6775" target="_blank" rel="nofollow sponsored noopener noreferrer" referrerpolicy="no-referrer-when-downgrade" style="display:inline-flex;align-items:center;padding:8px 12px;border-radius:9px;background:#7b6fff;color:#fff;font-size:12px;font-weight:700;text-decoration:none;">Sponsored offer</a><a href="https://sordidcopper.com/a7buqkb8ii?key=717a52ca31ccb8da56a9ae0bee29d372" target="_blank" rel="nofollow sponsored noopener noreferrer" referrerpolicy="no-referrer-when-downgrade" style="display:inline-flex;align-items:center;padding:8px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.14);color:inherit;font-size:12px;font-weight:700;text-decoration:none;">View offer</a></div>
 </aside></div>
+
+<!-- Accessibility Enhancements -->
+<div role="status" aria-live="polite" id="a11y-status" class="sr-only"></div>
+
+
+<!-- Keyboard Shortcuts Handler -->
+<script>
+(function(){
+  'use strict';
+  document.addEventListener('keydown',function(e){
+    // Ctrl/Cmd+S to download
+    if((e.ctrlKey||e.metaKey)&&e.key==='s'&&e.target.tagName!=='INPUT'&&e.target.tagName!=='TEXTAREA'){
+      e.preventDefault();
+      var dlBtn=document.getElementById('bd')||document.querySelector('.btnd');
+      if(dlBtn&&dlBtn.click)dlBtn.click();
+    }
+    // ESC to reset
+    if(e.key==='Escape'){
+      var rstBtn=document.getElementById('br')||document.querySelector('.btnr');
+      if(rstBtn&&rstBtn.click)rstBtn.click();
+    }
+    // Space/Enter to process when button focused
+    if((e.key===' '||e.key==='Enter')&&document.activeElement.tagName==='BUTTON'){
+      document.activeElement.click();
+    }
+  });
+})();
+</script>
+
+
+<!-- Enhanced Toast Notification System -->
+<script>
+(function(){
+  'use strict';
+  window.pxToast=function(message,type,duration){
+    type=type||'info';
+    duration=duration||3500;
+    var container=document.getElementById('toast-container');
+    if(!container){
+      container=document.createElement('div');
+      container.id='toast-container';
+      container.style.cssText='position:fixed;bottom:2rem;right:1.25rem;z-index:9999;display:flex;flex-direction:column;gap:0.5rem;pointer-events:none;';
+      document.body.appendChild(container);
+    }
+    var toast=document.createElement('div');
+    toast.className='toast toast-'+type;
+    toast.style.cssText='min-width:200px;max-width:350px;padding:0.875rem 1.25rem;border-radius:12px;background:var(--s2,#15152A);border:1px solid var(--bd,rgba(255,255,255,0.1));box-shadow:0 8px 32px rgba(0,0,0,0.4);backdrop-filter:blur(12px);color:var(--tx,#EEEEF8);font-size:0.875rem;font-weight:500;display:flex;align-items:center;gap:0.625rem;animation:toastSlideIn 0.3s ease;pointer-events:auto;cursor:pointer;';
+    var icon={success:'✓',error:'✕',warning:'⚠',info:'ℹ'}[type]||'ℹ';
+    toast.innerHTML='<span style="display:flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:'+({success:'rgba(35,214,122,0.2)',error:'rgba(255,79,79,0.2)',warning:'rgba(255,171,46,0.2)',info:'rgba(124,111,255,0.2)'}[type]||'rgba(124,111,255,0.2)')+';color:'+({success:'#23D67A',error:'#FF4F4F',warning:'#FFAB2E',info:'#7C6FFF'}[type]||'#7C6FFF')+'">'+icon+'</span><span>'+message+'</span>';
+    container.appendChild(toast);
+    
+    var closeTimeout=setTimeout(function(){removeToast(toast);},duration);
+    toast.addEventListener('click',function(){clearTimeout(closeTimeout);removeToast(toast);});
+    
+    function removeToast(t){
+      t.style.animation='toastSlideOut 0.25s ease forwards';
+      setTimeout(function(){t.remove();if(container.children.length===0)container.remove();},250);
+    }
+  };
+  
+  // Add animations
+  var style=document.createElement('style');
+  style.textContent='@keyframes toastSlideIn{from{opacity:0;transform:translateY(12px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes toastSlideOut{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(8px) scale(0.98)}}';
+  document.head.appendChild(style);
+})();
+</script>
+
+
+<!-- Enhanced File Validation -->
+<script>
+(function(){
+  'use strict';
+  window.validateFile=function(file,maxSizeMB,allowedTypes){
+    maxSizeMB=maxSizeMB||20;
+    allowedTypes=allowedTypes||['image/jpeg','image/png','image/webp','image/gif','application/pdf'];
+    
+    var errors=[];
+    if(!file){errors.push('No file selected');return errors;}
+    
+    var maxSize=maxSizeMB*1024*1024;
+    if(file.size>maxSize){
+      errors.push('File size exceeds '+maxSizeMB+'MB limit ('+(file.size/1024/1024).toFixed(2)+'MB)');
+    }
+    
+    if(allowedTypes.length>0&&!allowedTypes.includes(file.type)){
+      errors.push('Unsupported file type: '+file.type);
+    }
+    
+    return errors;
+  };
+})();
+</script>
+
 </body>
 </html>

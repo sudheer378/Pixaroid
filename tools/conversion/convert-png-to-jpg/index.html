@@ -20,6 +20,10 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why convert PNG to JPG?", "acceptedAnswer": {"@type": "Answer", "text": "JPEG is universally supported and great for photographs. It produces smaller files than PNG while maintaining excellent visual quality."}}, {"@type": "Question", "name": "Is PNG to JPG conversion free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes \u2014 completely free, no account, no watermark, no upload. All conversion happens in your browser."}}, {"@type": "Question", "name": "How long does PNG to JPG conversion take?", "acceptedAnswer": {"@type": "Answer", "text": "Most conversions complete in under a second for typical image sizes. Larger files (10MB+) may take 2\u20135 seconds."}}, {"@type": "Question", "name": "Will I lose quality converting PNG to JPG?", "acceptedAnswer": {"@type": "Answer", "text": "At 90% quality the difference is invisible to the human eye. Use 95\u2013100% for critical images."}}, {"@type": "Question", "name": "Does converting change the image quality?", "acceptedAnswer": {"@type": "Answer", "text": "Converting from JPEG to PNG creates a lossless copy at the same quality. Converting from PNG to JPEG applies compression at the quality setting you choose. Converting to WebP at 80% quality typically gives the same visual result as JPEG at higher quality with 25\u201335% smaller file size."}}, {"@type": "Question", "name": "Which image format is the smallest file size?", "acceptedAnswer": {"@type": "Answer", "text": "AVIF is currently the smallest format at equivalent quality \u2014 typically 50% smaller than JPEG and 20% smaller than WebP. WebP is the second-best choice and has near-universal browser support. JPEG remains the safest choice for maximum compatibility across older devices and software."}}, {"@type": "Question", "name": "Can I convert images without installing software?", "acceptedAnswer": {"@type": "Answer", "text": "Yes \u2014 Pixaroid converts images entirely in your browser using the Canvas API. No software, app, or plugin is needed. It works on Chrome, Firefox, Safari, and all modern mobile browsers. Your files never leave your device."}}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://pixaroid.vercel.app/"},{"@type":"ListItem","position":2,"name":"Conversion","item":"https://pixaroid.vercel.app/tools/conversion/"},{"@type":"ListItem","position":3,"name":"PNG to JPG Converter","item":"https://pixaroid.vercel.app/tools/conversion/convert-png-to-jpg/"}]}</script>
 <title>PNG to JPG Converter Free Online — No Upload | Pixaroid</title>
+
+<!-- Performance Preload Hints -->
+<link rel="preconnect" href="https://cdnjs.cloudflare.com"/>
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
@@ -546,6 +550,41 @@ select:focus,input[type=number]:focus,input[type=text]:focus{
 
     <script src="https://quge5.com/88/tag.min.js" data-zone="277292" async data-cfasync="false"></script>
     <script type="module" src="/js/modules/monetization.js" data-pixaroid-monetization></script>
+
+<!-- Performance Monitoring -->
+<script>
+if('PerformanceObserver' in window){
+  try{
+    var po=new PerformanceObserver(function(list){
+      list.getEntries().forEach(function(entry){
+        if(entry.entryType==='largest-contentful-paint'){
+          console.log('[Perf] LCP:',entry.startTime.toFixed(2),'ms');
+        }
+      });
+    });
+    po.observe({entryTypes:['largest-contentful-paint','first-input','layout-shift']});
+  }catch(e){}
+}
+</script>
+
+
+<!-- Lazy Loading for Images -->
+<script>
+(function(){
+  'use strict';
+  if('loading' in HTMLImageElement.prototype){
+    document.querySelectorAll('img[loading="lazy"]').forEach(function(img){
+      img.src=img.dataset.src||img.src;
+    });
+  }else{
+    var script=document.createElement('script');
+    script.src='https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+    script.async=true;
+    document.body.appendChild(script);
+  }
+})();
+</script>
+
 </head>
 <body>
 <div class="zo" id="zo"><button class="zc" id="zc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button><img id="zi" src="" alt="Zoomed"/>
@@ -972,6 +1011,198 @@ console.log('[Pixaroid] Universal Engine initialized:',TOOL_TYPE);
             console.log('Smart Upload initialized for category:', category);
         });
     </script>
+
+
+<!-- Accessibility Enhancements -->
+<div role="status" aria-live="polite" id="a11y-status" class="sr-only"></div>
+
+
+<!-- Keyboard Shortcuts Handler -->
+<script>
+(function(){
+  'use strict';
+  document.addEventListener('keydown',function(e){
+    // Ctrl/Cmd+S to download
+    if((e.ctrlKey||e.metaKey)&&e.key==='s'&&e.target.tagName!=='INPUT'&&e.target.tagName!=='TEXTAREA'){
+      e.preventDefault();
+      var dlBtn=document.getElementById('bd')||document.querySelector('.btnd');
+      if(dlBtn&&dlBtn.click)dlBtn.click();
+    }
+    // ESC to reset
+    if(e.key==='Escape'){
+      var rstBtn=document.getElementById('br')||document.querySelector('.btnr');
+      if(rstBtn&&rstBtn.click)rstBtn.click();
+    }
+    // Space/Enter to process when button focused
+    if((e.key===' '||e.key==='Enter')&&document.activeElement.tagName==='BUTTON'){
+      document.activeElement.click();
+    }
+  });
+})();
+</script>
+
+
+<!-- Enhanced Dropzone Features -->
+<script>
+(function(){
+  'use strict';
+  var dz=document.getElementById('dz');
+  if(!dz)return;
+  
+  // Prevent default drag behaviors
+  ['dragenter','dragover','dragleave','drop'].forEach(function(eventName){
+    document.body.addEventListener(eventName,function(e){e.preventDefault();e.stopPropagation();},{passive:false});
+  });
+  
+  // Highlight drop zone when item is dragged over it
+  ['dragenter','dragover'].forEach(function(eventName){
+    document.body.addEventListener(eventName,function(){dz.classList.add('on');},{passive:true});
+  });
+  
+  ['dragleave','drop'].forEach(function(eventName){
+    document.body.addEventListener(eventName,function(e){
+      if(!dz.contains(e.target)){dz.classList.remove('on');}
+    },{passive:true});
+  });
+  
+  // Handle dropped files
+  dz.addEventListener('drop',function(e){
+    var dt=e.dataTransfer;
+    var files=dt.files;
+    if(files&&files.length){
+      dz.classList.remove('on');
+      var fi=document.getElementById('fi');
+      if(fi){
+        var dataTransfer=new DataTransfer();
+        for(var i=0;i<files.length;i++){
+          if(files[i].type.startsWith('image/')||files[i].type.startsWith('application/pdf')){
+            dataTransfer.items.add(files[i]);
+          }
+        }
+        if(dataTransfer.items.length>0){
+          fi.files=dataTransfer.files;
+          var evt=new Event('change',{bubbles:true});
+          fi.dispatchEvent(evt);
+        }
+      }
+    }
+  });
+})();
+</script>
+
+
+<!-- Enhanced Toast Notification System -->
+<script>
+(function(){
+  'use strict';
+  window.pxToast=function(message,type,duration){
+    type=type||'info';
+    duration=duration||3500;
+    var container=document.getElementById('toast-container');
+    if(!container){
+      container=document.createElement('div');
+      container.id='toast-container';
+      container.style.cssText='position:fixed;bottom:2rem;right:1.25rem;z-index:9999;display:flex;flex-direction:column;gap:0.5rem;pointer-events:none;';
+      document.body.appendChild(container);
+    }
+    var toast=document.createElement('div');
+    toast.className='toast toast-'+type;
+    toast.style.cssText='min-width:200px;max-width:350px;padding:0.875rem 1.25rem;border-radius:12px;background:var(--s2,#15152A);border:1px solid var(--bd,rgba(255,255,255,0.1));box-shadow:0 8px 32px rgba(0,0,0,0.4);backdrop-filter:blur(12px);color:var(--tx,#EEEEF8);font-size:0.875rem;font-weight:500;display:flex;align-items:center;gap:0.625rem;animation:toastSlideIn 0.3s ease;pointer-events:auto;cursor:pointer;';
+    var icon={success:'✓',error:'✕',warning:'⚠',info:'ℹ'}[type]||'ℹ';
+    toast.innerHTML='<span style="display:flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:'+({success:'rgba(35,214,122,0.2)',error:'rgba(255,79,79,0.2)',warning:'rgba(255,171,46,0.2)',info:'rgba(124,111,255,0.2)'}[type]||'rgba(124,111,255,0.2)')+';color:'+({success:'#23D67A',error:'#FF4F4F',warning:'#FFAB2E',info:'#7C6FFF'}[type]||'#7C6FFF')+'">'+icon+'</span><span>'+message+'</span>';
+    container.appendChild(toast);
+    
+    var closeTimeout=setTimeout(function(){removeToast(toast);},duration);
+    toast.addEventListener('click',function(){clearTimeout(closeTimeout);removeToast(toast);});
+    
+    function removeToast(t){
+      t.style.animation='toastSlideOut 0.25s ease forwards';
+      setTimeout(function(){t.remove();if(container.children.length===0)container.remove();},250);
+    }
+  };
+  
+  // Add animations
+  var style=document.createElement('style');
+  style.textContent='@keyframes toastSlideIn{from{opacity:0;transform:translateY(12px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes toastSlideOut{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(8px) scale(0.98)}}';
+  document.head.appendChild(style);
+})();
+</script>
+
+
+<!-- Enhanced File Validation -->
+<script>
+(function(){
+  'use strict';
+  window.validateFile=function(file,maxSizeMB,allowedTypes){
+    maxSizeMB=maxSizeMB||20;
+    allowedTypes=allowedTypes||['image/jpeg','image/png','image/webp','image/gif','application/pdf'];
+    
+    var errors=[];
+    if(!file){errors.push('No file selected');return errors;}
+    
+    var maxSize=maxSizeMB*1024*1024;
+    if(file.size>maxSize){
+      errors.push('File size exceeds '+maxSizeMB+'MB limit ('+(file.size/1024/1024).toFixed(2)+'MB)');
+    }
+    
+    if(allowedTypes.length>0&&!allowedTypes.includes(file.type)){
+      errors.push('Unsupported file type: '+file.type);
+    }
+    
+    return errors;
+  };
+})();
+</script>
+
+
+<!-- Enhanced Progress Tracking -->
+<script>
+(function(){
+  'use strict';
+  window.updateProgress=function(percent,message){
+    var pf=document.getElementById('pf');
+    var pl=document.getElementById('pl');
+    var pd=document.getElementById('pd');
+    
+    if(pf){
+      pf.style.width=percent+'%';
+      if(percent>=100){pf.classList.add('done');}
+      else{pf.classList.remove('done');}
+    }
+    if(pl&&message)pl.textContent=message;
+    if(pd)pd.textContent=Math.round(percent)+'%';
+    
+    // Update A11y status
+    var status=document.getElementById('a11y-status');
+    if(status)status.textContent=message+' '+Math.round(percent)+'%';
+  };
+})();
+</script>
+
+
+<!-- Enhanced Progress Tracking -->
+<script>
+(function(){
+  'use strict';
+  window.updateProgress=function(percent,message){
+    var pf=document.getElementById('pf');
+    var pl=document.getElementById('pl');
+    var pd=document.getElementById('pd');
+    
+    if(pf){
+      pf.style.width=percent+'%';
+      if(percent>=100){pf.classList.add('done');}
+      else{pf.classList.remove('done');}
+    }
+    if(pl&&message)pl.textContent=message;
+    if(pd)pd.textContent=Math.round(percent)+'%';
+    
+    // Update A11y status
+    var status=document.getElementById('a11y-status');
+    if(status)status.textContent=message+' '+Math.round(percent)+'%';
+  };
+})();
+</script>
 
 </body>
 </html>

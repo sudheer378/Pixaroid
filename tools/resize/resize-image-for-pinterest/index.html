@@ -644,6 +644,41 @@ select:focus,input[type=number]:focus,input[type=text]:focus{
 
     <script src="https://quge5.com/88/tag.min.js" data-zone="277292" async data-cfasync="false"></script>
     <script type="module" src="/js/modules/monetization.js" data-pixaroid-monetization></script>
+
+<!-- Performance Monitoring -->
+<script>
+if('PerformanceObserver' in window){
+  try{
+    var po=new PerformanceObserver(function(list){
+      list.getEntries().forEach(function(entry){
+        if(entry.entryType==='largest-contentful-paint'){
+          console.log('[Perf] LCP:',entry.startTime.toFixed(2),'ms');
+        }
+      });
+    });
+    po.observe({entryTypes:['largest-contentful-paint','first-input','layout-shift']});
+  }catch(e){}
+}
+</script>
+
+
+<!-- Lazy Loading for Images -->
+<script>
+(function(){
+  'use strict';
+  if('loading' in HTMLImageElement.prototype){
+    document.querySelectorAll('img[loading="lazy"]').forEach(function(img){
+      img.src=img.dataset.src||img.src;
+    });
+  }else{
+    var script=document.createElement('script');
+    script.src='https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+    script.async=true;
+    document.body.appendChild(script);
+  }
+})();
+</script>
+
 </head>
 <body>
 
