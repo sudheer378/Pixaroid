@@ -1,0 +1,64 @@
+name: Pixaroid Tool Inventory Audit
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Audit sitemap, homepage registry, and repository tool pages
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+
+          const sitemap = fs.readFileSync('sitemap-tools.xml', 'utf8');
+          const sitemapUrls = [...sitemap.matchAll(/<loc>\s*([^<]+)\s*<\/loc>/g)]
+            .map(m => m[1].trim())
+            .filter(Boolean);
+
+          const sitemapSet = new Set(sitemapUrls);
+
+          const htmlFiles = [];
+          function walk(dir) {
+            for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+              if (entry.name === '.git' || entry.name === 'node_modules') continue;
+              const full = path.join(dir, entry.name);
+              if (entry.isDirectory()) walk(full);
+              else if (entry.isFile() && entry.name === 'index.html' && full.startsWith(path.join('tools', ''))) {
+                htmlFiles.push(full);
+              }
+            }
+          }
+          walk('tools');
+
+          const repoUrls = htmlFiles.map(file => {
+            const rel = file.replace(/\\/g, '/');
+            return 'https://pixaroid.vercel.app/' + rel.replace(/\/index\.html$/, '/') ;
+          });
+
+          const repoSet = new Set(repoUrls);
+
+          const sitemapOnly = sitemapUrls.filter(u => !repoSet.has(u));
+          const repoOnly = repoUrls.filter(u => !sitemapSet.has(u));
+
+          console.log('Sitemap URLs:', sitemapUrls.length);
+          console.log('Repository tool index pages:', repoUrls.length);
+          console.log('Sitemap-only URLs:', sitemapOnly.length);
+          for (const u of sitemapOnly) console.log('SITEMAP_ONLY', u);
+          console.log('Repository-only tool pages:', repoOnly.length);
+          for (const u of repoOnly) console.log('REPO_ONLY', u);
+
+          if (sitemapOnly.length || repoOnly.length) {
+            process.exitCode = 1;
+          }
+          NODE
