@@ -1,0 +1,26 @@
+png-to-webp: FAIL ElementHandle.click: Timeout 30000ms exceeded.
+Call log:
+attempting click action
+  -   waiting for element to be visible, enabled and stable
+  -   ele workerReqs={'/js/enhanced-worker.js', '/js/enhanced-workers.js'} errors=1
+    Cannot use import statement outside a module
+resize-insta-post: FAIL ElementHandle.click: Timeout 30000ms exceeded.
+Call log:
+attempting click action
+  -   waiting for element to be visible, enabled and stable
+  -   ele workerReqs={'/js/enhanced-worker.js', '/js/enhanced-workers.js'} errors=1
+    Cannot use import statement outside a module
+bg-remover: FAIL ElementHandle.click: Timeout 30000ms exceeded.
+Call log:
+attempting click action
+  -   waiting for element to be visible, enabled and stable
+  -   ele workerReqs={'/js/enhanced-worker.js', '/js/enhanced-workers.js'} errors=2
+    await is only valid in async functions and the top level bodies of modules
+    Cannot use import statement outside a module
+dim-checker: FAIL ElementHandle.click: Timeout 30000ms exceeded.
+Call log:
+attempting click action
+  -   waiting for element to be visible, enabled and stable
+  -   ele workerReqs={'/js/enhanced-worker.js', '/js/enhanced-workers.js'} errors=2
+    await is only valid in async functions and the top level bodies of modules
+    Cannot use import statement outside a module

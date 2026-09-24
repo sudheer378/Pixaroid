@@ -1,0 +1,15 @@
+SITEMAP_URLS 520
+{'self': 0, 'cross': 135, 'none': 1, 'redir': 0, 'noindex': 0, 'err': 0}
+COLLISION_GROUPS 12 PAGES_IN_COLLISIONS 67
+/tools/resize/resize-image-for-instagram 9
+/tools/resize/resize-image-for-desktop-wallpaper 8
+/tools/resize/resize-image-for-facebook 7
+/tools/resize/resize-image-for-pinterest 7
+/tools/resize/resize-image-for-tiktok-video 6
+/tools/resize/resize-image-for-twitter 6
+/tools/resize/resize-image-for-youtube 6
+/tools/resize/resize-image-for-linkedin 5
+/tools/resize/resize-image-for-tiktok 4
+/tools/resize/resize-image-for-whatsapp 4
+/tools/ai-tools/background-remover 3
+/tools/ai-tools/image-upscaler 2

@@ -1,0 +1,9 @@
+tools-data: [Errno 2] No such file or directory: 'js/tools-data.json'
+tool pages: 525 | sitemap urls: 520
+orphans: 258 | weak<=2: 203
+repo not in sitemap: 15
+sitemap not in repo: []
+tools-data file entries: 0
+JSON-LD @type totals (files containing): {'WebPage': 504, 'WebSite': 5, 'FAQPage': 518, 'Question': 3371, 'Answer': 3371, 'SearchAction': 1, 'Organization': 902, 'ImageObject': 423, 'ContactPoint': 1, 'SoftwareApplication': 512, 'Offer': 517, 'ItemList': 1, 'ListItem': 1545, 'BreadcrumbList': 514, 'AggregateRating': 499, 'HowTo': 513, 'HowToStep': 1957, 'MonetaryAmount': 412, 'SpeakableSpecification': 499, 'HowToTool': 87, 'HowToSupply': 87, 'WebApplication': 5, 'Article': 15}
+duplicate-canonical target groups (repo-wide): 67 pages involved: 188
+pages without canonical: 3 ['/googlef6c07c28bd01c8b8.html', '/404.html', '/tools/compression/demo-premium/']

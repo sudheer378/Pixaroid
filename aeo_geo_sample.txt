@@ -1,0 +1,12 @@
+/tools/compression/jpeg-compressor/: FAQ=False HowTo=False Breadcrumb=False privacy=True formats=False limits=False instructions=True h2count=1 leadDefinition=True
+/tools/conversion/convert-png-to-webp/: FAQ=True HowTo=True Breadcrumb=True privacy=True formats=True limits=False instructions=True h2count=2 leadDefinition=True
+/tools/resize/resize-image-for-instagram-post/: FAQ=True HowTo=True Breadcrumb=True privacy=True formats=True limits=True instructions=True h2count=2 leadDefinition=True
+/tools/international/currency-converter/: FAQ=False HowTo=False Breadcrumb=False privacy=False formats=True limits=False instructions=False h2count=0 leadDefinition=True
+/tools/international/text-translator/: FAQ=False HowTo=False Breadcrumb=False privacy=False formats=False limits=False instructions=False h2count=0 leadDefinition=False
+/tools/ai-tools/background-remover/: FAQ=True HowTo=True Breadcrumb=True privacy=True formats=True limits=False instructions=True h2count=2 leadDefinition=True
+
+currency 'live' claims: ['\n    <meta name="description" content="Convert between 150+ world currencies instantly with live exchange rates.', '\n    <meta property="og:description" content="Convert between 150+ world currencies instantly with live exchange rates.', '\n    <meta name="twitter:description" content="Convert between 150+ world currencies instantly with live exchange rates.']
+currency external API refs: [] False
+
+llms.txt lists international tools: True | mentions currency: False
+tools-data includes international entries: False

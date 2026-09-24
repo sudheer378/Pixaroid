@@ -1,0 +1,5 @@
+png-to-webp: FAIL HTTP 404 canonicalWorkersRequested=set() pageErrors=[]
+resize-insta-post: FAIL HTTP 404 canonicalWorkersRequested=set() pageErrors=[]
+bg-remover: FAIL HTTP 404 canonicalWorkersRequested=set() pageErrors=[]
+jpeg-compress: FAIL HTTP 404 canonicalWorkersRequested=set() pageErrors=[]
+dim-checker: FAIL HTTP 404 canonicalWorkersRequested=set() pageErrors=[]

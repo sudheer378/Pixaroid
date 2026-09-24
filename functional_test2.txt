@@ -1,0 +1,9 @@
+png-to-webp: FAIL no file input canonicalWorkers=set() pageErrors=[]
+resize-insta-post: FAIL no file input canonicalWorkers=set() pageErrors=[]
+bg-remover: FAIL no file input canonicalWorkers=set() pageErrors=[]
+jpeg-compress: FAIL no file input canonicalWorkers=set() pageErrors=[]
+dim-checker: FAIL no file input canonicalWorkers=set() pageErrors=[]
+pdf-merge-pageonly: FAIL no file input canonicalWorkers=set() pageErrors=[]
+mobile 360px horizontalOverflow=False
+mobile 390px horizontalOverflow=False
+mobile 412px horizontalOverflow=False

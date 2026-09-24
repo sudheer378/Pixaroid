@@ -1,0 +1,12 @@
+ai.worker.js: referenced-in-564 html=260, mentioned-in-js/config=4
+compress.worker.js: referenced-in-564 html=467, mentioned-in-js/config=4
+convert.worker.js: referenced-in-564 html=478, mentioned-in-js/config=4
+filter.worker.js: referenced-in-564 html=260, mentioned-in-js/config=4
+pdf.worker.js: referenced-in-564 html=2, mentioned-in-js/config=0
+resize.worker.js: referenced-in-564 html=444, mentioned-in-js/config=4
+js/engine.js referenced by HTML pages: 0
+js/tool-controller.js referenced by HTML pages: 498
+js/enhanced-engine.js referenced by HTML pages: 498
+js/enhanced-workers.js referenced by HTML pages: 498
+js/enhanced-worker.js referenced by HTML pages: 498
+Top JS includes across tool pages: [('/js/modules/monetization.js', 535), ('/js/smart-upload.js', 508), ('/js/enhanced-worker.js', 499), ('/js/tool-controller.js', 498), ('/js/enhanced-engine.js', 498), ('/js/enhanced-workers.js', 498), ('/js/modules/level2.js', 498), ('/js/premium-ui.js', 2), ('/js/pro-engine.js', 1), ('/js/advanced-worker.js', 1), ('/js/tool-controller-pro.js', 1), ('/js/app.js', 1), ('/js/vendor/pdf-lib.min.js', 1)]

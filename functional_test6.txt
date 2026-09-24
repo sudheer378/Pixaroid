@@ -1,0 +1,5 @@
+png-to-webp: FAIL no input handle (count=0, inHtml=False) canonicalWorkersRequested=set() pageErrors=[]
+resize-insta-post: FAIL no input handle (count=0, inHtml=False) canonicalWorkersRequested=set() pageErrors=[]
+bg-remover: FAIL no input handle (count=0, inHtml=False) canonicalWorkersRequested=set() pageErrors=[]
+jpeg-compress: FAIL no input handle (count=0, inHtml=False) canonicalWorkersRequested=set() pageErrors=[]
+dim-checker: FAIL no input handle (count=0, inHtml=False) canonicalWorkersRequested=set() pageErrors=[]
