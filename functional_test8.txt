@@ -1,0 +1,9 @@
+png-to-webp: FAIL no input handle (count=0) canonicalWorkersRequested=set() pageErrors=[]
+resize-insta-post: FAIL no input handle (count=0) canonicalWorkersRequested=set() pageErrors=[]
+bg-remover: FAIL no input handle (count=0) canonicalWorkersRequested=set() pageErrors=[]
+jpeg-compress: FAIL no input handle (count=0) canonicalWorkersRequested=set() pageErrors=[]
+dim-checker: FAIL no input handle (count=0) canonicalWorkersRequested=set() pageErrors=[]
+mobile 360px overflowPx=0
+mobile 390px overflowPx=0
+mobile 412px overflowPx=0
+homepage 360px menuToggleFound= False

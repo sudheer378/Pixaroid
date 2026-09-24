@@ -1,0 +1,39 @@
+GROUPS>=2: 80 PAGES: 135
+
+CANONICAL: https://pixaroid.vercel.app/tools/resize/resize-image-for-instagram/ (9 pages)
+    /tools/resize/resize-image-for-instagram-1080x1080 | Instagram Image Size 1080×1080 — Free Online | Pix | Resize Image for Instagram — 1080×1080 p
+    /tools/resize/resize-image-for-instagram-1080x1350 | Instagram Image Size 1080×1350 — Free Online | Pix | Resize Image for Instagram — 1080×1350 p
+    /tools/resize/resize-image-for-instagram-1080x1920 | Instagram Image Size 1080×1920 — Free Online | Pix | Resize Image for Instagram — 1080×1920 p
+    /tools/resize/resize-image-for-instagram-1080x566 | Instagram Image Size 1080×566 — Free Online | Pixa | Resize Image for Instagram — 1080×566 px
+
+CANONICAL: https://pixaroid.vercel.app/tools/resize/resize-image-for-desktop-wallpaper/ (8 pages)
+    /tools/resize/crop-image-16-9 | Crop Image to 16:9 Ratio Free Online — No Upload | | Crop Image to 16:9 Ratio — Free Online
+    /tools/resize/resize-image-for-google-meet | Resize Image for Google Meet Background — Free Onl | Resize Image for Google Meet Background 
+    /tools/resize/resize-image-for-windows-wallpaper | Windows Wallpaper Size Free Online — No Upload | P | Windows Wallpaper Size — 1920×1080 Free 
+    /tools/resize/resize-image-for-zoom | Resize Image for Zoom Background — Free Online — F | Resize Image for Zoom Background — Free 
+
+CANONICAL: https://pixaroid.vercel.app/tools/resize/resize-image-for-facebook/ (7 pages)
+    /tools/resize/resize-image-for-facebook-1200x630 | Facebook Image Size 1200×630 — Free Online | Pixar | Resize Image for Facebook — 1200×630 px
+    /tools/resize/resize-image-for-facebook-170x170 | Facebook Image Size 170×170 — Free Online | Pixaro | Resize Image for Facebook — 170×170 px
+    /tools/resize/resize-image-for-facebook-1920x1005 | Facebook Image Size 1920×1005 — Free Online | Pixa | Resize Image for Facebook — 1920×1005 px
+    /tools/resize/resize-image-for-facebook-820x312 | Facebook Image Size 820×312 — Free Online | Pixaro | Resize Image for Facebook — 820×312 px
+
+CANONICAL: https://pixaroid.vercel.app/tools/resize/resize-image-for-pinterest/ (7 pages)
+    /tools/resize/resize-image-for-pinterest-1000x1000 | Pinterest Image Size 1000×1000 — Free Online | Pix | Resize Image for Pinterest — 1000×1000 p
+    /tools/resize/resize-image-for-pinterest-1000x1500 | Pinterest Image Size 1000×1500 — Free Online | Pix | Resize Image for Pinterest — 1000×1500 p
+    /tools/resize/resize-image-for-pinterest-1000x3000 | Pinterest Image Size 1000×3000 — Free Online | Pix | Resize Image for Pinterest — 1000×3000 p
+    /tools/resize/resize-image-for-pinterest-165x165 | Pinterest Image Size 165×165 — Free Online | Pixar | Resize Image for Pinterest — 165×165 px
+
+CANONICAL: https://pixaroid.vercel.app/tools/resize/resize-image-for-tiktok-video/ (6 pages)
+    /tools/resize/resize-image-for-android-wallpaper | Android Wallpaper Size Free Online — No Upload | P | Android Wallpaper Size — 1080×1920 Free 
+    /tools/resize/resize-image-for-facebook-story | Facebook Story Size Free Online — No Upload | Pixa | Facebook Story — Resize Image to 1080×19
+    /tools/resize/resize-image-for-instagram-story | Instagram Story Size Free Online — No Upload | Pix | Instagram Story — Resize Image to 1080×1
+    /tools/resize/resize-image-for-snapchat-story | Snapchat Story Size Free Online — No Upload | Pixa | Snapchat Story — Resize Image to 1080×19
+
+CANONICAL: https://pixaroid.vercel.app/tools/resize/resize-image-for-twitter/ (6 pages)
+    /tools/resize/resize-image-for-twitter-1200x675 | Twitter Image Size 1200×675 — Free Online | Pixaro | Resize Image for Twitter — 1200×675 px
+    /tools/resize/resize-image-for-twitter-1500x500 | Twitter Image Size 1500×500 — Free Online | Pixaro | Resize Image for Twitter — 1500×500 px
+    /tools/resize/resize-image-for-twitter-400x400 | Twitter Image Size 400×400 — Free Online | Pixaroi | Resize Image for Twitter — 400×400 px
+    /tools/resize/resize-image-for-twitter-header | Twitter Header Image Size Free Online — No Upload  | Twitter Header Image — Resize Image to 1
+
+Jaccard body-text similarity between first two pages of largest group: 0.996

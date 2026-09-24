@@ -1,0 +1,23 @@
+compression /tools/compression/jpeg-compressor/ status=200 htmllen=75207 workerReqs=['advanced-worker.js', 'advanced-worker.js', 'advanced-worker.js'] consoleErrors=1
+   ERR: SmartUpload: Missing drop-zone or file-input elements
+conversion /tools/conversion/convert-png-to-webp/ status=200 htmllen=116642 workerReqs=['enhanced-workers.js', 'enhanced-worker.js'] consoleErrors=1
+   ERR: Cannot use import statement outside a module
+resize /tools/resize/resize-image-for-instagram-post/ status=200 htmllen=116822 workerReqs=['enhanced-worker.js', 'enhanced-workers.js'] consoleErrors=1
+   ERR: Cannot use import statement outside a module
+editor /tools/editor/ status=200 htmllen=76772 workerReqs=[] consoleErrors=0
+social /tools/social-tools/ status=200 htmllen=75871 workerReqs=[] consoleErrors=0
+ai /tools/ai-tools/background-remover/ status=200 htmllen=137083 workerReqs=['enhanced-workers.js', 'enhanced-worker.js'] consoleErrors=2
+   ERR: await is only valid in async functions and the top level bodies of modules
+   ERR: Cannot use import statement outside a module
+pdf /tools/pdf-tools/pdf-merge/ status=200 htmllen=138866 workerReqs=['enhanced-workers.js', 'enhanced-worker.js'] consoleErrors=2
+   ERR: await is only valid in async functions and the top level bodies of modules
+   ERR: Cannot use import statement outside a module
+utility /tools/utilities/image-info-checker/ status=404 htmllen=70374 workerReqs=[] consoleErrors=1
+   ERR: Failed to load resource: the server responded with a status of 404 ()
+international /tools/international/currency-converter/ status=200 htmllen=80879 workerReqs=[] consoleErrors=0
+/tools/compression/jpeg-compressor/ globals: {'engine': 'undefined', 'controller': 'undefined', 'enhanced': 'undefined', 'ew': 'undefined', 'core': 'undefined', 'sw': 'pending'}
+  scripts: ['/js/modules/monetization.js', '/js/pro-engine.js', '/js/advanced-worker.js', '/js/premium-ui.js', '/js/tool-controller-pro.js', '/js/smart-upload.js']
+/tools/ai-tools/background-remover/ globals: {'engine': 'undefined', 'controller': 'undefined', 'enhanced': 'undefined', 'ew': 'undefined', 'core': 'undefined', 'sw': 'pending'}
+  scripts: ['/js/modules/monetization.js', '/js/tool-controller.js', '/js/enhanced-engine.js', '/js/enhanced-workers.js', '/js/enhanced-worker.js', '/js/modules/level2.js', '/js/smart-upload.js']
+/ globals: {'engine': 'undefined', 'controller': 'undefined', 'enhanced': 'undefined', 'ew': 'undefined', 'core': 'undefined', 'sw': 'pending'}
+  scripts: []

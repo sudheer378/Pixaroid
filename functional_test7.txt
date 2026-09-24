@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "<stdin>", line 37, in <module>
+  File "<stdin>", line 8, in run
+TypeError: BrowserContext.new_page() got an unexpected keyword argument 'viewport'

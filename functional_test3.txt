@@ -1,0 +1,5 @@
+png-to-webp: FAIL no file input canonicalWorkersRequested=set() pageErrors=[]
+resize-insta-post: FAIL no file input canonicalWorkersRequested=set() pageErrors=[]
+bg-remover: FAIL no file input canonicalWorkersRequested=set() pageErrors=[]
+jpeg-compress: FAIL no file input canonicalWorkersRequested=set() pageErrors=[]
+dim-checker: FAIL no file input canonicalWorkersRequested=set() pageErrors=[]

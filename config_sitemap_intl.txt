@@ -1,0 +1,28 @@
+tools-data type: list len: 511
+tools-data total url entries: 511 | intl entries: 0
+tools-config.js entries: 14
+GA4 in site-config: ['G-XXXXXXXXXX']
+adsense: []
+vercel rewrites: 31
+   /(.*)
+   /(.*\\.xml)$
+   /robots.txt
+   /workers/(.*)\\.js$
+   /sw.js
+   /(css|js|assets|images|fonts)/(.*)
+   /(.*\\.html?)$
+   /tools/resize/instagram-sizes/
+   /tools/resize/passport-photo/
+   /tools/social-tools/instagram-post-size/
+   /compress
+   /convert
+   /resize
+   /editor
+   /ai
+vercel.json header keys: ['Cache-Control', 'Content-Type', 'Cross-Origin-Embedder-Policy', 'Cross-Origin-Opener-Policy', 'Referrer-Policy', 'Service-Worker-Allowed', 'X-Content-Type-Options', 'X-Frame-Options']
+SW VERSION: ["VERSION = 'pixaroid-v3.2.0'"]
+SW cache-first patterns: ['js', 'js', 'js', 'js', 'js', 'js']
+SW monetag refs: ['Monetag', 'Monetag', 'monetag']
+llms.txt categories mentioned: ['pdf-tools', 'international']
+ROBOTS: '# Robots.txt for Pixaroid\nUser-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /private/\nDisallow: /scripts/\nDisallow: /.git/\n\nSitemap: https://pixaroid.vercel.app/sitemap.xml\nSitemap: https://pixaroid.'
+lastmod values: [('2026-09-02', 520)]
