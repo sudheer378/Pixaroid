@@ -52,13 +52,6 @@
     "name": "Pixaroid",
     "url": "https://pixaroid.vercel.app"
   },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "ratingCount": "1247",
-    "bestRating": "5",
-    "worstRating": "1"
-  },
   "featureList": [
     "No file uploads — 100% browser-based processing",
     "Works offline as a PWA",
@@ -1831,19 +1824,6 @@ console.log('[Pixaroid] Universal Engine initialized:',TOOL_TYPE);
   });
 })();
 
-// Star rating (deterministic, not random)
-(function(){
-  var hd=document.querySelector('.hd');
-  if(!hd||document.querySelector('.star-rating'))return;
-  var slug=document.title||'';
-  var hash=0;for(var i=0;i<slug.length;i++)hash=(hash*31+slug.charCodeAt(i))&0xFFFFFFFF;
-  var ratings=['4.8','4.9','4.9','4.8','4.9'];
-  var rating=ratings[Math.abs(hash)%ratings.length];
-  var count=(800+(Math.abs(hash)%1500)).toLocaleString();
-  var sr=document.createElement('div');sr.className='star-rating';
-  sr.innerHTML='<span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star" style="opacity:.55">★</span><span class="star-count">'+rating+' ('+count+' ratings)</span>';
-  hd.parentNode.insertBefore(sr,hd.nextSibling);
-})();
 
 // Confetti on successful save (triggered by main engine via custom event)
 (function(){

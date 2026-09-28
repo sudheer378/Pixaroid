@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Currency Converter - Free Online Tool | Pixaroid</title>
-    <meta name="description" content="Convert between 150+ world currencies instantly with live exchange rates. Free currency converter for international travelers and businesses.">
+    <meta name="description" content="Convert between 150+ world currencies using built-in reference rates. Free currency converter for international travelers and businesses.">
     <meta name="keywords" content="currency converter, exchange rate, money conversion, forex, international currency">
     <link rel="canonical" href="https://pixaroid.vercel.app/tools/international/currency-converter/">
     
     <!-- Open Graph -->
     <meta property="og:title" content="Currency Converter - Free Online Tool | Pixaroid">
-    <meta property="og:description" content="Convert between 150+ world currencies instantly with live exchange rates.">
+    <meta property="og:description" content="Convert between 150+ world currencies using built-in reference rates.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://pixaroid.vercel.app/tools/international/currency-converter/">
     <meta property="og:image" content="https://pixaroid.vercel.app/assets/images/og-default.png">
@@ -18,7 +18,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Currency Converter - Free Online Tool | Pixaroid">
-    <meta name="twitter:description" content="Convert between 150+ world currencies instantly with live exchange rates.">
+    <meta name="twitter:description" content="Convert between 150+ world currencies using built-in reference rates.">
     
     <!-- Schema.org -->
     <script type="application/ld+json">
@@ -26,7 +26,7 @@
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": "Currency Converter",
-        "description": "Free online currency converter with live exchange rates for 150+ currencies",
+        "description": "Free online currency converter with built-in reference rates for 150+ currencies",
         "url": "https://pixaroid.vercel.app/tools/international/currency-converter/",
         "applicationCategory": "FinanceApplication",
         "operatingSystem": "Any",
@@ -236,7 +236,7 @@
     <div class="container">
         <header>
             <h1>💱 Currency Converter</h1>
-            <p class="subtitle">Convert between 150+ world currencies with live exchange rates</p>
+            <p class="subtitle">Convert between 150+ world currencies using built-in reference rates</p>
         </header>
         
         <div class="converter-card">
@@ -273,8 +273,8 @@
                 <p>Support for all major world currencies including USD, EUR, GBP, JPY, and more.</p>
             </div>
             <div class="feature">
-                <h3>📊 Live Rates</h3>
-                <p>Real-time exchange rates updated every minute from reliable financial sources.</p>
+                <h3>📊 Reference Rates</h3>
+                <p>Conversions use a static snapshot of built-in reference rates, not a live market feed. Rates may be outdated — verify important conversions before relying on them.</p>
             </div>
             <div class="feature">
                 <h3>✈️ Travel Friendly</h3>
@@ -392,7 +392,7 @@
             
             resultDiv.textContent = `${toSymbol} ${result.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
             rateInfo.textContent = `1 ${from} = ${rate.toFixed(6)} ${to}`;
-            lastUpdated.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+            lastUpdated.textContent = 'Rates: static reference snapshot (not live)';
         }
 
         // Event listeners
