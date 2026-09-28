@@ -7,8 +7,6 @@
  *              and isolated monetisation loading.
  */
 import { init as initPerf } from '/js/modules/performance.js';
-import { loadMonetag } from '/js/modules/monetag.js';
-import { mountSponsoredUnit } from '/js/modules/monetization.js';
 import { initToolsGrid } from '/js/modules/tools-grid.js';
 
 const HEADER_ROUTES = new Map([
@@ -55,10 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ── Performance module ───────────────────────────────── */
   initPerf();
-
-  /* ── Monetag + clearly labelled sponsored unit ───────── */
-  try { loadMonetag(); } catch (err) { console.warn('[Monetag] load failed:', err); }
-  try { mountSponsoredUnit(); } catch (err) { console.warn('[Sponsored] mount failed:', err); }
 
   /* ── Service Worker ───────────────────────────────────── */
   if ('serviceWorker' in navigator) {

@@ -5619,5 +5619,170 @@
       "image size checker",
       "image metadata viewer"
     ]
+  },
+  {
+    "name": "Address Formatter - International Address Standardizer",
+    "category": "utilities",
+    "desc": "Free online address formatter tool. Format and validate international addresses according to local standards for 50+ countries. Perfect for shipping, mailing, a",
+    "path": "/tools/international/address-formatter/",
+    "tags": [
+      "address formatter",
+      "international tools",
+      "free online tool"
+    ]
+  },
+  {
+    "name": "Age Calculator - Calculate Your Exact Age",
+    "category": "utilities",
+    "desc": "Calculate your exact age in years, months, weeks, and days. Free browser-based age calculator with detailed breakdown.",
+    "path": "/tools/international/age-calculator/",
+    "tags": [
+      "age calculator",
+      "international tools",
+      "free online tool"
+    ]
+  },
+  {
+    "name": "Currency Converter - Free Online Tool",
+    "category": "utilities",
+    "desc": "Convert between 150+ world currencies using built-in reference rates. Free currency converter for international travelers and businesses.",
+    "path": "/tools/international/currency-converter/",
+    "tags": [
+      "currency converter",
+      "international tools",
+      "free online tool"
+    ]
+  },
+  {
+    "name": "Holiday Calendar - International Holidays by Country",
+    "category": "utilities",
+    "desc": "View public holidays and festivals for any country. Free international holiday calendar with dates and descriptions.",
+    "path": "/tools/international/holiday-calendar/",
+    "tags": [
+      "holiday calendar",
+      "international tools",
+      "free online tool"
+    ]
+  },
+  {
+    "name": "Packing List Generator - Travel Checklist Creator",
+    "category": "utilities",
+    "desc": "Free online packing list generator. Create customized travel checklists for any trip type including business, beach, camping, skiing, and family vacations. Neve",
+    "path": "/tools/international/packing-list-generator/",
+    "tags": [
+      "packing list generator",
+      "international tools",
+      "free online tool"
+    ]
+  },
+  {
+    "name": "Paper Size Converter - International Paper Formats",
+    "category": "utilities",
+    "desc": "Convert between international paper sizes (A, B, C series) and North American sizes (Letter, Legal, Tabloid). Free paper size converter tool.",
+    "path": "/tools/international/paper-size-converter/",
+    "tags": [
+      "paper size converter",
+      "international tools",
+      "free online tool"
+    ]
+  },
+  {
+    "name": "Passport Photo Resizer - Create Compliant Photos",
+    "category": "utilities",
+    "desc": "Resize and crop photos to passport, visa, and ID photo requirements for any country. Free online passport photo tool.",
+    "path": "/tools/international/passport-photo-resizer/",
+    "tags": [
+      "passport photo resizer",
+      "international tools",
+      "free online tool"
+    ]
+  },
+  {
+    "name": "Phone Code Finder - International Calling Codes",
+    "category": "utilities",
+    "desc": "Find international phone codes and country calling codes instantly. Free tool for looking up dialing codes for any country worldwide.",
+    "path": "/tools/international/phone-code-finder/",
+    "tags": [
+      "phone code finder",
+      "international tools",
+      "free online tool"
+    ]
+  },
+  {
+    "name": "QR Code Generator - Create Custom QR Codes",
+    "category": "utilities",
+    "desc": "Generate custom QR codes for URLs, text, WiFi, and more. Free browser-based QR code generator with download option.",
+    "path": "/tools/international/qr-generator/",
+    "tags": [
+      "qr generator",
+      "international tools",
+      "free online tool"
+    ]
+  },
+  {
+    "name": "Script Detector - Identify Writing Systems",
+    "category": "utilities",
+    "desc": "Free online script detector tool. Automatically identify writing systems and scripts in any text including Latin, Cyrillic, Arabic, Chinese, Japanese, Korean, a",
+    "path": "/tools/international/script-detector/",
+    "tags": [
+      "script detector",
+      "international tools",
+      "free online tool"
+    ]
+  },
+  {
+    "name": "World Timezone Planner - Meeting Scheduler",
+    "category": "utilities",
+    "desc": "Plan meetings across time zones effortlessly. Compare times in multiple cities and find the perfect meeting slot for international teams.",
+    "path": "/tools/international/timezone-planner/",
+    "tags": [
+      "timezone planner",
+      "international tools",
+      "free online tool"
+    ]
+  },
+  {
+    "name": "Tip Calculator - Split Bills Easily",
+    "category": "utilities",
+    "desc": "Calculate tips and split bills among friends. Free browser-based tip calculator with customizable percentages.",
+    "path": "/tools/international/tip-calculator/",
+    "tags": [
+      "tip calculator",
+      "international tools",
+      "free online tool"
+    ]
+  },
+  {
+    "name": "Unit Converter - Length, Weight, Temperature & More",
+    "category": "utilities",
+    "desc": "Free online unit converter for length, weight, temperature, volume, area, and more. Convert between metric and imperial units instantly.",
+    "path": "/tools/international/unit-converter/",
+    "tags": [
+      "unit converter",
+      "international tools",
+      "free online tool"
+    ]
+  },
+  {
+    "name": "VAT Calculator - Calculate Value Added Tax",
+    "category": "utilities",
+    "desc": "Free VAT calculator for EU and international countries. Calculate VAT inclusive and exclusive prices instantly.",
+    "path": "/tools/international/vat-calculator/",
+    "tags": [
+      "vat calculator",
+      "international tools",
+      "free online tool"
+    ]
+  },
+  {
+    "name": "World Clock - Multiple Timezone Display",
+    "category": "utilities",
+    "desc": "Display current time in multiple cities worldwide. Free browser-based world clock for tracking time zones.",
+    "path": "/tools/international/world-clock/",
+    "tags": [
+      "world clock",
+      "international tools",
+      "free online tool"
+    ]
   }
 ]

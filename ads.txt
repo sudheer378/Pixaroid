@@ -5,26 +5,11 @@
 #  https://iabtechlab.com/ads-txt/
 # ============================================================
 
-# ── Google AdSense ──────────────────────────────────────────
-# Replace pub-XXXXXXXXXXXXXXXX with your real AdSense publisher ID
-google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
-
-# ── Google Ad Manager (if used) ─────────────────────────────
-# google.com, pub-XXXXXXXXXXXXXXXX, RESELLER, f08c47fec0942fa0
-
-# ── Ezoic ──────────────────────────────────────────────────
-# ezoic.com, XXXX, DIRECT
-# ezoic.com, XXXX, RESELLER
-
-# ── Media.net ───────────────────────────────────────────────
-# media.net, XXXXXXXX, DIRECT
-
-# ── Amazon Publisher Services ───────────────────────────────
-# amazon.com, XXXXXXXXXXXXXXXX, DIRECT
-
-# ── Playwire ────────────────────────────────────────────────
-# playwire.com, XXXXX, DIRECT
-
-# NOTE: Pixaroid does not currently serve ads.
-# This file is a placeholder for future monetisation.
-# Update all XXXXXXXX values before enabling ads.
+# Pixaroid does not currently serve ads. No third-party sellers are
+# authorized. This file intentionally contains no seller records; per the
+# IAB specification, a valid ads.txt may contain only comments.
+# Pre-launch audit (Sept 2026): removed placeholder record
+# "google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0" because it
+# contained an invalid publisher ID. If ads are ever enabled, add REAL,
+# verified seller lines here AND disclose advertising in the privacy and
+# cookie policies before deployment.
