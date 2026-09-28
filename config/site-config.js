@@ -39,20 +39,14 @@ const SITE_CONFIG = {
     aiTools:        true,
   },
 
-  analytics: { ga4: 'G-XXXXXXXXXX', clarity: '' },
+  // No analytics or tracking is loaded anywhere on Pixaroid (privacy-first).
+  analytics: { ga4: '', clarity: '' },
 
-  monetization: {
-    provider: 'Monetag',
-    zoneId: '277292',
-    script: 'https://quge5.com/88/tag.min.js',
-    smartlinks: [
-      'https://sordidcopper.com/ah4q89k44?key=b7b2b4355e9576b54f29b8445e7d6775',
-      'https://sordidcopper.com/a7buqkb8ii?key=717a52ca31ccb8da56a9ae0bee29d372',
-    ],
-    enabled: true,
-  },
+  // Monetization was removed pre-launch (see AUDIT_PRELAUNCH_QWEN.md P1-2).
+  // Do not re-enable without truthful ads.txt + privacy/cookie policy disclosure.
+  monetization: { enabled: false },
 
-  ads: { adsense: 'pub-XXXXXXXXXXXXXXXX', enabled: false },
+  ads: { enabled: false },
   deployment: { provider: 'vercel', outputDir: '.' },
 };
 

@@ -3120,4 +3120,19 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url><loc>https://pixaroid.vercel.app/tools/international/address-formatter/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pixaroid.vercel.app/tools/international/age-calculator/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pixaroid.vercel.app/tools/international/currency-converter/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pixaroid.vercel.app/tools/international/holiday-calendar/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pixaroid.vercel.app/tools/international/packing-list-generator/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pixaroid.vercel.app/tools/international/paper-size-converter/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pixaroid.vercel.app/tools/international/passport-photo-resizer/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pixaroid.vercel.app/tools/international/phone-code-finder/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pixaroid.vercel.app/tools/international/qr-generator/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pixaroid.vercel.app/tools/international/script-detector/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pixaroid.vercel.app/tools/international/timezone-planner/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pixaroid.vercel.app/tools/international/tip-calculator/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pixaroid.vercel.app/tools/international/unit-converter/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pixaroid.vercel.app/tools/international/vat-calculator/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pixaroid.vercel.app/tools/international/world-clock/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>
